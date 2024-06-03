@@ -1,0 +1,83 @@
+.date-range__start {
+  text-align: start;
+  font-size: 18px;
+}
+
+.date-range__start--date {
+  font-weight: 500;
+}
+
+.date-range__start--time {
+  font-size: 15px;
+}
+
+.date-range__start--time span {
+  font-weight: 500;
+  color: var(--main-color);
+}
+
+.date-range__end {
+  text-align: end;
+}
+
+.date-range__icon {
+  font-size: 36px;
+  color: var(--main-color);
+}
+
+.date-range__btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 5000;
+}
+
+.date-range {
+  width: 100%;
+  padding: 0 20px;
+}
+
+.date-range__wrapper-popup {
+
+  display: flex;
+  gap: 40px;
+  
+}
+
+.data-calendar__inputs {
+  display: flex;
+  align-items: center;
+}
+.data-calendar__inputs input {
+  display: block;
+  width: fit-content;
+}
+
+.data-calendar {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.data-calendar input {
+  color: var(--main-color);
+}
+
+.date-range__footer-popup {
+  display: flex;
+  justify-content: end;
+  border-top: 1px solid var(--main-color);
+}
+
+.date-range__button-popup {
+  height: 36px;
+  font-size: 16px;
+  color: #fff;
+  background-color: var(--main-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 12px;
+  border-radius: 12px;
+  margin-top: 16px;
+}

@@ -1,0 +1,112 @@
+{
+  "main": {
+    "account_id": 3,
+    "sim1": "",
+    "sim2": "",
+    "vehicle_id": 336023939,
+    "vehicle_name": "59 Volvo н 288 во 136",
+    "vehicle_pwd": "",
+    "vehicle_uid": "52db94d9-f4f1-2f8b-4fdb-208b3a9ac313",
+    "is_enabled": true,
+    "plugin_id": 3
+  },
+
+  "diag": {
+    "control": true
+  },
+
+  "driver_settings": {
+    "driver_events": {
+      "is_enabled": false,
+      "end_registration_by_removing_card": false,
+      "end_registration_by_turning_off_ignition": false,
+      "restore_registration_if_card_reapplied_within": 0
+    },
+
+    "CustomProtocolMonitoring": {
+      "addr": 0,
+      "func": 0,
+      "regNo": 0,
+      "dataSource": 0,
+      "use_as_driver_code": false
+    }
+  },
+
+  "speed_control_violation": {
+    "max_limit": "",
+    "reg_limit": "",
+    "is_enabled": false,
+    "reg_time_limit": "",
+    "reg_critical_limit": "",
+    "use_road_signs_instead_max_limit": false
+  },
+
+  "wheel_axes": [
+    {
+      "id": 1617,
+      "wheels": [
+        [
+          {
+            "id": 3237,
+            "position": "L",
+            "sensor_number": 34
+          }
+        ],
+        [
+          {
+            "id": 3238,
+            "position": "R",
+            "sensor_number": 31
+          }
+        ]
+      ],
+      "pressure_norm": 810,
+      "pressure_delta": 20,
+      "temperature_max": 60
+    },
+    {
+      "id": 1618,
+      "wheels": [
+        [
+          {
+            "id": 3239,
+            "position": "L",
+            "sensor_number": 38
+          }
+        ],
+        [
+          {
+            "id": 3240,
+            "position": "R",
+            "sensor_number": 35
+          }
+        ]
+      ],
+      "pressure_norm": 810,
+      "pressure_delta": 20,
+      "temperature_max": 60
+    },
+    {
+      "id": 1619,
+      "wheels": [
+        [
+          {
+            "id": 3241,
+            "position": "L",
+            "sensor_number": 42
+          }
+        ],
+        [
+          {
+            "id": 3242,
+            "position": "R",
+            "sensor_number": 39
+          }
+        ]
+      ],
+      "pressure_norm": 810,
+      "pressure_delta": 20,
+      "temperature_max": 60
+    }
+  ]
+}

@@ -1,0 +1,52 @@
+.folder__body {
+  padding-left: 10px;
+  display: none;
+}
+
+.folder__body--open {
+  display: block;
+}
+
+.folder__title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.folder__title div {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.folder__title span {
+  color: var(--main-color);
+}
+
+.folder__title input {
+  display: none;
+}
+
+.folder__checkbox {
+  width: 100%;
+  max-width: 14px;
+  min-width: 14px;
+  height: 14px;
+  border: 1px solid var(--main-color);
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  font-size: 12px;
+}
+
+.folder__checkbox::before {
+  color: #fff;
+  background-color: var(--main-color);
+  padding: 2px;
+}
+
+.folder__title .icon-minus {
+  font-size: 8px !important;
+}

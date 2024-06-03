@@ -1,0 +1,194 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url("https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap");
+
+* {
+  font-family: "Rubik";
+}
+
+:root {
+  --main-color: #ff6801;
+}
+*:focus-within {
+  outline: none;
+}
+.auth {
+  background: no-repeat url("../components/Auth/backAuth.png");
+  background-position: 100%;
+  background-size: cover;
+}
+@font-face {
+  font-family: "icomoon";
+  src: url("../fonts/icomoon.eot");
+  src:
+    url("../fonts/icomoon.eot") format("embedded-opentype"),
+    url("../fonts/icomoon.ttf") format("truetype"),
+    url("../fonts/icomoon.woff") format("woff"),
+    url("../fonts/icomoon.svg") format("svg");
+  font-weight: normal;
+  font-style: normal;
+  font-display: block;
+}
+
+[class^="icon-"],
+[class*=" icon-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: "icomoon" !important;
+  speak: never;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-book:before {
+  content: "\e914";
+}
+.icon-temp:before {
+  content: "\e90f";
+}
+.icon-press:before {
+  content: "\e910";
+}
+.icon-switch:before {
+  content: "\e913";
+}
+.icon-polygon:before {
+  content: "\e911";
+}
+.icon-polyline:before {
+  content: "\e912";
+}
+.icon-arrow:before {
+  content: "\e900";
+}
+.icon-block:before {
+  content: "\e901";
+}
+.icon-delete:before {
+  content: "\e902";
+}
+.icon-download:before {
+  content: "\e903";
+}
+.icon-expand:before {
+  content: "\e904";
+}
+.icon-logout:before {
+  content: "\e905";
+}
+.icon-menu:before {
+  content: "\e906";
+}
+.icon-more:before {
+  content: "\e907";
+}
+.icon-refresh:before {
+  content: "\e908";
+}
+.icon-search:before {
+  content: "\e909";
+}
+.icon-settings:before {
+  content: "\e90a";
+}
+.icon-checked:before {
+  content: "\e90b";
+}
+.icon-calendar:before {
+  content: "\e90c";
+}
+.icon-folder:before {
+  content: "\e90d";
+  color: var(--main-color);
+}
+.icon-folder-open:before {
+  content: "\e90e";
+  color: var(--main-color);
+}
+.icon-cross:before {
+  content: "\ea0f";
+}
+.icon-credit-card:before {
+  content: "\e93f";
+}
+.icon-history:before {
+  content: "\e94d";
+}
+.icon-user:before {
+  content: "\e971";
+}
+.icon-minus:before {
+  content: "\ea0b";
+}
+.icon-rectangle:before {
+  content: "\ea53";
+}
+.icon-cirlcle:before {
+  content: "\ea56";
+}
+
+.leaflet-bottom {
+  display: none !important;
+}
+
+.btn-group {
+  display: flex;
+  position: absolute;
+  align-items: center;
+  z-index: 1000;
+  gap: 10px;
+  right: 10px;
+  top: 10px;
+}
+
+.btn-group button {
+  height: 36px;
+  background: var(--main-color);
+  color: #fff;
+  border-radius: 12px;
+  padding: 0 12px;
+}
+
+.custom-marker-icon {
+  background-color: var(--main-color);
+  border: solid 1px #000;
+}
+
+.leaflet-div-icon {
+  z-index: 1000 !important;
+}
+
+.popup-track {
+  padding: 12px;
+  width: fit-content !important;
+  height: auto !important;
+  background-color: #fff;
+  border-radius: 6px;
+}
+
+.mycluster {
+  width: 40px;
+  height: 40px;
+  background-color: greenyellow;
+  text-align: center;
+  font-size: 24px;
+}
+
+.custom-marker-cluster {
+  background: #ffffff;
+  border: 15px solid #f00800;
+  border-radius: 50%;
+  color: #000000;
+  height: 33px;
+  line-height: 37px;
+  text-align: center;
+  width: 33px;
+}

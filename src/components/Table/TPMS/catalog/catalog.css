@@ -1,0 +1,125 @@
+.catalog-wrapper {
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  position: absolute;
+  color: white;
+  background: rgba(255, 255, 255, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  .catalog-content {
+    width: fit-content;
+    overflow-y: auto;
+    height: fit-content;
+    border-radius: 20px;
+    box-shadow: 0 25px 50px -10px rgb(41 37 36);
+    background-color: rgb(41 37 36);
+    padding: 3rem;
+  }
+  h1 {
+    font-size: 2rem;
+    line-height: 2.25rem;
+    text-align: center;
+  }
+  .catalog-item-container {
+    transition: all 0.3s;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(4, 25%);
+    justify-content: center;
+    align-items: center;
+    padding: 0 1rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+
+    grid-auto-rows: 200px;
+    &:first-child {
+    }
+    .catalog-card {
+      width: 100%;
+      height: 100%;
+      border-radius: 12px;
+      &.delete {
+        animation: forwards Removing 0.3s ease-in-out;
+      }
+      .title-tire {
+        color: black;
+        font-size: 24px;
+        text-align: center;
+        font-weight: 300;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      .wheel-image {
+        padding: 1rem;
+        width: 70%;
+        margin: 0 auto;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        .wheel {
+          width: 100%;
+        }
+      }
+    }
+  }
+}
+
+.text-circle {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+
+  top: 0;
+  left: 0;
+}
+
+.text-svg-text {
+  fill: rgb(84, 83, 83);
+  font-family: inherit;
+  font-size: 65px;
+  font-weight: 700;
+  text-transform: uppercase;
+  position: relative;
+
+  letter-spacing: 0.08em;
+}
+
+.text-svg {
+  max-width: 500px;
+  scale: 1.1;
+  transform: rotate(90deg);
+  position: relative;
+  bottom: 13px;
+}
+.catalog-content-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  grid-template-columns: 10% 90%;
+  width: 100%;
+  height: 100%;
+}
+.catalog-functions {
+  flex: 15%;
+  background: #bebbbb;
+  width: 100%;
+  height: 60%;
+}
+@keyframes Removing {
+  from {
+    width: 100%;
+    height: 100%;
+  }
+  to {
+    width: 0;
+    height: 0;
+    display: none;
+  }
+}

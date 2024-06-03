@@ -1,0 +1,12 @@
+/* .spin {
+  animation: both 2s spin;
+}
+
+@keyframes spin {
+  from {
+    translate: rotate(0deg);
+  }
+  to {
+    translate: rotate(360deg);
+  }
+} */

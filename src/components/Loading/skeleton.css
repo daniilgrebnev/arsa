@@ -1,0 +1,25 @@
+.skeleton-container {
+  background: #d2d1d16f;
+  position: relative;
+
+  .skeleton-line {
+    position: absolute;
+    left: -50%;
+    top: -50%;
+    transform: rotate(45deg);
+    height: 200%;
+    background: rgba(255, 255, 255, 0.722);
+    width: 0;
+    box-shadow: 1px 1px 40px 60px #e4e4e4;
+    animation: infinite alternate skeleton 1s ease-in-out;
+    transition: all 2s;
+  }
+}
+@keyframes skeleton {
+  from {
+    left: -20%;
+  }
+  to {
+    left: 120%;
+  }
+}

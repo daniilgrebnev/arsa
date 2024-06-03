@@ -1,0 +1,78 @@
+.menu-editor {
+  height: 100%;
+  background: #fff;
+  border-left: 1px solid var(--main-color);
+  width: 300px;
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 1001;
+}
+
+.menu-editor__active {
+  color: var(--main-color);
+}
+
+.menu-editor__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: solid 1px var(--main-color);
+  padding: 10px 20px;
+}
+
+.menu-editor__header button {
+  font-size: 32px;
+}
+
+.menu-editor__body {
+  padding: 10px 20px;
+}
+
+.menu-editor__name {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 16px;
+}
+
+.menu-editor__name:not(:first-child) {
+  margin-top: 20px;
+}
+
+.menu-editor__name input[type="text"] {
+  border: solid 1px var(--main-color);
+  width: 100%;
+  border-radius: 4px;
+  padding: 0 4px;
+}
+
+.menu-editor__name textarea {
+  width: 100%;
+  resize: none;
+  height: 300px;
+  border: solid 1px var(--main-color);
+  border-radius: 4px;
+  padding: 4px;
+}
+
+.menu-editor__btn {
+  width: 100%;
+  position: absolute;
+  bottom: 10px;
+  padding: 10px 20px;
+  display: flex;
+  justify-content: end;
+  gap: 30px;
+}
+
+.menu-editor__btn button:nth-child(1) {
+  color: var(--main-color);
+}
+
+.menu-editor__btn button:nth-child(2) {
+  background-color: var(--main-color);
+  color: #fff;
+  padding: 6px 12px;
+  border-radius: 12px;
+}

@@ -1,0 +1,15 @@
+.report-tab {
+  position: relative;
+  &.active {
+    color: var(--main-color);
+    &::before {
+      content: "";
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+      height: 2px;
+      width: 100%;
+      background: var(--main-color);
+    }
+  }
+}

@@ -1,0 +1,79 @@
+table {
+  table-layout: fixed;
+}
+tbody tr:nth-child(2n) {
+  background-color: rgb(235, 235, 235);
+}
+/* style.css */
+.resizer {
+  width: 20px;
+  height: 100%;
+  position: absolute;
+  right: 0;
+  top: 0;
+  cursor: col-resize;
+  z-index: 1;
+}
+
+td {
+  border: 1px solid;
+  text-wrap: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+thead {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background-color: white;
+}
+
+th {
+  position: sticky;
+  white-space: nowrap; /* чтобы текст не переносился */
+  overflow: hidden; /* скрываем часть текста, выходящую за пределы ячейки */
+  text-overflow: ellipsis; /* добавляем троеточие, если текст не помещается */
+  text-wrap: nowrap;
+  font-family: inherit;
+  font-weight: normal;
+}
+.column_resizer_own_class {
+  background: transparent !important;
+}
+th p {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis; /* добавляем троеточие, если текст не помещается */
+}
+tbody tr:hover {
+  background: #c5dbf7 !important;
+  cursor: pointer;
+}
+tr {
+  height: 30px;
+
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+tbody tr.active {
+  background: #84bcff !important	;
+}
+thead {
+  color: white;
+  text-align: center;
+}
+
+/* thead tr td:hover::after {
+	display: inline-block;
+	content: '';
+	width: 5px;
+	height: 5px;
+	position: absolute;
+	z-index: 0;
+	right: 20px;
+	top: 40%;
+	cursor: pointer;
+	border: 7px solid transparent; /* Прозрачные границы */
+/* border-top: 5px solid rgb(255, 255, 255); /* Добавляем треугольник */
+/* } */

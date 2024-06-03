@@ -1,0 +1,25 @@
+.addgeozone__menu {
+  width: fit-content;
+  height: 100px;
+  background: #fff;
+  position: fixed;
+  font-size: 16px;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+  z-index: 1000;
+}
+
+.addgeozone__btn {
+  display: block;
+  width: 100%;
+  border-bottom: 1px solid var(--main-color);
+  padding: 7px 14px;
+  transition: 0.1s all;
+  text-align: left;
+}
+
+.addgeozone__btn:hover {
+  background: var(--main-color);
+  color: #fff;
+}
