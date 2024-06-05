@@ -6,17 +6,18 @@ export interface IAuthRes {
   error_text: string
   ex_time: number
   jwt: string
+  mobile_phone: string
   rights: number
   role_id: number
   user_id: number
   user_is_master: boolean
-  waiting_confirm: boolean
 }
 
 interface IAuthState {
   isOpenCodeWidget: boolean
   isAuth: boolean | "loading" | "error"
   authErrorText: string | null
+  mobile_phone: string
   authData: {
     login: string
     password: string
@@ -27,6 +28,8 @@ const initialState: IAuthState = {
   isOpenCodeWidget: false,
   isAuth: false,
   authErrorText: null,
+
+  mobile_phone: "",
   authData: {
     login: "",
     password: "",
@@ -40,9 +43,15 @@ const authSlice = createSlice({
     resetAuth: (state: IAuthState) => {
       state.isAuth = false
     },
+    setPhoneNumber: (state: IAuthState, action: PayloadAction<string>) => {
+      state.mobile_phone = action.payload
+    },
     setIsAuth: (
       state: IAuthState,
-      action: PayloadAction<{ auth: boolean | "loading" | "error"; text?: string | null }>,
+      action: PayloadAction<{
+        auth: boolean | "loading" | "error"
+        text?: string | null
+      }>,
     ) => {
       state.isAuth = action.payload.auth
       state.authErrorText = action.payload.text ? action.payload.text : null
@@ -65,5 +74,6 @@ const authSlice = createSlice({
   },
 })
 
-export const { setIsAuth, setOpenCodeWidget, resetAuth, setAuthData } = authSlice.actions
+export const { setIsAuth, setOpenCodeWidget, resetAuth, setAuthData, setPhoneNumber } =
+  authSlice.actions
 export default authSlice.reducer

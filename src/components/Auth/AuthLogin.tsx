@@ -15,7 +15,9 @@ export const AuthLogin = () => {
   const [focusElem, setFocusElem] = useState<"password" | "login" | null>(null)
   const [loginWriteError, setLoginWriteError] = useState<boolean>(false)
   const [passwordWriteError, setPasswordWriteError] = useState<boolean>(false)
-  const { isOpenCodeWidget, isAuth, authErrorText } = useSelector((state: RootState) => state.auth)
+  const { isOpenCodeWidget, isAuth, authErrorText, mobile_phone } = useSelector(
+    (state: RootState) => state.auth,
+  )
   const dispatch = useDispatch<AppDispatch>()
   const [code, setCode] = useState<string>("")
 
@@ -51,7 +53,7 @@ export const AuthLogin = () => {
     if (passwordWriteError === true && loginWriteError === true) {
       return
     } else {
-      dispatch(thunkAuth({ password, login }))
+      dispatch(thunkAuth({ password, login, mobile_phone }))
     }
   }
 
@@ -95,7 +97,7 @@ export const AuthLogin = () => {
               <p className="text-center text-white text-2xl">Введите код</p>
               <div className="text-center text-white pt-5 text-lg">
                 <div className="font-light">Код отправлен на номер:</div>{" "}
-                <span className="tracking-wider">{login}</span>
+                <span className="tracking-wider">{mobile_phone}</span>
               </div>
               <div className="mt-10">
                 <CodeInput length={4} />
