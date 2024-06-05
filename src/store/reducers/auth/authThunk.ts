@@ -1,7 +1,7 @@
 import { ILogPassAuth } from "@/interfaces/auth"
 import { AppDispatch } from "@/store/store"
 import { authAPI, codeAuth, createInstance } from "../../../api/apiGlobal"
-import { setAuthData, setIsAuth, setOpenCodeWidget } from "./authSlice"
+import { setAuthData, setIsAuth, setOpenCodeWidget, setPhoneNumber } from "./authSlice"
 
 export const thunkAuth = (body: ILogPassAuth) => {
   return async (dispatch: AppDispatch) => {
@@ -26,9 +26,15 @@ export const thunkAuth = (body: ILogPassAuth) => {
         const token = data.jwt as string
         createInstance(token)
         localStorage.setItem("X-Auth", token)
+        dispatch(setPhoneNumber(data.mobile_phone))
         if (status == 202) {
           dispatch(setOpenCodeWidget(true))
-          dispatch(setAuthData({ login: body.login, password: body.password }))
+          dispatch(
+            setAuthData({
+              login: body.login,
+              password: body.password,
+            }),
+          )
         } else {
           dispatch(setIsAuth({ auth: true }))
         }
