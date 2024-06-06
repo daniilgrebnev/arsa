@@ -1,21 +1,26 @@
 import { RootState } from "@/store/store"
 
-import { useEffect, useState } from "react"
-import { useDispatch, useSelector } from "react-redux"
 import { ContextMenu } from "../components/Map/ContextMenu/ContextMenu"
 import { MyMapContainer } from "../components/Map/MyMapContainer"
+import React, { useEffect, useState } from "react"
+import { useSelector } from "react-redux"
+import { useDispatch } from "react-redux"
 import {
   setEditMap,
   setIsOpenMenuFigure,
   setIsOpenMenuMap,
   setIsOpenMenuTrack,
-} from "./../store/reducers/map/map"
+} from "../store/reducers/map/map"
+import { getTrack } from "../store/reducers/map/mapThunk"
 
 export const MapPage = () => {
   const dispatch = useDispatch<any>()
   const isOpen = useSelector((state: RootState) => state.map.isOpenMenuMap)
   const tracks = useSelector((state: RootState) => state.map.tracks)
-  const vehicleCheked = useSelector((state: RootState) => state.vehicles)
+  const chekedGeozone = useSelector((state: RootState) => state.security.geozonesCheked)
+  const menuFigure = useSelector((state: RootState) => state.map.isOpenMenuFigure)
+  const isEditor = useSelector((state: RootState) => state.map.editMap)
+  const vehicleCheked = useSelector((state: RootState) => state.vehicles.checkedVehicles)
   const startDate = useSelector((state: RootState) => state.security.startTiming)
   const endDate = useSelector((state: RootState) => state.security.endTiming)
 
@@ -38,14 +43,8 @@ export const MapPage = () => {
       alert("Можно показать не более 5 треков")
       return
     }
-    if (vehicleCheked) {
-      // dispatch(
-      //   getTrack(
-      //     // vehicleCheked.map((el) => el.vehicle_uid),
-      //     startDate,
-      //     endDate,
-      //   ),
-      // )
+    if (vehicleCheked.length > 0) {
+      dispatch(getTrack(vehicleCheked, startDate, endDate))
     }
   }, [vehicleCheked, endDate, startDate])
 
@@ -67,7 +66,14 @@ export const MapPage = () => {
           dispatch(setIsOpenMenuMap(visible))
         }}
       >
-        <MyMapContainer center={{ lat: 51.64159, lng: 39.150995 }} zoomMap={7} />
+        <MyMapContainer
+          center={{ lat: 51.64159, lng: 39.150995 }}
+          zoomMap={7}
+          tracks={tracks}
+          isEditor={isEditor}
+          isOpenMenuFigure={menuFigure}
+          chekedGeozone={chekedGeozone}
+        />
       </ContextMenu>
     </div>
   )

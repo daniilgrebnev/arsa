@@ -2,10 +2,11 @@ import { RootState } from "@/store/store"
 import React, { useEffect, useRef, useState } from "react"
 import { Marker, Polygon, Polyline, useMapEvent } from "react-leaflet"
 import { useSelector } from "react-redux"
-import L from "leaflet"
+import L, { LatLng, latLng } from "leaflet"
 import { useDispatch } from "react-redux"
 import {
   addGeozonePoint,
+  addGeozonePointIndex,
   setGeozonePoint,
   setLatLng,
   setRadius,
@@ -17,6 +18,8 @@ export const PolygonEditor = () => {
   const [edit, setEdit] = useState(true)
   const [transparent, setTransparent] = useState<any>(null)
 
+  const [newPoint, setNewPoints] = useState<any>([])
+
   const colorFigure = useSelector((state: RootState) => state.map.creatorFigure.color)
   const opacityFigure = useSelector((state: RootState) => state.map.creatorFigure.transparency)
   const lineWidth = useSelector((state: RootState) => state.map.creatorFigure.line_width)
@@ -26,6 +29,12 @@ export const PolygonEditor = () => {
 
   const customIcon = useRef(
     L.divIcon({
+      iconSize: [20, 20],
+    }),
+  )
+  const newCustomIcon = useRef(
+    L.divIcon({
+      className: "newCustomIcon",
       iconSize: [20, 20],
     }),
   )
@@ -46,6 +55,32 @@ export const PolygonEditor = () => {
       dispatch(setLatLng(result))
     }
   }, [points])
+
+  useEffect(() => {
+    console.log(points)
+    if (!edit) {
+      setNewPoints([])
+      points.forEach((el, index) => {
+        if (index === points.length - 1) {
+          setNewPoints((prev: any) => [
+            ...prev,
+            latLng({
+              lat: (el.lat + points[0].lat) / 2,
+              lng: (el.lng + points[0].lng) / 2,
+            }),
+          ])
+          return
+        }
+        setNewPoints((prev: any) => [
+          ...prev,
+          latLng({
+            lat: (el.lat + points[index + 1].lat) / 2,
+            lng: (el.lng + points[index + 1].lng) / 2,
+          }),
+        ])
+      })
+    }
+  }, [edit, points])
 
   const clickLastPoint = () => {
     setEdit(false)
@@ -104,6 +139,20 @@ export const PolygonEditor = () => {
               icon={customIcon.current}
             />
           )}
+          {newPoint.length > 0 &&
+            newPoint.map((el, index) => {
+              return (
+                <Marker
+                  position={el}
+                  icon={newCustomIcon.current}
+                  eventHandlers={{
+                    mousedown: (e) => {
+                      dispatch(addGeozonePointIndex({ coord: el, index: index }))
+                    },
+                  }}
+                />
+              )
+            })}
         </Polygon>
       )}
       {edit && points.length >= 1 && (

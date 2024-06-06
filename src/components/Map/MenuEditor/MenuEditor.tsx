@@ -1,8 +1,8 @@
-import React, { useRef, useState } from "react";
-import "./MenuEditor.css";
-import { useSelector } from "react-redux";
-import { RootState } from "@/store/store";
-import { useDispatch } from "react-redux";
+import React, { useRef, useState } from "react"
+import "./MenuEditor.css"
+import { useSelector } from "react-redux"
+import { RootState } from "@/store/store"
+import { useDispatch } from "react-redux"
 import {
   clearFigure,
   setColorFigure,
@@ -12,56 +12,36 @@ import {
   setNameGeozone,
   setOpacityFigure,
   setTypeFigure,
-} from "./../../../store/reducers/map/map";
-import { Range, getTrackBackground } from "react-range";
+} from "./../../../store/reducers/map/map"
+import { Range, getTrackBackground } from "react-range"
 
 export const MenuEditor = () => {
-  const dispatch = useDispatch();
-  const typeFigure = useSelector(
-    (state: RootState) => state.map.creatorFigure.geometry_type_id
-  );
-  const colorFigure = useSelector(
-    (state: RootState) => state.map.creatorFigure.color
-  );
-  const opacityFigure = useSelector(
-    (state: RootState) => state.map.creatorFigure.transparency
-  );
-  const lineWidth = useSelector(
-    (state: RootState) => state.map.creatorFigure.line_width
-  );
-  const commentGeozone = useSelector(
-    (state: RootState) => state.map.creatorFigure.comment
-  );
-  const nameGeozone = useSelector(
-    (state: RootState) => state.map.creatorFigure.geozone_name
-  );
-  const fig = useSelector((state: RootState) => state.map.creatorFigure);
+  const dispatch = useDispatch()
+  const typeFigure = useSelector((state: RootState) => state.map.creatorFigure.geometry_type_id)
+  const colorFigure = useSelector((state: RootState) => state.map.creatorFigure.color)
+  const opacityFigure = useSelector((state: RootState) => state.map.creatorFigure.transparency)
+  const lineWidth = useSelector((state: RootState) => state.map.creatorFigure.line_width)
+  const commentGeozone = useSelector((state: RootState) => state.map.creatorFigure.comment)
+  const nameGeozone = useSelector((state: RootState) => state.map.creatorFigure.geozone_name)
+  const fig = useSelector((state: RootState) => state.map.creatorFigure)
 
   return (
     <div className="menu-editor">
       <div className="menu-editor__header">
         <button
-          className={`icon-polygon ${
-            typeFigure === "polygon" && "menu-editor__active"
-          }`}
+          className={`icon-polygon ${typeFigure === "polygon" && "menu-editor__active"}`}
           onClick={() => dispatch(setTypeFigure("polygon"))}
         ></button>
         <button
-          className={`icon-rectangle ${
-            typeFigure === "rectangle" && "menu-editor__active"
-          }`}
+          className={`icon-rectangle ${typeFigure === "rectangle" && "menu-editor__active"}`}
           onClick={() => dispatch(setTypeFigure("rectangle"))}
         ></button>
         <button
-          className={`icon-polyline ${
-            typeFigure === "line" && "menu-editor__active"
-          }`}
+          className={`icon-polyline ${typeFigure === "line" && "menu-editor__active"}`}
           onClick={() => dispatch(setTypeFigure("line"))}
         ></button>
         <button
-          className={`icon-circle ${
-            typeFigure === "circle" && "menu-editor__active"
-          }`}
+          className={`icon-cirlcle ${typeFigure === "circle" && "menu-editor__active"}`}
           onClick={() => dispatch(setTypeFigure("circle"))}
         ></button>
       </div>
@@ -141,7 +121,7 @@ export const MenuEditor = () => {
           {Math.round(opacityFigure * 100)}%
         </div>
         <div style={{ marginTop: "20px" }}>
-          Толщина линии:
+          Толщина :
           <Range
             values={[lineWidth]}
             step={0.1}
@@ -208,8 +188,8 @@ export const MenuEditor = () => {
       <div className="menu-editor__btn">
         <button
           onClick={() => {
-            dispatch(setEditMap(false));
-            dispatch(clearFigure());
+            dispatch(setEditMap(false))
+            dispatch(clearFigure())
           }}
         >
           Отменить
@@ -217,14 +197,14 @@ export const MenuEditor = () => {
         <button
           onClick={() => {
             // dispatch()
-            console.log(fig);
-            dispatch(clearFigure());
-            dispatch(setEditMap(false));
+            console.log(fig)
+            dispatch(clearFigure())
+            dispatch(setEditMap(false))
           }}
         >
           Готово
         </button>
       </div>
     </div>
-  );
-};
+  )
+}

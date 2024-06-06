@@ -39,7 +39,7 @@ const initialState: Imap = {
     longitube: null,
     radius: 0,
     line_width: 2,
-    geometry_type_id: "rectangle",
+    geometry_type_id: "polygon",
     use_as_address: false,
     image_url: null,
     geozone_points: [],
@@ -147,6 +147,11 @@ const mapSlice = createSlice({
     addGeozonePoint(state: Imap, action: PayloadAction<any>) {
       state.creatorFigure.geozone_points = [...state.creatorFigure.geozone_points, action.payload]
     },
+    addGeozonePointIndex(state: Imap, action: PayloadAction<{ coord: any; index: number }>) {
+      let newArrayPoints = [...state.creatorFigure.geozone_points]
+      newArrayPoints.splice(action.payload.index + 1, 0, action.payload.coord)
+      state.creatorFigure.geozone_points = newArrayPoints
+    },
     setLatLng(state: Imap, action: PayloadAction<any>) {
       state.creatorFigure.latitube = action.payload.lat
       state.creatorFigure.longitube = action.payload.lng
@@ -196,6 +201,7 @@ export const {
   setIsOpenMenuFigure,
   setFigure,
   setIsOpenMenuTrack,
+  addGeozonePointIndex,
   setPointInfo,
 } = mapSlice.actions
 export default mapSlice.reducer
