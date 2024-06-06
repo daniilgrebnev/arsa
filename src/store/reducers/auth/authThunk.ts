@@ -1,7 +1,11 @@
 import { ILogPassAuth } from "@/interfaces/auth"
 import { AppDispatch } from "@/store/store"
 import { authAPI, codeAuth, createInstance } from "../../../api/apiGlobal"
+
+import { thunkGetTestVehicle } from "../security/securityThunk"
+
 import { setAuthData, setIsAuth, setOpenCodeWidget, setPhoneNumber } from "./authSlice"
+
 
 export const thunkAuth = (body: ILogPassAuth) => {
   return async (dispatch: AppDispatch) => {
@@ -37,6 +41,7 @@ export const thunkAuth = (body: ILogPassAuth) => {
           )
         } else {
           dispatch(setIsAuth({ auth: true }))
+          dispatch(thunkGetTestVehicle())
         }
       } else {
         dispatch(setIsAuth({ auth: "error", text: "Неверный пароль" }))
@@ -46,6 +51,7 @@ export const thunkAuth = (body: ILogPassAuth) => {
         clearTimeout(loadingTimer)
         loadingTimer = null
       }
+
       dispatch(setIsAuth({ auth: "error", text: "Ошибка аутентификации" }))
     }
   }
@@ -75,6 +81,7 @@ export const thunkCode = (code: string) => {
     switch (status) {
       case 200:
         dispatch(setIsAuth({ auth: true }))
+        dispatch(thunkGetTestVehicle())
         break
       case 401:
         dispatch(setIsAuth({ auth: "error", text: "Неверный код" }))

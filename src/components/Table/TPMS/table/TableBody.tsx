@@ -23,7 +23,8 @@ export const TableBody = () => {
   const data = searchedData?.length == 0 || searchedData == null ? defaultData : searchedData
   const direction = useSelector((state: RootState) => state.table.direction)
   let sort = useSelector((state: RootState) => state.table.sort)
-  const { vehiclesCheked } = useSelector((state: RootState) => state.security)
+
+  const { checkedVehicles } = useSelector((state: RootState) => state.vehicles)
   const [id, setId] = useState<string>()
   const dispatch = useDispatch<AppDispatch>()
 
@@ -35,7 +36,7 @@ export const TableBody = () => {
         setNewData(data)
       }
     }
-  }, [sort, data, direction, vehiclesCheked, type])
+  }, [sort, data, direction, checkedVehicles, type, defaultData])
 
   const handleActive = (_id: string, isEmpty: boolean) => {
     dispatch(setVehicleUID(_id))
@@ -143,7 +144,7 @@ export const TableBody = () => {
         ))
       ) : (
         <>
-          {data == "loading" || vehiclesCheked.length != 0 ? (
+          {data == "loading" || checkedVehicles.length != 0 ? (
             <div className="absolute top-[100px] h-full text-3xl w-full text-center  left-0">
               <div className=" h-full flex items-center justify-center w-[95%] mx-auto bg-gray-200 rounded-lg">
                 <Skeleton width={"100%"} height={"100%"} />

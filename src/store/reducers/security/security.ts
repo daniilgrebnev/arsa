@@ -1,28 +1,25 @@
 /* eslint-disable array-callback-return */
 import { IGeozone, IGroupGeozone } from "@/interfaces/geozone"
-import { IVehicle, IVehicleGroup } from "@/interfaces/vehicle"
+import { IVehicleGroup } from "@/interfaces/vehicle"
 import { TstatusGroup } from "@/types/types"
 import type { PayloadAction } from "@reduxjs/toolkit"
 import { createSlice } from "@reduxjs/toolkit"
 import { LatLng } from "leaflet"
 import { DateTime } from "ts-luxon"
-import {
-  checkObjectsPresenceGeozone,
-  checkObjectsPresenceVehicle,
-} from "./../../../helpers/filters"
+import { checkObjectsPresenceGeozone } from "./../../../helpers/filters"
 
 interface CounterState {
   searchedVehicle: IVehicleGroup[] | null
   isAuth: boolean
   token: string | null
   groupsVehicle: IVehicleGroup[]
-  vehiclesCheked: IVehicle[]
   isAllVehicleCheked: TstatusGroup
   groupsGeozone: IGroupGeozone[]
   geozonesCheked: IGeozone[]
   drivers: any
   startTiming: number
   endTiming: number
+  test: any
 }
 
 const initialState = {
@@ -30,7 +27,7 @@ const initialState = {
   token: null,
   searchedVehicle: null,
   groupsVehicle: [],
-  vehiclesCheked: [],
+  test: [],
   isAllVehicleCheked: "none",
   groupsGeozone: [
     {
@@ -197,95 +194,11 @@ const counterSlice = createSlice({
     setToken(state: CounterState, action: PayloadAction<string>) {
       state.token = action.payload
     },
-    setGroupsVehicle(state: CounterState, action: PayloadAction<IVehicleGroup[]>) {
+    setTestGroupsVehicle: (state: CounterState, action: PayloadAction<any>) => {
+      state.test = action.payload
+    },
+    setGroupsVehicle(state: CounterState, action: PayloadAction<any[]>) {
       state.groupsVehicle = action.payload
-    },
-    setVehicleCheked(
-      state: CounterState,
-      action: PayloadAction<{ vehicle: IVehicle; id: number }>,
-    ) {
-      const isCheked: boolean =
-        state.vehiclesCheked.filter((vehicle) => {
-          return vehicle.vehicle_uid === action.payload.vehicle.vehicle_uid
-        }).length > 0 // проверка отмечен ли вехекл
-
-      // изменение статуса группы
-      let index = state.groupsVehicle.findIndex((group) => group.id === action.payload.id) // поиск индекса группы
-      let newGroups = [...state.groupsVehicle]
-
-      let newVehicleCheked = isCheked
-        ? [...state.vehiclesCheked].filter(
-            (vehicle) => vehicle.vehicle_id !== action.payload.vehicle.vehicle_id,
-          )
-        : [...state.vehiclesCheked, action.payload.vehicle] // если не добавлен то добавляем, если добавлен убирае
-
-      let contain: string = checkObjectsPresenceVehicle(newGroups[index].vehicles, newVehicleCheked)
-
-      if (contain === "all") {
-        newGroups[index].status = "all"
-      }
-      if (contain === "contain") {
-        newGroups[index].status = "some"
-      }
-      if (contain === "none") {
-        newGroups[index].status = "none"
-      }
-      state.groupsVehicle = newGroups
-      state.vehiclesCheked = newVehicleCheked
-    },
-    setVehicleChekedGroup(state: CounterState, action: PayloadAction<number>) {
-      let index = state.groupsVehicle.findIndex((group) => group.id === action.payload)
-      let countCheked = state.groupsVehicle.filter((i) => i.status === "all").length
-      if (countCheked + 1 === state.groupsVehicle.length) {
-        state.isAllVehicleCheked = "all"
-      } else {
-        state.isAllVehicleCheked = "some"
-      }
-      let newGroups = [...state.groupsVehicle]
-      newGroups[index].status = "all"
-
-      state.groupsVehicle = newGroups
-      state.vehiclesCheked = [...state.vehiclesCheked, ...state.groupsVehicle[index].vehicles]
-    },
-    removeVehicleChekedGroup(state: CounterState, action: PayloadAction<number>) {
-      let index = state.groupsVehicle.findIndex((group) => group.id === action.payload)
-      let countCheked = state.groupsVehicle.filter((i) => i.status === "all").length
-      if (countCheked === 1) {
-        state.isAllVehicleCheked = "none"
-      } else {
-        state.isAllVehicleCheked = "some"
-      }
-
-      let newGroups = [...state.groupsVehicle]
-      newGroups[index].status = "none"
-      state.groupsVehicle = newGroups
-      state.vehiclesCheked = [...state.vehiclesCheked].filter((vehicle) => {
-        return !newGroups[index].vehicles.some(
-          (vehicleGroup) => vehicleGroup.vehicle_id === vehicle.vehicle_id,
-        )
-      })
-    },
-    setVehicleChekedAll(state: CounterState) {
-      let cheked: any = []
-      ;[...state.groupsVehicle].forEach((group) => {
-        cheked = [...cheked, ...group.vehicles]
-      })
-      state.vehiclesCheked = cheked
-      state.groupsVehicle = state.groupsVehicle.map((vehicle) => {
-        const newVehicle = vehicle
-        vehicle.status = "all"
-        return newVehicle
-      })
-      state.isAllVehicleCheked = "all"
-    },
-    removeVehicleCheked(state: CounterState) {
-      state.vehiclesCheked = []
-      state.isAllVehicleCheked = "none"
-      state.groupsVehicle = state.groupsVehicle.map((vehicle) => {
-        const newVehicle = vehicle
-        vehicle.status = "none"
-        return newVehicle
-      })
     },
 
     setGroupsGeozone(state: CounterState, action: PayloadAction<IGroupGeozone[]>) {
@@ -365,11 +278,7 @@ export const {
   setToken,
   setAuth,
   setGroupsVehicle,
-  setVehicleCheked,
-  setVehicleChekedGroup,
-  removeVehicleChekedGroup,
-  setVehicleChekedAll,
-  removeVehicleCheked,
+
   setGroupsGeozone,
   setGeozoneCheked,
   setGeozoneChekedGroup,
@@ -378,5 +287,6 @@ export const {
   setEndTiming,
   setSearchedVehicle,
   removeGeozone,
+  setTestGroupsVehicle,
 } = counterSlice.actions
 export default counterSlice.reducer

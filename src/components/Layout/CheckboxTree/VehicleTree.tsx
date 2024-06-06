@@ -1,65 +1,53 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-import { AppDispatch, RootState } from '@/store/store'
-import { useDispatch, useSelector } from 'react-redux'
-import {
-	removeVehicleCheked,
-	removeVehicleChekedGroup,
-	setVehicleCheked,
-	setVehicleChekedAll,
-	setVehicleChekedGroup,
-} from './../../../store/reducers/security/security'
-import { SimpleFolder } from './SimpleFolder/SimpleFolder'
-import { VehicleCheckbox } from './VehicleCheckbox/VehicleCheckbox'
+import { AppDispatch, RootState } from "@/store/store"
+import { uniq } from "lodash"
+import { useLayoutEffect, useState } from "react"
+import { useDispatch, useSelector } from "react-redux"
+import { NullableDate } from "../../../components/NullableDate/NullableDate"
+import CheckboxTree from "../../../components/testUi/CheckboxTree/CheckboxTree"
+import { thunkGetTableData } from "../../../store/reducers/table/tableThunk"
+import { setCheckedVehicles } from "../../../store/reducers/vehicles/vehicleSlice"
+import { Ok } from "../../../styles/image/Ok"
 
-export const VehicleTree = (groupsArr: any) => {
-	const groups = groupsArr.groups
-	const dispatch: AppDispatch = useDispatch()
+export const VehicleTree = () => {
+  const { data, filteredData } = useSelector((state: RootState) => state.vehicles)
+  const dispatch = useDispatch<AppDispatch>()
+  const [checked, setChecked] = useState<string[]>([])
+  useLayoutEffect(() => {
+    dispatch(setCheckedVehicles(uniq(checked)))
+    dispatch(thunkGetTableData(checked))
+  }, [checked])
 
-	const vehiclesCheked = useSelector(
-		(state: RootState) => state.security.vehiclesCheked
-	)
-	const isAllVehicleCheked = useSelector(
-		(state: RootState) => state.security.isAllVehicleCheked
-	)
+  return (
+    <div className="max-h-[75dvh] overflow-y-auto text-sm">
+      <>
+        {typeof data != "string" && (
+          <CheckboxTree
+            data={filteredData}
+            keyword={"children"}
+            checked={checked}
+            onChecked={setChecked}
+            iconCheck={
+              <div className="w-[18px] aspect-square rounded bg-orange-500 flex items-center justify-center align-middle">
+                <Ok fill="white" width={10} />
+              </div>
+            }
+            iconNonCheck={
+              <div className="w-[18px] aspect-square rounded border border-orange-500"></div>
+            }
+            iconHalfCheck={
+              <div className="w-[18px] h-[18px] text-white rounded bg-orange-500 flex items-center justify-center">
+                -
+              </div>
+            }
+            iconExpand={<div className="icon-folder-open text-lg text-white"></div>}
+            iconNonExpand={<div className="icon-folder text-lg"></div>}
+          />
+        )}
+      </>
 
-	const onChekedAll = () => {
-		if (isAllVehicleCheked === 'all') {
-			dispatch(removeVehicleCheked())
-			return
-		}
-		dispatch(setVehicleChekedAll())
-	}
-	const searchedGroups = useSelector(
-		(state: RootState) => state.security.searchedVehicle
-	)
-	return groups.length > 0 ? (
-		<div className=''>
-			<SimpleFolder
-				title='Все'
-				status={isAllVehicleCheked}
-				onCheked={onChekedAll}
-			>
-				{groups.map((group, id) => {
-					return (
-						<VehicleCheckbox
-							group={group}
-							cheked={vehiclesCheked}
-							onCheked={setVehicleCheked}
-							onCheckedGroup={setVehicleChekedGroup}
-							onRemoveCheckedGroup={removeVehicleChekedGroup}
-							key={id}
-						/>
-					)
-				})}
-			</SimpleFolder>
-		</div>
-	) : (
-		<p>
-			{searchedGroups?.length == 0 ? (
-				'По вашему запросу ничего не найдено.'
-			) : (
-				<p className='text-center'>Загрузка...</p>
-			)}
-		</p>
-	)
+      {data == "loading" && <NullableDate text="Загрузка..." color="green" />}
+      {data == "error" && <NullableDate text="Ошибка" color="red" />}
+      {data == null && <NullableDate text="Неверный порядок запросов" color="red" />}
+    </div>
+  )
 }

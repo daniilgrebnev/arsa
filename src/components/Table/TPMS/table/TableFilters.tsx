@@ -20,9 +20,23 @@ export const TableFilters = () => {
   const [searchOpen, setSearchOpen] = useState(false)
   const [searchValue, setSearchValue] = useState("")
   const dispatch = useDispatch<AppDispatch>()
-  const checkedItems: string[] = filterChecked(
-    useSelector((state: any) => state.security.vehiclesCheked),
-  )
+  const { filteredData, checkedVehicles } = useSelector((state: RootState) => state.vehicles)
+  const checkedItemsArray: any[] = []
+  const items = filteredData
+    .filter((item) =>
+      item.vehicles?.some((vehicle) => checkedVehicles.includes(vehicle.vehicle_uid)),
+    )
+    .map((item) => item.vehicles)
+
+  for (let i = 0; i < items.length; i++) {
+    const currentItem = items[i]
+    if (currentItem) {
+      for (let u = 0; u < currentItem.length; u++) {
+        checkedItemsArray.push(currentItem[u])
+      }
+    }
+  }
+  const checkedItems = filterChecked(checkedItemsArray)
   const tableData = useSelector((state: RootState) => state.table.data)
   const { type } = useSelector((state: RootState) => state.filters)
   const reloadHandler = () => {

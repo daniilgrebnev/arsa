@@ -15,6 +15,7 @@ import auth from "./reducers/auth/authSlice"
 import error from "./reducers/error/errorSlice"
 import objectSettings from "./reducers/objectSettings/objectSettings"
 import fuel from "./reducers/testingUI/fuel/fuel"
+import vehicles from "./reducers/vehicles/vehicleSlice"
 
 export const store = configureStore({
   reducer: combineReducers({
@@ -32,6 +33,7 @@ export const store = configureStore({
     auth,
     objectSettings,
     fuel,
+    vehicles,
   }),
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
 })

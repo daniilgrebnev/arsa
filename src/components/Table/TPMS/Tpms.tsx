@@ -1,9 +1,6 @@
 import { AppDispatch, RootState } from "@/store/store"
-import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { Fuel } from "../../../components/testUi/Fuel/Fuel"
-import { filterChecked } from "../../../helpers/checked-data-filter"
-import { thunkGetTableData } from "../../../store/reducers/table/tableThunk"
 import { setPage } from "../../../store/reducers/tpms/tpms"
 import { Catalog } from "./catalog/Catalog"
 import { Chart } from "./chart/Chart"
@@ -19,19 +16,14 @@ interface ITmpsNavItem {
 
 export const Tpms = () => {
   const page = useSelector((state: RootState) => state.tpms.page)
-  const [activeReport, setActiveReport] = useState(page)
+
   const dispatch = useDispatch<AppDispatch>()
-  const checkedItems: string[] = filterChecked(
-    useSelector((state: any) => state.security.vehiclesCheked),
-  )
+
+  // const checkedItems: string[] = filterChecked(checkedItemsArray)
   const isOpenCatalog = useSelector((state: RootState) => state.catalog.isOpen)
   const isOpenSwitch = useSelector((state: RootState) => state.switchTire.isOpen)
   const isOpenSwitchHistory = useSelector((state: RootState) => state.switchHistory.isOpen)
   const isOpenFuel = useSelector((state: RootState) => state.fuel.isOpen)
-
-  useEffect(() => {
-    dispatch(thunkGetTableData(checkedItems))
-  })
 
   const tpmsNav: ITmpsNavItem[] = [
     {
