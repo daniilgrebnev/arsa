@@ -1,8 +1,7 @@
 import { IGroupGeozone } from "@/interfaces/geozone"
 import { getTreeGroupsVehicles } from "../../../api/apiGlobal"
-import { IVehicleGroup } from "./../../../interfaces/vehicle"
 import { AppDispatch } from "./../../store"
-import { setGroupsGeozone, setGroupsVehicle } from "./security"
+import { setGroupsGeozone, setGroupsVehicle, setTestGroupsVehicle } from "./security"
 
 // export const thunkAuth = (login: string, password: string) => {
 //   return async (dispatch: AppDispatch) => {
@@ -24,12 +23,19 @@ export const thunkGetVehicle = () => {
   return async (dispatch: AppDispatch) => {
     const res: any = await getTreeGroupsVehicles()
     if ("rows" in res) {
-      let newGroups: IVehicleGroup[] = res.rows.map((group) => {
+      let newGroups: any[] = res.rows.map((group) => {
         return { ...group, status: "none" }
       })
-
+      console.log(newGroups)
       dispatch(setGroupsVehicle(newGroups))
     }
+  }
+}
+export const thunkGetTestVehicle = () => {
+  return async (dispatch: AppDispatch) => {
+    const res: any = await getTreeGroupsVehicles()
+
+    dispatch(setTestGroupsVehicle(res))
   }
 }
 

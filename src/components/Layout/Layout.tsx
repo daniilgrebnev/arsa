@@ -1,6 +1,7 @@
-import { RootState } from "@/store/store"
+import { AppDispatch, RootState } from "@/store/store"
 import React, { useEffect } from "react"
-import { useSelector } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
+import { thunkGetVehicles } from "../../store/reducers/vehicles/vehicleThunk"
 import { Auth } from "../Auth/Auth"
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "../shadcnui/ui/resizable"
 import Header from "./Header/Header"
@@ -14,11 +15,18 @@ export const Layout = ({
 }>) => {
   const { isAuth } = useSelector((state: RootState) => state.auth)
   const { isOpen } = useSelector((state: RootState) => state.objectSettings)
-  useEffect(() => {}, [isAuth])
+  const { test } = useSelector((state: RootState) => state.security)
+  const dispatch = useDispatch<AppDispatch>()
+  useEffect(() => {
+    dispatch(thunkGetVehicles())
+  }, [isAuth])
   return (
     <div>
       {isAuth == true ? (
         <>
+          {/* <div className="absolute w-screen z-[100] h-screen bg-gray-100 top-0 left-0 flex items-center justify-center">
+            {test && test.length != 0 && <CheckboxTree data={test.data} keyword={"children"} />}
+          </div> */}
           {isOpen && <ObjectSettings />}
           <ResizablePanelGroup
             direction="horizontal"

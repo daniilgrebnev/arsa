@@ -1,23 +1,45 @@
-import { IVehicle } from "@/interfaces/vehicle"
 import { AppDispatch, RootState } from "@/store/store"
 import { useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import { allItems } from "../../../../helpers/mapAllVehicles"
-import { filterSearch } from "../../../../helpers/searchFilterGroups"
-import { setSearchedVehicle } from "../../../../store/reducers/security/security"
+import {
+  setDefaultFilteredData,
+  setFilteredData,
+  setIsSearch,
+} from "../../../../store/reducers/vehicles/vehicleSlice"
 
 export const Search = () => {
-  const [showSearch, setShowSearch] = useState(false)
   const [searchValue, setSearchValue] = useState("")
-  const checkedVehicles = useSelector((state: RootState) => state.security.vehiclesCheked)
-  const groups = useSelector((state: RootState) => state.security.groupsVehicle)
-  const items: IVehicle[] = allItems(groups)
 
   const dispatch = useDispatch<AppDispatch>()
 
-  const searchHandler = (text) => {
-    setSearchValue(text)
-    text.length > 0 && dispatch(setSearchedVehicle(filterSearch(groups, searchValue)))
+  const { checkedVehicles, data, filteredData } = useSelector((state: RootState) => state.vehicles)
+
+  const searchHandler = (text: string) => {
+    console.log(searchValue)
+    const textProcess = (text: string) => {
+      return text.toLowerCase().trim()
+    }
+
+    if (text.length > 0) {
+      const searchFilter =
+        typeof data != "string" && data != null
+          ? data.data
+              .map((group: any) => ({
+                ...group,
+                vehicles: group.vehicles?.filter((vehicle) =>
+                  textProcess(vehicle.vehicle_name).includes(textProcess(text)),
+                ),
+              }))
+              .filter((group) => group.vehicles && group.vehicles.length > 0)
+          : []
+
+      dispatch(setIsSearch(true))
+      console.log(searchFilter)
+      dispatch(setFilteredData(searchFilter))
+    } else {
+      dispatch(setIsSearch(false))
+      dispatch(setDefaultFilteredData())
+    }
   }
 
   return (
@@ -29,6 +51,7 @@ export const Search = () => {
           type="text"
           onChange={(e) => {
             searchHandler(e.target.value)
+            setSearchValue(e.target.value)
           }}
           value={searchValue}
           placeholder={"Введите название ТС"}
@@ -37,7 +60,7 @@ export const Search = () => {
           title="Сбросить поиск"
           onClick={() => {
             setSearchValue("")
-            dispatch(setSearchedVehicle(null))
+            dispatch(dispatch(setDefaultFilteredData()))
           }}
           className="text-red-600 text-2xl cursor-pointer"
         >

@@ -1,5 +1,5 @@
 import { RootState } from "@/store/store"
-import React from "react"
+import React, { useEffect } from "react"
 import { useSelector } from "react-redux"
 import { Skeleton } from "../../../../components/Loading/Skeleton"
 import { DriverCard } from "./charts/DriverCard"
@@ -13,9 +13,8 @@ export const Chart = () => {
     chart: React.ReactNode
   }
 
-  const checkedData = useSelector((state: RootState) => state.security.vehiclesCheked)
   const data = useSelector((state: RootState) => state.table.data)
-
+  useEffect(() => {}, [data])
   const charts: ICharts[] = [
     {
       title: "Давление",

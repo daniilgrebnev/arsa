@@ -22,7 +22,7 @@ const LeftBar = () => {
       </Link>
 
       <DateRangePicker />
-      <div className="w-full " style={{ height: "72vh" }}>
+      <div className="w-full cd" style={{ height: "72vh" }}>
         <CheckboxTreeContainer />
       </div>
     </div>

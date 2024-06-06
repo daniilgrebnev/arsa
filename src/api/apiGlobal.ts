@@ -2,7 +2,6 @@ import { IFuelReq } from "@/components/testUi/Fuel/Fuel"
 import { ILogPassAuth } from "@/interfaces/auth"
 import { ISwitchHistoryReq } from "@/interfaces/switchHistory"
 import { ITableData } from "@/interfaces/table"
-import { IVehicleTree } from "@/interfaces/vehicle"
 import { IWheelChart } from "@/interfaces/wheelChart"
 import { ISwitchReq } from "@/store/reducers/switchTire/switchTire"
 import axios from "axios"
@@ -94,8 +93,8 @@ export const getTrackAPI = async (uid: string, start_time: any, end_time: any) =
 //Получение Дерева машин
 export const getTreeGroupsVehicles = async () => {
   try {
-    const response = await instance.post("tpms/v1/ctl/vehicles/get_tree_vehicles")
-    return response.data as IVehicleTree[]
+    const { data, status } = await instance.post("tpms/v1/ctl/vehicles/get_tree_vehicles")
+    return { data, status }
   } catch (error) {
     return { error: "Ошибка запроса данных" }
   }

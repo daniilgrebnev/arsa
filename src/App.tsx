@@ -20,10 +20,6 @@ function App() {
   }, [isAuth])
   return (
     <>
-      {/* <div className="absolute w-screen z-[2000] h-screen bg-gray-100 top-0 left-0 flex items-center justify-center">
-        <TableTestUI />
-      </div> */}
-
       <Layout>
         <Routes>
           <Route path="/" element={<Main />}></Route>
