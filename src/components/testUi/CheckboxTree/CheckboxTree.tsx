@@ -1,4 +1,6 @@
+import { RootState } from "@/store/store"
 import { useEffect } from "react"
+import { useSelector } from "react-redux"
 import { Checkbox } from "./Checkbox"
 import { checkboxProcess } from "./checkbox-process"
 
@@ -28,7 +30,7 @@ const CheckboxTree = ({
   expandAll,
 }: ICheckboxTreeProps) => {
   useEffect(() => {}, [checked, expandAll])
-
+  const { isSearch } = useSelector((state: RootState) => state.vehicles)
   const rows: any[] = checkboxProcess(data)
 
   return (
@@ -45,7 +47,7 @@ const CheckboxTree = ({
           keyword={keyword}
           setChecked={onChecked}
           checked={checked}
-          expandAll={expandAll}
+          expandAll={isSearch}
         />
       ))}
     </div>
