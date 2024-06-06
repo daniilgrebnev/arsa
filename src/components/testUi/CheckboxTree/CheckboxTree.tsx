@@ -31,6 +31,7 @@ const CheckboxTree = ({
 }: ICheckboxTreeProps) => {
   useEffect(() => {}, [checked, expandAll])
   const { isSearch } = useSelector((state: RootState) => state.vehicles)
+
   const rows: any[] = checkboxProcess(data)
 
   return (
