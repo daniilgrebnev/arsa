@@ -95,8 +95,10 @@ export const getTreeGroupsVehicles = async () => {
   try {
     const { data, status } = await instance.post("tpms/v1/ctl/vehicles/get_tree_vehicles")
     return { data, status }
-  } catch (error) {
-    return { error: "Ошибка запроса данных" }
+  } catch (error: any) {
+    console.error("Error fetching report:", error)
+    const status = error.response ? error.response.status : 500 // Default to 500 if no response
+    return { tableData: null, status }
   }
 }
 
@@ -108,11 +110,17 @@ export const getTableData = async (uuids: any) => {
   }
 
   console.log(body)
-  const response = await instance.post("tpms/v1/reports/get_report_tpms", body)
-
-  const tableData = response.data.data as ITableData
-  const status = response.status
-  return { tableData, status }
+  try {
+    const response = await instance.post("tpms/v1/reports/get_report_tpms", body)
+    const tableData = response.data.data as ITableData
+    const status = response.status
+    console.log(status)
+    return { tableData, status }
+  } catch (error: any) {
+    console.error("Error fetching report:", error)
+    const status = error.response ? error.response.status : 500 // Default to 500 if no response
+    return { tableData: null, status }
+  }
 }
 
 // Данные по машине

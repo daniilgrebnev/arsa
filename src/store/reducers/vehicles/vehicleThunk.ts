@@ -11,7 +11,7 @@ export const thunkGetVehicles = () => {
     console.log(status)
     switch (status) {
       case 401:
-        dispatch(setIsAuth({ auth: "error", text: "Время сессии истекло" }))
+        dispatch(setIsAuth({ auth: "error", text: "Сессия завершена" }))
         break
       case 200:
         dispatch(setVehicleData(data))

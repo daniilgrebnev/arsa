@@ -1,23 +1,13 @@
-import { useEffect } from "react"
-import { useDispatch, useSelector } from "react-redux"
 import { Route, Routes } from "react-router"
 import { Layout } from "./components/Layout/Layout"
 import { Main } from "./pages/Main"
 import { MapPage } from "./pages/Map"
 import { Table } from "./pages/Table"
-import { thunkGetVehicle } from "./store/reducers/security/securityThunk"
-
-import { RootState } from "./store/store"
 
 function App() {
-  const dispatch: any = useDispatch()
-  const { isAuth } = useSelector((state: RootState) => state.auth)
+  // const dispatch: any = useDispatch()
+  // const { isAuth } = useSelector((state: RootState) => state.auth)
 
-  useEffect(() => {
-    if (isAuth) {
-      dispatch(thunkGetVehicle())
-    }
-  }, [isAuth])
   return (
     <>
       <Layout>

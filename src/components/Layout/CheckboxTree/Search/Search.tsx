@@ -1,6 +1,7 @@
 import { IVehicleData } from "@/interfaces/vehicleTree"
 import { AppDispatch, RootState } from "@/store/store"
-import { useState } from "react"
+import { uniq } from "lodash"
+import { useCallback, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import {
   setDefaultFilteredData,
@@ -10,65 +11,92 @@ import {
 
 export const Search = () => {
   const [searchValue, setSearchValue] = useState("")
-
   const dispatch = useDispatch<AppDispatch>()
 
-  const { checkedVehicles, data, filteredData } = useSelector((state: RootState) => state.vehicles)
+  const { data } = useSelector((state: RootState) => state.vehicles)
 
-  const searchHandler = (text: string) => {
-    console.log(searchValue)
-    const textProcess = (text: string) => {
-      return text.toLowerCase().trim()
-    }
+  const textProcess = (text: string) => text.toLowerCase().trim()
 
-    if (text.length > 0) {
-      const searchFilterName: IVehicleData[] =
-        typeof data != "string" && data != null
-          ? data.data
-              .map((group: any) => ({
-                ...group,
-                vehicles: group.vehicles?.filter((vehicle) =>
-                  textProcess(vehicle.vehicle_name).includes(textProcess(text)),
-                ),
-              }))
-              .filter((group) => group.vehicles && group.vehicles.length > 0)
-          : []
+  const searchHandler = useCallback(
+    (text: string) => {
+      const processText = textProcess(text)
+      if (processText.length > 0 && data && typeof data !== "string") {
+        dispatch(setIsSearch(true))
+        const searchFilter = (filterFunc: (vehicle: any) => boolean) =>
+          data.data
+            .map((group: any) => ({
+              ...group,
+              vehicles: group.vehicles?.filter(filterFunc),
+            }))
+            .filter((group) => group.vehicles && group.vehicles.length > 0)
 
-      const searchFilterGroupName: IVehicleData[] =
-        typeof data != "string" && data != null
-          ? data.data.filter((group) => {
-              console.log(group)
-              return textProcess(group.group_name).includes(textProcess(text))
+        const filterByName = searchFilter((vehicle) =>
+          textProcess(vehicle.vehicle_name).includes(processText),
+        )
+
+        const filterByGroupName = data.data.filter((group) =>
+          textProcess(group.group_name).includes(processText),
+        )
+
+        const activeParentGroups = filterByGroupName.map((i) => i.id)
+
+        const additionalFilteredGroups = data.data.filter((group: any) =>
+          activeParentGroups.includes(group.parent_id),
+        )
+
+        filterByGroupName.push(...additionalFilteredGroups)
+
+        const filterByTerminalID = searchFilter((vehicle) =>
+          textProcess(vehicle.vehicle_id.toString()).includes(processText),
+        )
+
+        const combineSearches: { [key: number]: IVehicleData } = {}
+
+        filterByGroupName.forEach((group) => {
+          combineSearches[group.id] = group
+        })
+
+        if (filterByGroupName.length === 0) {
+          filterByName.forEach((group) => {
+            combineSearches[group.id] = group
+          })
+          filterByTerminalID.forEach((group) => {
+            combineSearches[group.id] = group
+          })
+        } else {
+          const addParentGroups = (searchResult: IVehicleData[]) => {
+            const parentGroups = searchResult.flatMap((group) =>
+              data.data.filter((parentGroup: any) => parentGroup.id === group.parent_id),
+            )
+            parentGroups.forEach((group) => {
+              combineSearches[group.id] = group
             })
-          : []
+          }
 
-      const searchTerminalIDFilters: IVehicleData[] =
-        typeof data != "string" && data != null
-          ? data.data
-              .map((group: any) => ({
-                ...group,
-                vehicles: group.vehicles?.filter((vehicle) =>
-                  textProcess(vehicle.vehicle_id.toString()).includes(textProcess(text)),
-                ),
-              }))
-              .filter((group) => group.vehicles && group.vehicles.length > 0)
-          : []
-      console.log(searchTerminalIDFilters)
-      const combineSearches: IVehicleData[] = []
+          addParentGroups(filterByName)
+          addParentGroups(filterByTerminalID)
+        }
 
-      // Порядок не менять !!!
-      combineSearches.push(...searchFilterName)
-      combineSearches.push(...searchFilterGroupName)
-      combineSearches.push(...searchTerminalIDFilters)
+        const finalizing = Object.values(combineSearches)
+        const levelMax = Math.max(...finalizing.map((group: any) => group.level))
 
-      dispatch(setIsSearch(true))
+        const higherLevelGroups = data.data.filter((group: any) => group.level > levelMax)
+        higherLevelGroups.forEach((group) => {
+          combineSearches[group.id] = group
+        })
 
-      dispatch(setFilteredData(combineSearches))
-    } else {
-      dispatch(setIsSearch(false))
-      dispatch(setDefaultFilteredData())
-    }
-  }
+        const heighInWork = data.data.filter((item) =>
+          finalizing.some((group) => group.parent_id == item.id),
+        )
+
+        dispatch(setFilteredData(uniq([...finalizing, ...heighInWork])))
+      } else {
+        dispatch(setIsSearch(false))
+        dispatch(setDefaultFilteredData())
+      }
+    },
+    [data, dispatch],
+  )
 
   return (
     <div>
@@ -88,7 +116,7 @@ export const Search = () => {
           title="Сбросить поиск"
           onClick={() => {
             setSearchValue("")
-            dispatch(dispatch(setDefaultFilteredData()))
+            dispatch(setDefaultFilteredData())
           }}
           className="text-red-600 text-2xl cursor-pointer"
         >
