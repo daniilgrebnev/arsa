@@ -67,6 +67,7 @@ export const MyMapContainer: React.FC<propsType> = (props) => {
         style={{ width: "100%", height: "100%" }}
         className="container-map"
       >
+        {props?.children && props.children}
         <SetMap />
         {!props.isEditor &&
           props.tracks &&

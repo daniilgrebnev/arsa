@@ -12,6 +12,7 @@ import {
   setIsOpenMenuTrack,
 } from "../store/reducers/map/map"
 import { getTrack } from "../store/reducers/map/mapThunk"
+import { SettingsEvents } from "./../components/Map/SettingsEvents/SettingsEvents"
 
 export const MapPage = () => {
   const dispatch = useDispatch<any>()
@@ -73,7 +74,9 @@ export const MapPage = () => {
           isEditor={isEditor}
           isOpenMenuFigure={menuFigure}
           chekedGeozone={chekedGeozone}
-        />
+        >
+          <SettingsEvents />
+        </MyMapContainer>
       </ContextMenu>
     </div>
   )

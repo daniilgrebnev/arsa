@@ -39,6 +39,13 @@ export const PolygonEditor = () => {
     }),
   )
 
+  const newCustomIconLastPoint = useRef(
+    L.divIcon({
+      className: "newCustomIconLastPoint",
+      iconSize: [20, 20],
+    }),
+  )
+
   useMapEvent("click", (e) => {
     if (edit) {
       dispatch(addGeozonePoint(e.latlng))
@@ -167,6 +174,7 @@ export const PolygonEditor = () => {
           >
             {points.map((position, index) => {
               const isFirstMarker = index === 0
+
               return (
                 <Marker
                   key={index}
@@ -176,7 +184,7 @@ export const PolygonEditor = () => {
                     click: () => (isFirstMarker ? clickLastPoint() : null),
                     move: (e) => moveMarker(e, index),
                   }}
-                  icon={customIcon.current}
+                  icon={isFirstMarker ? newCustomIconLastPoint.current : customIcon.current}
                 />
               )
             })}
