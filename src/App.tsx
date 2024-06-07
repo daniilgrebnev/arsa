@@ -2,15 +2,12 @@ import { Route, Routes } from "react-router"
 import { Layout } from "./components/Layout/Layout"
 import { Main } from "./pages/Main"
 
+import { MapPage } from "./pages/Map"
 import { Table } from "./pages/Table"
-
-
 
 function App() {
   // const dispatch: any = useDispatch()
   // const { isAuth } = useSelector((state: RootState) => state.auth)
-
-
 
   return (
     <>
