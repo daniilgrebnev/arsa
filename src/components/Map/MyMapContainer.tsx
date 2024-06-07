@@ -25,38 +25,39 @@ import {
 } from "./../../store/reducers/map/map"
 import { removeGeozone } from "./../../store/reducers/security/security"
 import { Track } from "./Track/Track"
+import { IGeozone } from "@/interfaces/geozone"
+import { DateTime } from "ts-luxon"
 
 type propsType = {
   center: LatLngExpression
   zoomMap: number
   children?: React.ReactNode
+  isEditor?: boolean
+  isOpenMenuFigure: boolean
+  chekedGeozone?: IGeozone[]
+  tracks?: any
 }
 
 export const MyMapContainer: React.FC<propsType> = (props) => {
-  const isEditor = useSelector((state: RootState) => state.map.editMap)
   const dispatch = useDispatch()
 
   const [menuPosition, setMenuPosition] = useState({ x: 0, y: 0 })
-
-  const menuFigure = useSelector((state: RootState) => state.map.isOpenMenuFigure)
 
   const handleContextMenu = (event: any) => {
     setMenuPosition({ x: event.clientX, y: event.clientY })
   }
 
-  const chekedGeozone = useSelector((state: RootState) => state.security.geozonesCheked)
-
-  const tracks = useSelector((state: RootState) => state.map.tracks)
-
   return (
     <div
       style={{ width: "100%", height: "94vh", position: "relative", zIndex: 1 }}
       onClick={(e) => {
-        dispatch(setIsOpenMenuMap(false))
-        dispatch(setIsOpenMenuFigure(false))
-        tracks.forEach((i, index) => {
-          dispatch(setIsOpenMenuTrack({ id: index, value: false }))
-        })
+        if (props.tracks) {
+          dispatch(setIsOpenMenuMap(false))
+          dispatch(setIsOpenMenuFigure(false))
+          props.tracks.forEach((i, index) => {
+            dispatch(setIsOpenMenuTrack({ id: index, value: false }))
+          })
+        }
       }}
     >
       <MapContainer
@@ -67,8 +68,10 @@ export const MyMapContainer: React.FC<propsType> = (props) => {
         className="container-map"
       >
         <SetMap />
-        {!isEditor &&
-          tracks.map((track, index) => {
+        {!props.isEditor &&
+          props.tracks &&
+          props.tracks.map((track, index) => {
+            console.log(track)
             return <Track track={track} index={index} />
           })}
 
@@ -76,8 +79,9 @@ export const MyMapContainer: React.FC<propsType> = (props) => {
           attribution="&copy; <a href='https://www.openstreetmap.org/copyright'>OpenStreetMap</a> contributors"
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
-        {!isEditor &&
-          chekedGeozone.map((geozone, key) => {
+        {!props.isEditor &&
+          props.chekedGeozone &&
+          props.chekedGeozone.map((geozone, key) => {
             if (geozone.geometry_type_id === "rectangle") {
               return (
                 <ContextMenu
@@ -97,7 +101,7 @@ export const MyMapContainer: React.FC<propsType> = (props) => {
                     },
                   ]}
                   menuPosition={menuPosition}
-                  menuVisible={menuFigure}
+                  menuVisible={props.isOpenMenuFigure}
                   contextMenu={handleContextMenu}
                   setMenuVisible={(visible) => dispatch(setIsOpenMenuFigure(visible))}
                 >
@@ -151,7 +155,7 @@ export const MyMapContainer: React.FC<propsType> = (props) => {
                     },
                   ]}
                   menuPosition={menuPosition}
-                  menuVisible={menuFigure}
+                  menuVisible={props.isOpenMenuFigure}
                   contextMenu={handleContextMenu}
                   setMenuVisible={(visible) => dispatch(setIsOpenMenuFigure(visible))}
                 >
@@ -202,7 +206,7 @@ export const MyMapContainer: React.FC<propsType> = (props) => {
                     },
                   ]}
                   menuPosition={menuPosition}
-                  menuVisible={menuFigure}
+                  menuVisible={props.isOpenMenuFigure}
                   contextMenu={handleContextMenu}
                   setMenuVisible={(visible) => dispatch(setIsOpenMenuFigure(visible))}
                 >
@@ -249,7 +253,7 @@ export const MyMapContainer: React.FC<propsType> = (props) => {
                     },
                   ]}
                   menuPosition={menuPosition}
-                  menuVisible={menuFigure}
+                  menuVisible={props.isOpenMenuFigure}
                   contextMenu={handleContextMenu}
                   setMenuVisible={(visible) => dispatch(setIsOpenMenuFigure(visible))}
                 >
@@ -279,9 +283,9 @@ export const MyMapContainer: React.FC<propsType> = (props) => {
               )
             }
           })}
-        {isEditor && <MapEditor />}
+        {props.isEditor && <MapEditor />}
       </MapContainer>
-      {isEditor && <MenuEditor />}
+      {props.isEditor && <MenuEditor />}
     </div>
   )
 }
