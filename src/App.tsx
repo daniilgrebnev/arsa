@@ -16,7 +16,7 @@ function App() {
   const { isAuth } = useSelector((state: RootState) => state.auth)
 
   useEffect(() => {
-    dispatch(thunkAuth({ login: "1111", password: "3423", mobile_phone: "" }))
+    // dispatch(thunkAuth({ login: "1111", password: "3423", mobile_phone: "" }))
     if (isAuth) {
       dispatch(thunkGetVehicle())
     }
