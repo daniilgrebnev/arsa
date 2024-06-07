@@ -180,7 +180,7 @@ const initialState = {
   startTiming: Math.round(
     DateTime.local().set({ hour: 0, minute: 0, second: 0, millisecond: 0 }).toSeconds(),
   ),
-  endTiming: Math.round(DateTime.local().toSeconds()),
+  endTiming: Math.round(DateTime.local().set({ hour: 23, minute: 59 }).toSeconds()),
 } satisfies CounterState as CounterState
 
 const counterSlice = createSlice({
@@ -256,10 +256,10 @@ const counterSlice = createSlice({
     },
 
     setStartTiming(state: CounterState, action: PayloadAction<number>) {
-      state.startTiming = action.payload
+      state.startTiming = Math.round(action.payload)
     },
     setEndTiming(state: CounterState, action: PayloadAction<number>) {
-      state.endTiming = action.payload
+      state.endTiming = Math.round(action.payload)
     },
 
     removeGeozone(state: CounterState, action: PayloadAction<string>) {

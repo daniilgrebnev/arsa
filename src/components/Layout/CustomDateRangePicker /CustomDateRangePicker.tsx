@@ -21,8 +21,8 @@ export const CustomDateRangePicker = () => {
   const russianDays = ["пн", "вт", "ср", "чт", "пт", "сб", "вс"]
 
   useEffect(() => {
-    dispatch(setStartTiming(startDate.toMillis()))
-    dispatch(setEndTiming(endDate.toMillis()))
+    dispatch(setStartTiming(startDate.toSeconds()))
+    dispatch(setEndTiming(endDate.toSeconds()))
     console.log("x ")
   }, [startDate, endDate])
 

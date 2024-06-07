@@ -32,7 +32,7 @@ export const SwitchTire = () => {
   const { startTiming } = useSelector((state: RootState) => state.security)
   const current_Id = switchHistoryTire != null ? switchHistoryTire?.wheel_id : wheel_id
   const submitHandler = () => {
-    dispatch(setEndTiming(DateTime.now().toMillis()))
+    dispatch(setEndTiming(DateTime.now().toSeconds()))
     const body: ISwitchReq = {
       wheel_id: switchAll ? 0 : current_Id,
       wheel_model_id: tireId != null ? tireId : 0,
