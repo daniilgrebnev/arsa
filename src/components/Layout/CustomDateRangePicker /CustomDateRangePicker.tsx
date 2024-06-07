@@ -13,8 +13,8 @@ export const CustomDateRangePicker = () => {
 
   const { endTiming, startTiming } = useSelector((state: RootState) => state.security)
 
-  const [startDate, setStartDate] = useState(DateTime.fromMillis(startTiming))
-  const [endDate, setEndDate] = useState(DateTime.fromMillis(endTiming))
+  const [startDate, setStartDate] = useState(DateTime.fromSeconds(startTiming))
+  const [endDate, setEndDate] = useState(DateTime.fromSeconds(endTiming))
   const [activeTiming, setActiveTiming] = useState(1)
 
   const [isOpenPopup, setIsOpenPopup] = useState(false)

@@ -47,8 +47,6 @@ export const MyMapContainer: React.FC<propsType> = (props) => {
     setMenuPosition({ x: event.clientX, y: event.clientY })
   }
 
-  console.log(Math.round(DateTime.local().toSeconds()))
-
   return (
     <div
       style={{ width: "100%", height: "94vh", position: "relative", zIndex: 1 }}
