@@ -26,6 +26,7 @@ import {
 import { removeGeozone } from "./../../store/reducers/security/security"
 import { Track } from "./Track/Track"
 import { IGeozone } from "@/interfaces/geozone"
+import { DateTime } from "ts-luxon"
 
 type propsType = {
   center: LatLngExpression
@@ -45,6 +46,8 @@ export const MyMapContainer: React.FC<propsType> = (props) => {
   const handleContextMenu = (event: any) => {
     setMenuPosition({ x: event.clientX, y: event.clientY })
   }
+
+  console.log(Math.round(DateTime.local().toSeconds()))
 
   return (
     <div
@@ -70,6 +73,7 @@ export const MyMapContainer: React.FC<propsType> = (props) => {
         {!props.isEditor &&
           props.tracks &&
           props.tracks.map((track, index) => {
+            console.log(track)
             return <Track track={track} index={index} />
           })}
 

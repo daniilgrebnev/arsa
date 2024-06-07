@@ -17,12 +17,8 @@ export const Wheel: React.FC<IWheel> = (wheel) => {
   const { isOpen } = useSelector((state: RootState) => state.wheelChart)
   const isActiveWheel: boolean =
     useSelector((state: RootState) => state.car.wheel_id) === wheel.wheel_id
-  const start_date: number = Math.round(
-    useSelector((state: RootState) => state.security.startTiming) / 1000,
-  )
-  const end_date: number = Math.round(
-    useSelector((state: RootState) => state.security.endTiming) / 1000,
-  )
+  const start_date: number = useSelector((state: RootState) => state.security.startTiming)
+  const end_date: number = useSelector((state: RootState) => state.security.endTiming)
 
   const body = {
     press: wheel.data.sensor_data.press,

@@ -177,8 +177,10 @@ const initialState = {
   ],
   geozonesCheked: [],
   drivers: [],
-  startTiming: DateTime.local().set({ hour: 0, minute: 0, second: 0, millisecond: 0 }).toMillis(),
-  endTiming: DateTime.local().toMillis(),
+  startTiming: Math.round(
+    DateTime.local().set({ hour: 0, minute: 0, second: 0, millisecond: 0 }).toSeconds(),
+  ),
+  endTiming: Math.round(DateTime.local().toSeconds()),
 } satisfies CounterState as CounterState
 
 const counterSlice = createSlice({

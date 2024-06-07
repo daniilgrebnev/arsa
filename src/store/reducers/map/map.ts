@@ -58,6 +58,7 @@ const mapSlice = createSlice({
   initialState,
   reducers: {
     addTrack(state: Imap, action: PayloadAction<any>) {
+      debugger
       state.tracks = [
         ...state.tracks,
         {

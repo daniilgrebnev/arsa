@@ -18,8 +18,8 @@ export const Fuel = () => {
   const { data } = useSelector((state: RootState) => state.fuel)
 
   const body: IFuelReq = {
-    start_date: Math.round(startTiming / 1000),
-    end_date: Math.round(endTiming / 1000),
+    start_date: startTiming,
+    end_date: endTiming,
     tank_id: Number(tank),
   }
 
