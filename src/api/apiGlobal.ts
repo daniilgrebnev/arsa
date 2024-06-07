@@ -21,7 +21,7 @@ export const createInstance = (token: string) => {
 export const getInfoPointEvent = async (uid: string, start_date: number, end_date: number) => {
   try {
     const res = await instance.post(
-      "https://server.arsa.pro/server/api/v1/reports/events/get/events",
+      "https://server.arsa.pro/api/svr/v1/reports/tracks/get_events",
       {
         vehicle_uid: uid,
         start_date: start_date,
@@ -74,7 +74,7 @@ export const codeAuth = async (code: string): Promise<number> => {
 export const getTrackAPI = async (uid: string, start_time: any, end_time: any) => {
   try {
     const response = await instance.post(
-      "https://server.arsa.pro/server/api/v1/reports/track/get/track",
+      "https://server.arsa.pro/api/svr/v1/reports/tracks/get_track",
       {
         vehicle_uid: uid, // uid машины *
         start_date: start_time, // Дата начала периода *

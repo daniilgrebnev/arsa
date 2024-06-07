@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux"
 import { Link } from "react-router-dom"
 import { thunkGetVehicles } from "../../../store/reducers/vehicles/vehicleThunk"
 import { CheckboxTreeContainer } from "../CheckboxTree/CheckboxTree"
-import { DateRangePicker } from "../CustomDateRangePicker/CustomDateRangePicker"
+import { CustomDateRangePicker } from "../CustomDateRangePicker /CustomDateRangePicker"
 
 const LeftBar = () => {
   const dispatch = useDispatch<AppDispatch>()
@@ -21,7 +21,7 @@ const LeftBar = () => {
         <img src="logo.png" alt="ARSA" />
       </Link>
 
-      <DateRangePicker />
+      <CustomDateRangePicker />
       <div className="w-full cd" style={{ height: "72vh" }}>
         <CheckboxTreeContainer />
       </div>

@@ -4,18 +4,11 @@ import { addTrack, setTrackAll } from "./map"
 
 export const getTrack = (uids: string[], start_time: any, end_time: any) => {
   return async (dispatch: AppDispatch) => {
+    debugger
     const tracks = await Promise.all(
       uids.map(async (uid) => {
-        const resTrack = await getTrackAPI(
-          uid,
-          Math.round(start_time / 1000),
-          Math.round(end_time / 1000),
-        )
-        const resEvents = await getInfoPointEvent(
-          uid,
-          Math.round(start_time / 1000),
-          Math.round(end_time / 1000),
-        )
+        const resTrack = await getTrackAPI(uid, start_time, end_time)
+        const resEvents = await getInfoPointEvent(uid, start_time, end_time)
         return { track: resTrack.data, events: resEvents.data, uid: uid }
       }),
     )

@@ -192,3 +192,13 @@
   text-align: center;
   width: 33px;
 }
+
+.newCustomIcon {
+  background-color: #ffffffa1;
+  border: 1px solid #00000040;
+}
+
+.newCustomIcon:hover {
+  background-color: #fff;
+  border: 1px solid #000;
+}
