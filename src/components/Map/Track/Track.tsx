@@ -15,6 +15,7 @@ import {
 } from "./../../../store/reducers/map/map"
 import { SwitchDecoratorLine } from "../SwitchDecoratorLine/SwitchDecoratorLine"
 import { ContextMenu } from "../ContextMenu/ContextMenu"
+import { douglasPeucker } from "./../../../helpers/map"
 
 export const Track = ({ track, index }) => {
   const dispatch = useDispatch()
@@ -74,7 +75,10 @@ export const Track = ({ track, index }) => {
                 geometry_type_id: "line",
                 use_as_address: false,
                 image_url: null,
-                geozone_points: track.data.map((i) => new LatLng(i.lt, i.ln)),
+                geozone_points: douglasPeucker(
+                  track.data.map((i) => new LatLng(i.lt, i.ln)),
+                  0.0009,
+                ),
                 comment: `Путь создани по треку c id ${track.id}`,
                 account_id: 654546,
                 transparency: 0.75,
@@ -100,7 +104,10 @@ export const Track = ({ track, index }) => {
                 geometry_type_id: "polygon",
                 use_as_address: false,
                 image_url: null,
-                geozone_points: [...track.data].map((i) => new LatLng(i.lt, i.ln)),
+                geozone_points: douglasPeucker(
+                  [...track.data].map((i) => new LatLng(i.lt, i.ln)),
+                  0.001,
+                ),
                 comment: `Путь создани по треку c id ${track.id}`,
                 account_id: 654546,
                 transparency: 0.75,
