@@ -9,12 +9,14 @@ import { thunkGetVehicle } from "./store/reducers/security/securityThunk"
 
 import { RootState } from "./store/store"
 import { MapPage } from "./pages/Map"
+import { thunkAuth } from "./store/reducers/auth/authThunk"
 
 function App() {
   const dispatch: any = useDispatch()
   const { isAuth } = useSelector((state: RootState) => state.auth)
 
   useEffect(() => {
+    dispatch(thunkAuth({ login: "1111", password: "3423", mobile_phone: "" }))
     if (isAuth) {
       dispatch(thunkGetVehicle())
     }
