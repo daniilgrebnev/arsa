@@ -1,5 +1,5 @@
-import { AppDispatch } from "@/store/store"
-import { useDispatch } from "react-redux"
+import { AppDispatch, RootState } from "@/store/store"
+import { useDispatch, useSelector } from "react-redux"
 import { ICatalog, setUpdatedElem } from "../../../../store/reducers/catalog/catalog"
 import { deleteWheelModelThunk } from "../../../../store/reducers/catalog/catalogThunk"
 
@@ -8,6 +8,13 @@ interface ICatalogItem extends ICatalog {
 }
 
 export const CatalogItem = ({ id, name, comment }: ICatalogItem) => {
+  const account_id = useSelector((state: RootState) =>
+    typeof state.car.data != "string"
+      ? state.car.data != undefined
+        ? state.car.data?.data.account_id
+        : -1
+      : -1,
+  )
   const dispatch = useDispatch<AppDispatch>()
   const elem: ICatalog = { id, name, comment }
   return (
@@ -31,7 +38,7 @@ export const CatalogItem = ({ id, name, comment }: ICatalogItem) => {
             </div>
             <div
               onClick={() => {
-                dispatch(deleteWheelModelThunk(elem.id))
+                dispatch(deleteWheelModelThunk(elem.id, account_id))
               }}
               className=" icon-delete text-2xl hover:text-red-600 top-2 right-2 text-red-500"
             ></div>

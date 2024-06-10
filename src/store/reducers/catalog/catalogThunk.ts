@@ -23,11 +23,11 @@ export const createUpdateWheelModelThunk = ({ id, name, comment }: IWheel, { acc
     }
   }
 }
-export const deleteWheelModelThunk = (id: number) => {
+export const deleteWheelModelThunk = (id: number, account_id: number) => {
   return async (dispatch: AppDispatch) => {
     const response = await deleteWheelModel(id)
     if (typeof response != undefined) {
-      dispatch(getCatalogThunk(id))
+      dispatch(getCatalogThunk(account_id))
     } else {
       alert("Ошибка запроса")
     }

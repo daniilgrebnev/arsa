@@ -19,10 +19,8 @@ export const SwitchHistory = () => {
 
   const { vehicle_uid } = useSelector((state: RootState) => state.car)
   const wheel_id = useSelector((state: RootState) => state.car.wheel_id) || 0
-  const start_date = Math.round(
-    useSelector((state: RootState) => state.security.startTiming) / 1000
-  )
-  const end_date = Math.round(useSelector((state: RootState) => state.security.endTiming) / 1000)
+  const start_date = useSelector((state: RootState) => state.security.startTiming)
+  const end_date = useSelector((state: RootState) => state.security.endTiming)
 
   const body: ISwitchHistoryReq = {
     vehicle_uid,
@@ -40,7 +38,7 @@ export const SwitchHistory = () => {
       id,
       description,
       tireName: name,
-      wheel_id:0,
+      wheel_id: 0,
     }
     dispatch(setSwitchHistoryTire(tire))
   }
