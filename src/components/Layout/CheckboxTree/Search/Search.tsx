@@ -46,8 +46,8 @@ export const Search = () => {
 
         filterByGroupName.push(...additionalFilteredGroups)
 
-        const filterByTerminalID = searchFilter((vehicle) =>
-          textProcess(vehicle.vehicle_id.toString()).includes(processText),
+        const filterByTerminalID = searchFilter(
+          (vehicle) => textProcess(vehicle.vehicle_id.toString()) === processText,
         )
 
         const combineSearches: { [key: number]: IVehicleData } = {}
