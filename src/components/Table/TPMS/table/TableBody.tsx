@@ -1,6 +1,5 @@
 import { ITableData } from "@/interfaces/table"
 import { AppDispatch, RootState } from "@/store/store"
-import moment from "moment"
 import "moment/locale/ru"
 import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
@@ -14,7 +13,6 @@ import { setDefaultWheelChart } from "../../../../store/reducers/wheelChart/whee
 import { CircleIndicatorContainer } from "./CircleIndicatorContainer"
 
 export const TableBody = () => {
-  moment.locale("ru")
   let [newData, setNewData] = useState<ITableData[]>([])
   const { filters, type } = useSelector((state: RootState) => state.filters)
   const defaultData = useSelector((state: RootState) => state.table.data)

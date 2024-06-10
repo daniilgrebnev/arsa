@@ -22,7 +22,7 @@ export const colorInit = ({ press, norm, delta, d, valid_period }: IPropsWP) => 
     colorName = "yellow"
   } else if (redUp || redDown) {
     color = "bg-red-600"
-    arrowDirection = redUp ? "up" : "down"
+    arrowDirection = !redUp ? "up" : "down"
     colorName = "red"
   } else if (green) {
     color = "bg-green-600"

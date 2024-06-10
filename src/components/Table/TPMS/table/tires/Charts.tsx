@@ -41,8 +41,8 @@ export const Charts = () => {
     vehicle_uid: queryData ? queryData?.vehicle_uid : "",
     wheel_axes_id: queryData ? queryData?.wheel_axes_id : 0,
     sensor_number: queryData ? queryData?.sensor_number : 0,
-    end_date: Math.round(endTiming / 1000),
-    start_date: Math.round(startTiming / 1000),
+    end_date: Math.round(endTiming),
+    start_date: Math.round(startTiming),
   }
 
   useEffect(() => {
@@ -55,7 +55,7 @@ export const Charts = () => {
       const newMax = domain.max - 3600
       const newMin = domain.min - 3600
       const zoomDelta = newMax - newMin
-      const startDate = Math.round(startTiming / 1000)
+      const startDate = Math.round(startTiming)
       if (newMin < startDate) {
         setIsMin(true)
         dispatch(
@@ -80,7 +80,7 @@ export const Charts = () => {
       const newMax = domain.max + 3600
       const newMin = domain.min + 3600
       const zoomDelta = newMax - newMin
-      const endDate = Math.round(endTiming / 1000)
+      const endDate = Math.round(endTiming)
       if (newMax > endDate) {
         setIsMax(true)
         dispatch(

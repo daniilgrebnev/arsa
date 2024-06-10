@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
 // interface Vehicle {
 //   type: "vehicle"
@@ -44,11 +44,9 @@ export const Checkbox = ({
   const handleToggle = () => {
     setIsOpen(!isOpen)
   }
-  const onSelect = (elem) => {
-    console.log(elem)
-  }
+
   const handleCheckboxChange = (isChecked: boolean) => {
-    if (data.type === "group") {
+    if (data[keyword] !== undefined) {
       const allVehicleUids = getAllVehicleUids(data.children)
       if (isChecked) {
         setChecked((prevChecked) => {
@@ -59,7 +57,7 @@ export const Checkbox = ({
           return prevChecked.filter((uid) => !allVehicleUids.includes(uid))
         })
       }
-    } else if (data.type === "vehicle") {
+    } else if (data[keyword] === undefined) {
       if (isChecked) {
         setChecked((prevChecked) => {
           return Array.from(new Set([...prevChecked, data.vehicle_uid]))
@@ -83,9 +81,9 @@ export const Checkbox = ({
   const getAllVehicleUids = (children: any): string[] => {
     let uids: string[] = []
     children.forEach((child) => {
-      if (child.type === "vehicle") {
+      if (child[keyword] === undefined) {
         uids.push(child.vehicle_uid)
-      } else if (child.type === "group") {
+      } else if (child[keyword] !== undefined) {
         uids = [...uids, ...getAllVehicleUids(child.children)]
       }
     })
@@ -93,18 +91,18 @@ export const Checkbox = ({
   }
 
   const isChecked = (): boolean => {
-    if (data.type === "group") {
+    if (data[keyword] !== undefined) {
       const allVehicleUids = getAllVehicleUids(data.children)
       return allVehicleUids.length > 0 && allVehicleUids.every((uid) => checked.includes(uid))
-    } else if (data.type === "vehicle") {
+    } else if (data[keyword] === undefined) {
       return checked.includes(data.vehicle_uid)
     }
     return false
   }
-
+  useEffect(() => {}, [checked, data, isChecked])
   const isHalfChecked = (): boolean => {
-    if (!isChecked() && data.type === "group") {
-      const allVehicleUids = getAllVehicleUids(data.children)
+    if (!isChecked() && data[keyword] !== undefined) {
+      const allVehicleUids = getAllVehicleUids(data[keyword])
       return allVehicleUids.some((uid) => checked.includes(uid))
     } else {
       return false
@@ -125,23 +123,36 @@ export const Checkbox = ({
         <div className=" ">
           {checkItemsIsFull && (
             <>
-              {isHalfChecked() && <div onClick={handleIconClick}>{iconHalfCheck}</div>}
-              {isChecked() && <div onClick={handleIconClick}>{iconCheck}</div>}
+              {isHalfChecked() && (
+                <div onClick={() => handleCheckboxChange(true)}>{iconHalfCheck}</div>
+              )}
+              {isChecked() && <div onClick={() => handleCheckboxChange(false)}>{iconCheck}</div>}
               {!isChecked() && !isHalfChecked() && (
-                <div onClick={handleIconClick}>{iconNonCheck}</div>
+                <div onClick={() => handleCheckboxChange(true)}>{iconNonCheck}</div>
               )}
             </>
           )}
         </div>
 
-        {data.type === "vehicle" && (
-          <div className="" onClick={handleIconClick}>
+        {data[keyword] === undefined && (
+          <div
+            className=""
+            onClick={(e) => {
+              e.stopPropagation()
+              handleIconClick()
+            }}
+          >
             {data.vehicle_name}
           </div>
         )}
-        {data.type === "group" && (
+        {data[keyword] !== undefined && (
           <>
-            <span onClick={handleToggle}>
+            <span
+              onClick={(e) => {
+                e.stopPropagation()
+                handleToggle()
+              }}
+            >
               {isOpen ? (
                 <> {iconExpand ? iconExpand : "[+]"} </>
               ) : (

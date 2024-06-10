@@ -2,14 +2,14 @@ import { AppDispatch } from "@/store/store"
 import { useEffect } from "react"
 import { useDispatch } from "react-redux"
 import { Link } from "react-router-dom"
-import { thunkGetVehicle } from "../../../store/reducers/security/securityThunk"
+import { thunkGetVehicles } from "../../../store/reducers/vehicles/vehicleThunk"
 import { CheckboxTreeContainer } from "../CheckboxTree/CheckboxTree"
 import { CustomDateRangePicker } from "../CustomDateRangePicker /CustomDateRangePicker"
 
 const LeftBar = () => {
   const dispatch = useDispatch<AppDispatch>()
   useEffect(() => {
-    dispatch(thunkGetVehicle())
+    dispatch(thunkGetVehicles())
   }, [])
 
   return (

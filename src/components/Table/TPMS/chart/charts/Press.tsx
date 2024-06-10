@@ -26,8 +26,8 @@ const Press = (propsChartData: any) => {
   const notNorm = (data) => {
     const timeCheck = data.filter((item) =>
       item.wheel_pressure.some(
-        (i) => i.d && DateTime.now().toSeconds() - i.d < item.settings.sensors_valid_time_period
-      )
+        (i) => i.d && DateTime.now().toSeconds() - i.d < item.settings.sensors_valid_time_period,
+      ),
     )
     const count = timeCheck.filter((item) => item.sensors_out_of_norm).length
 
@@ -55,9 +55,11 @@ const Press = (propsChartData: any) => {
       color: "#f5cc16",
       count: chartData
         ? chartData.filter(
-            (i) =>
+            (i, index) =>
+              chartData[index].wheel_pressure.length !== 0 &&
               Math.round(new Date().getTime() / 1000) - i.last_event_date >
-              i.settings.sensors_valid_time_period && chartData
+                i.settings.sensors_valid_time_period &&
+              chartData,
           ).length
         : 100,
     },

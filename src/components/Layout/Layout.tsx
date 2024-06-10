@@ -1,7 +1,6 @@
 import { AppDispatch, RootState } from "@/store/store"
-import React, { useEffect } from "react"
+import React from "react"
 import { useDispatch, useSelector } from "react-redux"
-import { thunkGetVehicles } from "../../store/reducers/vehicles/vehicleThunk"
 import { Auth } from "../Auth/Auth"
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "../shadcnui/ui/resizable"
 import Header from "./Header/Header"
@@ -17,9 +16,7 @@ export const Layout = ({
   const { isOpen } = useSelector((state: RootState) => state.objectSettings)
   const { test } = useSelector((state: RootState) => state.security)
   const dispatch = useDispatch<AppDispatch>()
-  useEffect(() => {
-    dispatch(thunkGetVehicles())
-  }, [isAuth])
+
   return (
     <div>
       {isAuth == true ? (

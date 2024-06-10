@@ -8,10 +8,10 @@ export const thunkGetVehicles = () => {
   return async (dispatch: AppDispatch) => {
     dispatch(setVehicleData("loading"))
     const { status, data } = await getTreeGroupsVehicles()
-    console.log(status)
+
     switch (status) {
       case 401:
-        dispatch(setIsAuth({ auth: "error", text: "Время сессии истекло" }))
+        dispatch(setIsAuth({ auth: "error", text: "Сессия завершена" }))
         break
       case 200:
         dispatch(setVehicleData(data))

@@ -1,8 +1,5 @@
-import { RootState } from "@/store/store"
 import { useEffect } from "react"
-import { useSelector } from "react-redux"
 import { Checkbox } from "./Checkbox"
-import { checkboxProcess } from "./checkbox-process"
 
 interface ICheckboxTreeProps {
   data: any
@@ -30,25 +27,24 @@ const CheckboxTree = ({
   expandAll,
 }: ICheckboxTreeProps) => {
   useEffect(() => {}, [checked, expandAll])
-  const { isSearch } = useSelector((state: RootState) => state.vehicles)
 
-  const rows: any[] = checkboxProcess(data)
+  useEffect(() => {}, [checked, data])
 
   return (
     <div>
-      {rows.map((i) => (
+      {data.map((i: any, index) => (
         <Checkbox
           iconCheck={iconCheck}
           iconExpand={iconExpand}
           iconHalfCheck={iconHalfCheck}
           iconNonCheck={iconNonCheck}
           iconNonExpand={iconNonExpand}
-          key={i.type === "vehicle" ? i.vehicle_uid : i.group_name}
+          key={index}
           data={i}
           keyword={keyword}
           setChecked={onChecked}
           checked={checked}
-          expandAll={isSearch}
+          expandAll={expandAll}
         />
       ))}
     </div>
