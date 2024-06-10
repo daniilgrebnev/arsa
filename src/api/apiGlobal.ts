@@ -14,7 +14,7 @@ let instance = axios.create({
 export const createInstance = (token: string) => {
   instance = axios.create({
     baseURL: "https://tpms.arsa.pro/api/",
-    headers: { "X-Auth": token },
+    headers: { "X-Auth": token, "Content-Type": "application/json" },
   })
 }
 
@@ -94,6 +94,17 @@ export const getTrackAPI = async (uid: string, start_time: any, end_time: any) =
 export const getTreeGroupsVehicles = async () => {
   try {
     const { data, status } = await instance.post("tpms/v1/ctl/vehicles/get_tree_vehicles")
+    return { data, status }
+  } catch (error: any) {
+    console.error("Error fetching report:", error)
+    const status = error.response ? error.response.status : 500 // Default to 500 if no response
+    return { tableData: null, status }
+  }
+}
+
+export const getTreeDrivers = async () => {
+  try {
+    const { data, status } = await instance.post("tpms/v1/ctl/drivers/get_tree_drivers")
     return { data, status }
   } catch (error: any) {
     console.error("Error fetching report:", error)
