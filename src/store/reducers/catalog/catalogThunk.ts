@@ -27,7 +27,7 @@ export const deleteWheelModelThunk = (id: number) => {
   return async (dispatch: AppDispatch) => {
     const response = await deleteWheelModel(id)
     if (typeof response != undefined) {
-      dispatch(getCatalogThunk(3))
+      dispatch(getCatalogThunk(id))
     } else {
       alert("Ошибка запроса")
     }
