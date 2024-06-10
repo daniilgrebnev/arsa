@@ -35,8 +35,7 @@ const Press = (propsChartData: any) => {
   }
 
   const chartData = propsChartData.data
-  const haveSensors = chartData.wheel_pressure && chartData.wheel_pressure.length == 0
-  console.log(chartData)
+
   const data = [
     {
       name: "В норме",
@@ -56,9 +55,8 @@ const Press = (propsChartData: any) => {
       color: "#f5cc16",
       count: chartData
         ? chartData.filter(
-            (i) =>
-              chartData &&
-              haveSensors &&
+            (i, index) =>
+              chartData[index].wheel_pressure.length !== 0 &&
               Math.round(new Date().getTime() / 1000) - i.last_event_date >
                 i.settings.sensors_valid_time_period &&
               chartData,
