@@ -12,6 +12,7 @@ export const getTrack = (uids: string[], start_time: any, end_time: any) => {
         return { track: resTrack.data, events: resEvents.data, uid: uid }
       }),
     )
+    debugger
     dispatch(setTrackAll([]))
     tracks.forEach((track) => {
       if (track.track.length > 0) {
