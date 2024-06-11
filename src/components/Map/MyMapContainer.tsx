@@ -262,6 +262,7 @@ export const MyMapContainer: React.FC<propsType> = (props) => {
                     positions={geozone.geozone_points.map((item) => {
                       return [item.lat, item.lng]
                     })}
+                    pathOptions={{ weight: 5 }}
                     eventHandlers={{
                       mousedown: (e) => {
                         e.originalEvent.preventDefault()
