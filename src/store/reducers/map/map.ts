@@ -24,9 +24,11 @@ interface Imap {
   }>
   pointInfo: { index: number; idTrack: number } | null
   map: any
+  infoGeozones: any
 }
 
 const initialState: Imap = {
+  infoGeozones: [],
   editMap: false,
   isOpenMenuMap: false,
   isOpenMenuFigure: false,
@@ -39,7 +41,7 @@ const initialState: Imap = {
     longitube: null,
     radius: 0,
     line_width: 2,
-    geometry_type_id: "polygon",
+    geometry_type_id: 2,
     use_as_address: false,
     image_url: null,
     geozone_points: [],
@@ -57,6 +59,31 @@ const mapSlice = createSlice({
   name: "table",
   initialState,
   reducers: {
+    setAllGeozoneInfo(state: Imap, action: PayloadAction<any>) {
+      state.infoGeozones = action.payload
+      // if (action.payload.length > 0) {
+      //   const points = L.polyline(action.payload.geozone_points.map((el) => [el.lt, el.ln]))
+      //   const bounds = points.getBounds()
+      //   state.map.fitBounds(bounds)
+      // }
+    },
+    addGeozone(state: Imap, action: PayloadAction<any>) {
+      state.infoGeozones = [...state.infoGeozones, action.payload]
+    },
+    setCreatorFigure(state: Imap, action: PayloadAction<any>) {
+      let figure = { ...action.payload }
+      if (figure.transparency === 0) {
+        figure.transparency = 0.1
+      }
+      if (figure.line_width === 0) {
+        figure.line_width = 3
+      }
+      if (figure.color === "") {
+        figure.color = "#3388ff"
+      }
+      state.creatorFigure = figure
+      state.editMap = true
+    },
     addTrack(state: Imap, action: PayloadAction<any>) {
       debugger
       state.tracks = [
@@ -87,7 +114,7 @@ const mapSlice = createSlice({
         longitube: 0,
         radius: 0,
         line_width: 1,
-        geometry_type_id: "rectangle",
+        geometry_type_id: 2,
         use_as_address: false,
         image_url: null,
         geozone_points: [],
@@ -108,7 +135,8 @@ const mapSlice = createSlice({
     },
     setTypeFigure(state: Imap, action: PayloadAction<Tfigure>) {
       state.creatorFigure.geometry_type_id = action.payload
-      if (action.payload === "circle") {
+      debugger
+      if (action.payload === 0) {
         if (!state.creatorFigure.latitube && !state.creatorFigure.longitube) {
           state.creatorFigure.geozone_points = []
         }
@@ -121,7 +149,7 @@ const mapSlice = createSlice({
           )
         })
       }
-      if (action.payload === "line") {
+      if (action.payload === 3) {
         state.creatorFigure.latitube = null
         state.creatorFigure.longitube = null
         state.creatorFigure.radius = null
@@ -179,10 +207,18 @@ const mapSlice = createSlice({
     setMap(state: Imap, action: PayloadAction<any>) {
       state.map = action.payload
     },
+    setCenter(state: Imap, action: PayloadAction<{ lat: number; lng: number }>) {
+      state.creatorFigure.latitube = action.payload.lat
+      state.creatorFigure.longitube = action.payload.lng
+    },
   },
 })
 
 export const {
+  setCenter,
+  setCreatorFigure,
+  setAllGeozoneInfo,
+  addGeozone,
   setMap,
   addTrack,
   setTrackAll,

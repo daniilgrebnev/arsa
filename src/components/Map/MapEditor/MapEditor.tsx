@@ -18,10 +18,10 @@ export const MapEditor = () => {
 
   return (
     <div>
-      {typeFigure === "line" && <LineEditor />}
-      {typeFigure === "rectangle" && <RectangleEditor />}
-      {typeFigure === "circle" && <CircleEditor />}
-      {typeFigure === "polygon" && <PolygonEditor />}
+      {typeFigure === 3 && <LineEditor />}
+      {typeFigure === 1 && <RectangleEditor />}
+      {typeFigure === 0 && <CircleEditor />}
+      {typeFigure === 2 && <PolygonEditor />}
     </div>
   )
 }

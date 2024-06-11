@@ -29,20 +29,20 @@ export const MenuEditor = () => {
     <div className="menu-editor">
       <div className="menu-editor__header">
         <button
-          className={`icon-polygon ${typeFigure === "polygon" && "menu-editor__active"}`}
-          onClick={() => dispatch(setTypeFigure("polygon"))}
+          className={`icon-polygon ${typeFigure === 2 && "menu-editor__active"}`}
+          onClick={() => dispatch(setTypeFigure(2))}
         ></button>
         <button
-          className={`icon-rectangle ${typeFigure === "rectangle" && "menu-editor__active"}`}
-          onClick={() => dispatch(setTypeFigure("rectangle"))}
+          className={`icon-rectangle ${typeFigure === 1 && "menu-editor__active"}`}
+          onClick={() => dispatch(setTypeFigure(1))}
         ></button>
         <button
-          className={`icon-polyline ${typeFigure === "line" && "menu-editor__active"}`}
-          onClick={() => dispatch(setTypeFigure("line"))}
+          className={`icon-polyline ${typeFigure === 3 && "menu-editor__active"}`}
+          onClick={() => dispatch(setTypeFigure(3))}
         ></button>
         <button
-          className={`icon-cirlcle ${typeFigure === "circle" && "menu-editor__active"}`}
-          onClick={() => dispatch(setTypeFigure("circle"))}
+          className={`icon-cirlcle ${typeFigure === 0 && "menu-editor__active"}`}
+          onClick={() => dispatch(setTypeFigure(0))}
         ></button>
       </div>
       <div className="menu-editor__body">
