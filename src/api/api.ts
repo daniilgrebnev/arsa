@@ -34,5 +34,6 @@ export const tpmsQuery = async (dataQuery: IDefaultQuery) => {
     queryParameters.url,
     queryParameters.body && queryParameters.body,
   )
+
   return { data, status }
 }

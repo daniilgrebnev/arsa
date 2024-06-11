@@ -4,6 +4,7 @@ import { useSelector } from "react-redux"
 import { DriverTree } from "./DriverTree"
 import { GeozoneTree } from "./GeozoneTree"
 import { Search } from "./Search/Search"
+import { SearchDrivers } from "./Search/SearchDriver"
 import { VehicleTree } from "./VehicleTree"
 import "./style.css"
 
@@ -15,6 +16,9 @@ export const CheckboxTreeContainer = () => {
   const groups = useSelector((state: RootState) => state.security.groupsVehicle)
   const selectedVehiclesLength = useSelector(
     (state: RootState) => state.vehicles.checkedVehicles,
+  ).length
+  const selectedDriversLength = useSelector(
+    (state: RootState) => state.driver.checkedDrivers,
   ).length
   const searchedGroups = useSelector((state: RootState) => state.security.searchedVehicle)
   const currentGroups = searchedGroups == null ? groups : searchedGroups
@@ -50,6 +54,7 @@ export const CheckboxTreeContainer = () => {
             key={index}
           >
             {tab.title} {tab.value === "transport" && selectedVehiclesLength}
+            {tab.value == "driver" && selectedDriversLength}
             {tab.value === "geoZone" && 0}
           </div>
         ))}
@@ -60,7 +65,12 @@ export const CheckboxTreeContainer = () => {
             <Search /> <VehicleTree />
           </>
         )}
-        {activeTab === "driver" && <DriverTree />}
+        {activeTab === "driver" && (
+          <>
+            <SearchDrivers />
+            <DriverTree />
+          </>
+        )}
         {activeTab === "geoZone" && <GeozoneTree />}
       </div>
     </div>

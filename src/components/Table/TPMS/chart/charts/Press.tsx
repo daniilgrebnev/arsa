@@ -66,7 +66,7 @@ const Press = (propsChartData: any) => {
     {
       name: "Н/д",
       filter: "noData",
-      color: "#363636",
+      color: "#b0aeae",
       count: chartData ? chartData.filter((i) => i.sensors_without_data == true).length : 0,
     },
   ]

@@ -1,6 +1,6 @@
 import { uniqBy } from "lodash"
 
-export function vehicleCheckboxTree(groups: any) {
+export function driversCheckboxTree(groups: any) {
   const groupMap: { [key: number]: any } = {}
   const orphanGroups: any[] = []
   const rootGroups: any[] = []
@@ -31,17 +31,10 @@ export function vehicleCheckboxTree(groups: any) {
     const currentGroup = groupMap[group.id]
     if (currentGroup) {
       currentGroup.children.push(
-        ...(currentGroup.vehicles || []).map((vehicle: any) => ({
-          ...vehicle,
-          type: "vehicle",
-          name: vehicle.vehicle_name,
-        })),
-      )
-      currentGroup.children.push(
         ...(currentGroup.drivers || []).map((driver: any) => ({
           ...driver,
           type: "driver",
-          name: driver.driver_name,
+          name: driver.surname + driver.first_name + driver.patronymic,
         })),
       )
     }
