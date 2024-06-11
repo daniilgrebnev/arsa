@@ -12,7 +12,9 @@ import tpms from "./reducers/tpms/tpms"
 import wheelChart from "./reducers/wheelChart/wheelChart"
 
 import auth from "./reducers/auth/authSlice"
+import driver from "./reducers/drivers/driverSlice"
 import error from "./reducers/error/errorSlice"
+import geoZones from "./reducers/geozones/geozonesSlice"
 import objectSettings from "./reducers/objectSettings/objectSettings"
 import fuel from "./reducers/testingUI/fuel/fuel"
 import vehicles from "./reducers/vehicles/vehicleSlice"
@@ -34,6 +36,8 @@ export const store = configureStore({
     objectSettings,
     fuel,
     vehicles,
+    driver,
+    geoZones,
   }),
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
 })

@@ -1,39 +1,43 @@
 import { IVehicleData } from "@/interfaces/vehicleTree"
-import { AppDispatch } from "@/store/store"
+import { AppDispatch, RootState } from "@/store/store"
 import { uniq } from "lodash"
 import { useCallback, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import {
-  setDefaultFilteredData,
-  setFilteredData,
-  setIsSearch,
-} from "../../../../store/reducers/vehicles/vehicleSlice"
+  setDefaultDriverFilterData,
+  setDriverSearch,
+  setDriversFilteredData,
+} from "../../../../store/reducers/drivers/driverSlice"
+import { setIsSearch } from "../../../../store/reducers/vehicles/vehicleSlice"
 
-export const Search = () => {
+export const SearchDrivers = () => {
   const [searchValue, setSearchValue] = useState("")
   const dispatch = useDispatch<AppDispatch>()
-
-  const data = useSelector((state: any) => state.vehicles.data?.data)
+  const data = useSelector((state: RootState) => state.driver.data)
 
   const textProcess = (text: string) => {
-    return text != undefined ? text.toLowerCase().trim() : ""
+    return text ? text.toLowerCase().trim() : ""
   }
 
   const searchHandler = useCallback(
     (text: string) => {
       const processText = textProcess(text)
-      if (processText.length > 0 && data && typeof data !== "string") {
+      if (processText.length > 0 && data && Array.isArray(data)) {
         dispatch(setIsSearch(true))
-        const searchFilter = (filterFunc: (vehicle: any) => boolean) =>
+        dispatch(setDriverSearch(true))
+
+        const searchFilter = (filterFunc: (driver: any) => boolean) =>
           data
             .map((group: any) => ({
               ...group,
-              vehicles: group.vehicles?.filter(filterFunc),
+              drivers: group.drivers ? group.drivers.filter(filterFunc) : [],
             }))
-            .filter((group) => group.vehicles && group.vehicles.length > 0)
+            .filter((group) => group.drivers && group.drivers.length > 0)
 
-        const filterByName = searchFilter((vehicle) =>
-          textProcess(vehicle.name).includes(processText),
+        const filterByName = searchFilter((driver) =>
+          textProcess(`${driver.surname} ${driver.first_name} ${driver.patronymic}`).includes(
+            processText,
+          ),
         )
 
         const filterByGroupName = data.filter((group) =>
@@ -48,8 +52,8 @@ export const Search = () => {
 
         filterByGroupName.push(...additionalFilteredGroups)
 
-        const filterByTerminalID = searchFilter((vehicle) =>
-          textProcess(vehicle.vehicle_id.toString()).includes(processText),
+        const filterByTerminalID = searchFilter((driver) =>
+          textProcess(driver?.driver_code.toString()).includes(processText),
         )
 
         const combineSearches: { [key: number]: IVehicleData } = {}
@@ -102,11 +106,11 @@ export const Search = () => {
 
         const heighInWork = findAllParents(data, finalizing)
 
-        console.log(heighInWork)
-        dispatch(setFilteredData(uniq([...finalizing, ...heighInWork])))
+        dispatch(setDriversFilteredData(uniq([...finalizing, ...heighInWork])))
       } else {
+        dispatch(setDriverSearch(false))
         dispatch(setIsSearch(false))
-        dispatch(setDefaultFilteredData())
+        dispatch(setDefaultDriverFilterData())
       }
     },
     [data, dispatch],
@@ -120,17 +124,17 @@ export const Search = () => {
           className="bg-transparent text-gray-800 placeholder:font-light w-full focus-within:outline-none px-2"
           type="text"
           onChange={(e) => {
-            setSearchValue(e.target.value.toString())
-            searchHandler(e.target.value.toString())
+            setSearchValue(e.target.value)
+            searchHandler(e.target.value)
           }}
           value={searchValue}
-          placeholder={"Введите название ТС"}
+          placeholder={"Введите имя водителя"}
         />
         <div
           title="Сбросить поиск"
           onClick={() => {
             setSearchValue("")
-            dispatch(setDefaultFilteredData())
+            dispatch(setDefaultDriverFilterData())
           }}
           className="text-red-600 text-2xl cursor-pointer"
         >
