@@ -1,10 +1,11 @@
-import { uniqBy } from "lodash"
+import { uniq } from "lodash"
 
 export function driversCheckboxTree(groups: any) {
   const groupMap: { [key: number]: any } = {}
   const orphanGroups: any[] = []
   const rootGroups: any[] = []
 
+  // Создание узлов групп и добавление их в groupMap
   groups.forEach((group: any) => {
     const groupNode: any = { ...group, children: [], type: "group" }
     groupMap[group.id] = groupNode
@@ -18,27 +19,31 @@ export function driversCheckboxTree(groups: any) {
     }
   })
 
-  for (const group of groups) {
-    const parentGroup = groupMap[group.parent_id || 0]
-    if (parentGroup) {
-      parentGroup.length > 0 && parentGroup.children.push(uniqBy(groupMap[group.id], "account_id"))
-    } else {
-      orphanGroups.push(groupMap[group.id])
-    }
-  }
-
+  // Добавление водителей в соответствующие группы
   groups.forEach((group: any) => {
     const currentGroup = groupMap[group.id]
     if (currentGroup) {
-      currentGroup.children.push(
-        ...(currentGroup.drivers || []).map((driver: any) => ({
-          ...driver,
-          type: "driver",
-          name: driver.surname + driver.first_name + driver.patronymic,
-        })),
-      )
+      if (group.drivers) {
+        currentGroup.children.push(
+          ...group.drivers.map((driver: any) => ({
+            ...driver,
+            type: "driver",
+            name: driver.surname + driver.first_name + driver.patronymic,
+          })),
+        )
+      }
     }
   })
 
-  return rootGroups.length === 0 ? orphanGroups : rootGroups
+  // Обработка случаев, когда группы были осиротевшими
+  orphanGroups.forEach((orphanGroup: any) => {
+    const parentGroup = groupMap[orphanGroup.parent_id]
+    if (parentGroup) {
+      parentGroup.children.push(orphanGroup)
+    } else {
+      rootGroups.push(orphanGroup)
+    }
+  })
+
+  return rootGroups.length === 0 ? uniq(orphanGroups) : uniq(rootGroups)
 }

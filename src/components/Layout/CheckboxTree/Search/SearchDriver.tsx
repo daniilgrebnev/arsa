@@ -1,6 +1,6 @@
 import { IVehicleData } from "@/interfaces/vehicleTree"
 import { AppDispatch, RootState } from "@/store/store"
-import { uniq } from "lodash"
+import { uniqBy } from "lodash"
 import { useCallback, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import {
@@ -22,6 +22,7 @@ export const SearchDrivers = () => {
   const searchHandler = useCallback(
     (text: string) => {
       const processText = textProcess(text)
+      console.log(processText)
       if (processText.length > 0 && data && Array.isArray(data)) {
         dispatch(setIsSearch(true))
         dispatch(setDriverSearch(true))
@@ -105,8 +106,9 @@ export const SearchDrivers = () => {
         }
 
         const heighInWork = findAllParents(data, finalizing)
-
-        dispatch(setDriversFilteredData(uniq([...finalizing, ...heighInWork])))
+        const finArr = finalizing.concat(uniqBy(heighInWork, "account_id"))
+        console.log(finArr)
+        dispatch(setDriversFilteredData(finArr))
       } else {
         dispatch(setDriverSearch(false))
         dispatch(setIsSearch(false))
