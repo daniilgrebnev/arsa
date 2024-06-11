@@ -67,6 +67,7 @@ export const MyMapContainer: React.FC<propsType> = (props) => {
         style={{ width: "100%", height: "100%" }}
         className="container-map"
       >
+        {props?.children && props.children}
         <SetMap />
         {!props.isEditor &&
           props.tracks &&
@@ -261,6 +262,7 @@ export const MyMapContainer: React.FC<propsType> = (props) => {
                     positions={geozone.geozone_points.map((item) => {
                       return [item.lat, item.lng]
                     })}
+                    pathOptions={{ weight: 5 }}
                     eventHandlers={{
                       mousedown: (e) => {
                         e.originalEvent.preventDefault()

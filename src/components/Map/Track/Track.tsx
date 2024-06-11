@@ -2,7 +2,7 @@ import MarkerClusterGroup from "react-leaflet-cluster"
 import L, { LatLng, MarkerCluster } from "leaflet"
 import { useDispatch } from "react-redux"
 import { useSelector } from "react-redux"
-import { Marker, useMap } from "react-leaflet"
+import { Marker, Polyline, useMap } from "react-leaflet"
 import { useState } from "react"
 import { RootState } from "./../../../store/store"
 import {
@@ -31,9 +31,9 @@ export const Track = ({ track, index }) => {
 
   const createClusterCustomIcon = function (cluster: MarkerCluster) {
     return L.divIcon({
-      html: `<span>${cluster.getChildCount()}</span>`,
+      html: `<div class="custom-marker-cluster-div" style="background: ${colors[index]}4f"><div style="background: ${colors[index]}">${cluster.getChildCount()}</div></div>`,
       className: "custom-marker-cluster",
-      iconSize: L.point(33, 33, true),
+      iconSize: L.point(50, 50, true),
     })
   }
 
@@ -55,7 +55,7 @@ export const Track = ({ track, index }) => {
     }
     return nearestPointIndex !== -1 ? nearestPointIndex : null
   }
-  debugger
+
   return (
     <ContextMenu
       btnMenu={[
@@ -127,7 +127,6 @@ export const Track = ({ track, index }) => {
         points={track.data}
         pathOptions={{ color: colors[index], weight: 10, opacity: 0.5 }}
         idTrack={index}
-        events={track.events}
         eventHandlers={{
           mousedown: (e) => {
             e.originalEvent.preventDefault()
@@ -163,6 +162,7 @@ export const Track = ({ track, index }) => {
           spiderfyOnMaxZoom={true}
           disableClusteringAtZoom={18}
           showCoverageOnHover={false}
+          iconCreateFunction={createClusterCustomIcon}
           removeOutsideVisibleBounds={true}
         >
           {track.events.map((el) => {

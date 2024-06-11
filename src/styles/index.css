@@ -183,14 +183,27 @@
 }
 
 .custom-marker-cluster {
-  background: #ffffff;
-  border: 15px solid #f00800;
-  border-radius: 50%;
-  color: #000000;
-  height: 33px;
-  line-height: 37px;
-  text-align: center;
-  width: 33px;
+  width: 40px;
+  height: 40px;
+  border-radius: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.custom-marker-cluster-div {
+  width: 40px !important;
+  height: 40px !important;
+}
+
+.custom-marker-cluster div {
+  width: 30px;
+  height: 30px;
+  border-radius: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #fff;
 }
 
 .newCustomIcon {
@@ -201,4 +214,9 @@
 .newCustomIcon:hover {
   background-color: #fff;
   border: 1px solid #000;
+}
+
+.newCustomIconLastPoint {
+  background-color: blue;
+  border: 1px solid #00000040;
 }

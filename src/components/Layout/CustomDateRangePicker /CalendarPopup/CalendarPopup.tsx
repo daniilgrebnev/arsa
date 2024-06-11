@@ -25,6 +25,7 @@ export const CalendarPopup: React.FC<propsType> = ({
 }) => {
   const [currentStartDate, setCurrentStartDate] = useState(startDate)
   const [currentEndDate, setCurrentEndDate] = useState(endDate)
+  const [activeTiming, setActiveTiming] = useState(1)
 
   const [isOpenStart, setIsOpenStart] = useState(false)
   const [isOpenEnd, setIsOpenEnd] = useState(false)
@@ -53,6 +54,81 @@ export const CalendarPopup: React.FC<propsType> = ({
           }}
         >
           {children}
+          <div className="date-range__timing">
+            <button
+              onClick={() => {
+                setCurrentStartDate(
+                  DateTime.local().set({ hour: 0, minute: 0, second: 0, millisecond: 0 }),
+                )
+                setCurrentEndDate(DateTime.local().set({ hour: 23, minute: 59, second: 59 }))
+                setActiveTiming(1)
+              }}
+              className={activeTiming === 1 ? "date-range__timing--active" : ""}
+            >
+              Сегодня
+            </button>
+            <button
+              onClick={() => {
+                setCurrentStartDate(
+                  DateTime.local().set({
+                    day: DateTime.local().day - 1,
+                    hour: 0,
+                    minute: 0,
+                    second: 0,
+                    millisecond: 0,
+                  }),
+                )
+                setCurrentEndDate(
+                  DateTime.local().set({
+                    day: DateTime.local().day - 1,
+                    hour: 23,
+                    minute: 59,
+                    second: 59,
+                  }),
+                )
+                setActiveTiming(2)
+              }}
+              className={activeTiming === 2 ? "date-range__timing--active" : ""}
+            >
+              Вчера
+            </button>
+            <button
+              onClick={() => {
+                setCurrentStartDate(
+                  DateTime.local().set({
+                    day: DateTime.local().day - 7,
+                    hour: 0,
+                    minute: 0,
+                    second: 0,
+                    millisecond: 0,
+                  }),
+                )
+                setCurrentEndDate(DateTime.local().set({ hour: 23, minute: 59, second: 59 }))
+                setActiveTiming(3)
+              }}
+              className={activeTiming === 3 ? "date-range__timing--active" : ""}
+            >
+              7 дней
+            </button>
+            <button
+              onClick={() => {
+                setCurrentStartDate(
+                  DateTime.local().set({
+                    month: DateTime.local().month - 1,
+                    hour: 0,
+                    minute: 0,
+                    second: 0,
+                    millisecond: 0,
+                  }),
+                )
+                setCurrentEndDate(DateTime.local().set({ hour: 23, minute: 59, second: 59 }))
+                setActiveTiming(4)
+              }}
+              className={activeTiming === 4 ? "date-range__timing--active" : ""}
+            >
+              Месяц
+            </button>
+          </div>
           <div className="date-range__wrapper-popup ">
             <div className="data-calendar">
               <Calendar currentDate={currentStartDate} setCurrentDate={setCurrentStartDate} />

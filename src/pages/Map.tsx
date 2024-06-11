@@ -10,8 +10,10 @@ import {
   setIsOpenMenuFigure,
   setIsOpenMenuMap,
   setIsOpenMenuTrack,
+  setTrackAll,
 } from "../store/reducers/map/map"
 import { getTrack } from "../store/reducers/map/mapThunk"
+import { SettingsEvents } from "./../components/Map/SettingsEvents/SettingsEvents"
 
 export const MapPage = () => {
   const dispatch = useDispatch<any>()
@@ -39,9 +41,12 @@ export const MapPage = () => {
   }
 
   useEffect(() => {
-    if (tracks.length > 5) {
+    if (vehicleCheked.length > 5) {
       alert("Можно показать не более 5 треков")
       return
+    }
+    if (vehicleCheked.length === 0) {
+      dispatch(setTrackAll([]))
     }
     if (vehicleCheked.length > 0) {
       dispatch(getTrack(vehicleCheked, startDate, endDate))
@@ -73,7 +78,9 @@ export const MapPage = () => {
           isEditor={isEditor}
           isOpenMenuFigure={menuFigure}
           chekedGeozone={chekedGeozone}
-        />
+        >
+          <SettingsEvents />
+        </MyMapContainer>
       </ContextMenu>
     </div>
   )

@@ -19,7 +19,6 @@ type propsType = {
     locationfound?: (e) => void
   }
   idTrack: number
-  events: any
 }
 
 export const SwitchDecoratorLine: React.FC<propsType> = ({
@@ -27,7 +26,6 @@ export const SwitchDecoratorLine: React.FC<propsType> = ({
   eventHandlers,
   pathOptions,
   idTrack,
-  events,
 }) => {
   const [isView, setIsView] = useState(true)
   const pointInfo = useSelector((state: RootState) => state.map.pointInfo)
