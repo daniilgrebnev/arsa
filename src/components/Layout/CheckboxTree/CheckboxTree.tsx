@@ -5,6 +5,7 @@ import { DriverTree } from "./DriverTree"
 import { GeozoneTree } from "./GeozoneTree"
 import { Search } from "./Search/Search"
 import { SearchDrivers } from "./Search/SearchDriver"
+import { SearchGeoZones } from "./Search/SearchGeoZones"
 import { VehicleTree } from "./VehicleTree"
 import "./style.css"
 
@@ -71,7 +72,12 @@ export const CheckboxTreeContainer = () => {
             <DriverTree />
           </>
         )}
-        {activeTab === "geoZone" && <GeozoneTree />}
+        {activeTab === "geoZone" && (
+          <>
+            <SearchGeoZones />
+            <GeozoneTree />
+          </>
+        )}
       </div>
     </div>
   )

@@ -1,42 +1,52 @@
 export function geoZoneCheckboxTree(groups: any) {
-  if (!Array.isArray(groups)) {
-    console.error("Invalid input: groups is not an array")
-    return []
-  }
-
   const groupMap: { [key: number]: any } = {}
+  const orphanGroups: any[] = []
   const rootGroups: any[] = []
+  const processedGroupIds: Set<number> = new Set()
 
+  // Создание узлов групп и добавление их в groupMap
   groups.forEach((group: any) => {
-    const groupNode: any = { ...group, children: [], type: "group", name: group.group_name }
-    groupMap[group.id] = groupNode
+    if (!processedGroupIds.has(group.id)) {
+      processedGroupIds.add(group.id)
 
-    if (group.parent_id === undefined || group.parent_id === null) {
-      rootGroups.push(groupNode)
-    } else {
-      if (!groupMap[group.parent_id]) {
-        groupMap[group.parent_id] = { children: [] }
+      const groupNode: any = { ...group, children: [], type: "group" }
+      groupMap[group.id] = groupNode
+
+      if (group.parent_id === undefined || group.parent_id === null) {
+        rootGroups.push(groupNode)
+      } else {
+        if (groupMap[group.parent_id]) {
+          groupMap[group.parent_id].children.push(groupNode)
+        } else {
+          orphanGroups.push(groupNode)
+        }
       }
-      groupMap[group.parent_id].children.push(groupNode)
     }
   })
 
-  console.log(groups)
+  // Добавление геозон в соответствующие группы
+  groups.forEach((group: any) => {
+    const currentGroup = groupMap[group.id]
+    if (currentGroup && group.geozones) {
+      currentGroup.children.push(
+        ...group.geozones.map((geozone: any) => ({
+          ...geozone,
+          type: "geozone",
+          name: geozone.geozone_name,
+        })),
+      )
+    }
+  })
 
-  if (groups.length > 0) {
-    groups.forEach((group: any) => {
-      const currentGroup = groupMap[group.id]
-      if (currentGroup) {
-        currentGroup.children.push(
-          ...(group.geozones || []).map((geozone: any) => ({
-            ...geozone,
-            type: "geozone",
-            name: geozone.geozone_name,
-          })),
-        )
-      }
-    })
-  }
+  // Обработка случаев, когда группы были осиротевшими
+  orphanGroups.forEach((orphanGroup: any) => {
+    const parentGroup = groupMap[orphanGroup.parent_id]
+    if (parentGroup) {
+      parentGroup.children.push(orphanGroup)
+    } else {
+      rootGroups.push(orphanGroup)
+    }
+  })
 
-  return rootGroups
+  return rootGroups.length === 0 ? orphanGroups : rootGroups
 }

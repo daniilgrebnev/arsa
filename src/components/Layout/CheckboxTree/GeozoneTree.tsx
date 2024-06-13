@@ -8,7 +8,7 @@ import { setCheckedGeoZones, setGeoZonesData } from "../../../store/reducers/geo
 import { Ok } from "../../../styles/image/Ok"
 
 export const GeozoneTree = () => {
-  const data = useSelector((state: RootState) => state.geoZones.data)
+  const data = useSelector((state: RootState) => state.geoZones.filteredData)
   const checkedZones = useSelector((state: RootState) => state.geoZones.checkedGeoZones)
   const dispatch = useDispatch<AppDispatch>()
   const getTree = (data) => {
@@ -25,7 +25,7 @@ export const GeozoneTree = () => {
     dispatch(setCheckedGeoZones(checked))
   }, [checked])
 
-  const groups = geoZoneCheckboxTree(data)
+  const groups = data != null ? geoZoneCheckboxTree(data) : []
 
   return (
     <div className="text-sm">
