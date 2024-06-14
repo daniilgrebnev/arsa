@@ -61,11 +61,11 @@ const mapSlice = createSlice({
   reducers: {
     setAllGeozoneInfo(state: Imap, action: PayloadAction<any>) {
       state.infoGeozones = action.payload
-      // if (action.payload.length > 0) {
-      //   const points = L.polyline(action.payload.geozone_points.map((el) => [el.lt, el.ln]))
-      //   const bounds = points.getBounds()
-      //   state.map.fitBounds(bounds)
-      // }
+      if (action.payload.length > 0) {
+        const points = L.polyline(action.payload[0].geozone_points.map((el) => [el.lat, el.lng]))
+        const bounds = points.getBounds()
+        state.map.fitBounds(bounds)
+      }
     },
     addGeozone(state: Imap, action: PayloadAction<any>) {
       state.infoGeozones = [...state.infoGeozones, action.payload]

@@ -70,8 +70,7 @@ export const MyMapContainer: React.FC<propsType> = (props) => {
       >
         {props?.children && props.children}
         <SetMap />
-        {!props.isEditor &&
-          props.tracks &&
+        {props.tracks &&
           props.tracks.map((track, index) => {
             console.log(track)
             return <Track track={track} index={index} />
