@@ -25,7 +25,7 @@ const VehicleInfo = (propsChartData: any) => {
       color: "#f5cc16",
       count: chartData
         ? chartData.filter(
-            (i) => Math.round(new Date().getTime() / 1000) - i.last_event_date > 1800
+            (i) => Math.round(new Date().getTime() / 1000) - i.last_event_date > 1800,
           ).length
         : 0,
     },
@@ -55,7 +55,7 @@ const VehicleInfo = (propsChartData: any) => {
     },
     {
       name: "Все",
-      filter: "",
+      filter: "all",
       color: "#363636",
       count: chartData ? chartData.length : 0,
     },

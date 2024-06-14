@@ -16,6 +16,7 @@ import driver from "./reducers/drivers/driverSlice"
 import error from "./reducers/error/errorSlice"
 import geoZones from "./reducers/geozones/geozonesSlice"
 import objectSettings from "./reducers/objectSettings/objectSettings"
+import router from "./reducers/routing/routerSlice"
 import fuel from "./reducers/testingUI/fuel/fuel"
 import vehicles from "./reducers/vehicles/vehicleSlice"
 
@@ -38,6 +39,7 @@ export const store = configureStore({
     vehicles,
     driver,
     geoZones,
+    router,
   }),
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
 })
