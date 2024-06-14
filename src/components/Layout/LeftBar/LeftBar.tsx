@@ -27,7 +27,7 @@ const LeftBar = () => {
       />
 
       <CustomDateRangePicker />
-      <div className="w-full cd" style={{ height: "72vh" }}>
+      <div className="w-full ">
         <CheckboxTreeContainer />
       </div>
     </div>

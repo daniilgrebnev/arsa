@@ -60,7 +60,7 @@ export const CheckboxTreeContainer = () => {
           </div>
         ))}
       </nav>
-      <div className="tree px-2">
+      <div className="tree px-2 max-h-[75dvh] overflow-y-auto">
         {activeTab === "transport" && (
           <>
             <Search /> <VehicleTree />

@@ -71,7 +71,7 @@ export const VehicleTree = () => {
   console.log(groups, filteredData)
 
   return (
-    <div className="max-h-[67dvh] overflow-y-auto text-sm w-full">
+    <div className="text-sm w-full h-full">
       <div className="w-full">
         {typeof data !== "string" && data !== null && (
           <div className="w-full">

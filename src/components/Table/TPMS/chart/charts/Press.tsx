@@ -57,7 +57,7 @@ const Press = (propsChartData: any) => {
         ? chartData.filter(
             (i, index) =>
               chartData[index].wheel_pressure.length !== 0 &&
-              Math.round(new Date().getTime() / 1000) - i.last_event_date >
+              Math.round(new Date().getTime() / 1000) - i.last_event_date <
                 i.settings.sensors_valid_time_period &&
               chartData,
           ).length
