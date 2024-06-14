@@ -40,3 +40,9 @@ export const getGeozones = (uids: string[]) => {
     )
   }
 }
+
+export const removeGeozoneInfo = (uid: string) => {
+  return async (dispath: AppDispatch) => {
+    debugger
+  }
+}

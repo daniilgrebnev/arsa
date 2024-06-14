@@ -47,6 +47,21 @@ export const getInfoPointEvent = async (uid: string, start_date: number, end_dat
   }
 }
 
+export const removeGeozone = async (uid: string) => {
+  try {
+    const res = await instance.post(
+      "https://server.arsa.pro/api/svr/v1/ctl/geozones/delete_geozone",
+      {
+        vehicle_uid: uid,
+      },
+    )
+    return res.data
+  } catch (e) {
+    console.log(e)
+    return { error: "Ошибка запроса данных" }
+  }
+}
+
 // Авторизация
 export const authAPI = async (body: ILogPassAuth) => {
   try {
