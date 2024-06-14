@@ -12,14 +12,15 @@ import {
   setIsOpenMenuTrack,
   setTrackAll,
 } from "../store/reducers/map/map"
-import { getTrack } from "../store/reducers/map/mapThunk"
+import { getGeozones, getTrack } from "../store/reducers/map/mapThunk"
 import { SettingsEvents } from "./../components/Map/SettingsEvents/SettingsEvents"
 
 export const MapPage = () => {
   const dispatch = useDispatch<any>()
   const isOpen = useSelector((state: RootState) => state.map.isOpenMenuMap)
   const tracks = useSelector((state: RootState) => state.map.tracks)
-  const chekedGeozone = useSelector((state: RootState) => state.security.geozonesCheked)
+  // const chekedGeozone = useSelector((state: RootState) => state.security.geozonesCheked)
+  const chekedGeozone = useSelector((state: RootState) => state.map.infoGeozones)
   const menuFigure = useSelector((state: RootState) => state.map.isOpenMenuFigure)
   const isEditor = useSelector((state: RootState) => state.map.editMap)
   const vehicleCheked = useSelector((state: RootState) => state.vehicles.checkedVehicles)
@@ -40,6 +41,8 @@ export const MapPage = () => {
     dispatch(setIsOpenMenuMap(true))
   }
 
+  let chekedGeozoneA: string[] = ["001e3fd1-4d85-17a8-903a-6bac4f978829"]
+
   useEffect(() => {
     if (vehicleCheked.length > 5) {
       alert("Можно показать не более 5 треков")
@@ -52,6 +55,16 @@ export const MapPage = () => {
       dispatch(getTrack(vehicleCheked, startDate, endDate))
     }
   }, [vehicleCheked, endDate, startDate])
+
+  useEffect(() => {
+    if (chekedGeozoneA.length > 5) {
+      alert("Можно показать не более 5 треков")
+      return
+    }
+    if (chekedGeozoneA.length > 0) {
+      dispatch(getGeozones(chekedGeozoneA))
+    }
+  }, [])
 
   return (
     <div>

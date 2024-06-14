@@ -7,6 +7,7 @@ import { useDispatch } from "react-redux"
 import {
   addGeozonePoint,
   addGeozonePointIndex,
+  setCenter,
   setGeozonePoint,
   setLatLng,
   setRadius,
@@ -55,6 +56,12 @@ export const PolygonEditor = () => {
   useMapEvent("mousemove", (e) => {
     setTransparent(e.latlng)
   })
+
+  useEffect(() => {
+    if (points.length > 2) {
+      setEdit(false)
+    }
+  }, [])
 
   useEffect(() => {
     if (points.length >= 3) {

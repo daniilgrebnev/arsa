@@ -18,6 +18,7 @@ import { MenuEditor } from "./MenuEditor/MenuEditor"
 import { useDispatch } from "react-redux"
 import { ContextMenu } from "./ContextMenu/ContextMenu"
 import {
+  setCreatorFigure,
   setIsOpenMenuFigure,
   setIsOpenMenuMap,
   setIsOpenMenuTrack,
@@ -83,7 +84,7 @@ export const MyMapContainer: React.FC<propsType> = (props) => {
         {!props.isEditor &&
           props.chekedGeozone &&
           props.chekedGeozone.map((geozone, key) => {
-            if (geozone.geometry_type_id === "rectangle") {
+            if (geozone.geometry_type_id === 1) {
               return (
                 <ContextMenu
                   btnMenu={[
@@ -91,7 +92,7 @@ export const MyMapContainer: React.FC<propsType> = (props) => {
                       label: "Редактировать геозону",
 
                       onClickBtn: () => {
-                        console.log("red")
+                        dispatch(setCreatorFigure(geozone))
                       },
                     },
                     {
@@ -138,14 +139,14 @@ export const MyMapContainer: React.FC<propsType> = (props) => {
                 </ContextMenu>
               )
             }
-            if (geozone.geometry_type_id === "circle" && geozone.latitube && geozone.longitube) {
+            if (geozone.geometry_type_id === 0 && geozone.latitube && geozone.longitube) {
               return (
                 <ContextMenu
                   btnMenu={[
                     {
                       label: "Редактировать геозону",
                       onClickBtn: () => {
-                        console.log("red")
+                        dispatch(setCreatorFigure(geozone))
                       },
                     },
                     {
@@ -189,14 +190,14 @@ export const MyMapContainer: React.FC<propsType> = (props) => {
                 </ContextMenu>
               )
             }
-            if (geozone.geometry_type_id === "polygon") {
+            if (geozone.geometry_type_id === 2) {
               return (
                 <ContextMenu
                   btnMenu={[
                     {
                       label: "Редактировать геозону",
                       onClickBtn: () => {
-                        console.log("red")
+                        dispatch(setCreatorFigure(geozone))
                       },
                     },
                     {
@@ -212,9 +213,11 @@ export const MyMapContainer: React.FC<propsType> = (props) => {
                   setMenuVisible={(visible) => dispatch(setIsOpenMenuFigure(visible))}
                 >
                   <Polygon
-                    positions={geozone.geozone_points.map((item) => {
-                      return [item.lat, item.lng]
-                    })}
+                    positions={geozone.geozone_points
+                      .map((item) => {
+                        return [item.lat, item.lng]
+                      })
+                      .splice(0, geozone.geozone_points.length - 1)}
                     eventHandlers={{
                       mousedown: (e) => {
                         e.originalEvent.preventDefault()
@@ -236,14 +239,14 @@ export const MyMapContainer: React.FC<propsType> = (props) => {
                 </ContextMenu>
               )
             }
-            if (geozone.geometry_type_id === "line") {
+            if (geozone.geometry_type_id === 3) {
               return (
                 <ContextMenu
                   btnMenu={[
                     {
                       label: "Редактировать геозону",
                       onClickBtn: () => {
-                        console.log("red")
+                        dispatch(setCreatorFigure(geozone))
                       },
                     },
                     {

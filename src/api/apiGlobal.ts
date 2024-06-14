@@ -72,6 +72,19 @@ export const codeAuth = async (code: string): Promise<number> => {
 
 //
 
+export const getGeozone = async (uids: string[]) => {
+  try {
+    const response = await instance.post(
+      "https://server.arsa.pro/api/svr/v1/ctl/geozones/get_geozones_detail",
+      { geozone_uids: uids },
+    )
+    return response.data
+  } catch (error) {
+    console.log(error)
+    return { error: "Ошибка запроса данных" }
+  }
+}
+
 export const getTrackAPI = async (uid: string, start_time: any, end_time: any) => {
   try {
     const response = await instance.post(
