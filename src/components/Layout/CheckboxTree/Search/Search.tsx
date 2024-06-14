@@ -21,10 +21,10 @@ export const Search = () => {
 
   const searchHandler = (text: string) => {
     let searchedData: any = data
-
-    const processedText = textProcess(text)
     dispatch(setIsSearch(true))
-    if (text.length > 0) {
+    const processedText = textProcess(text)
+
+    if (searchValue.length != 0) {
       const terminalIdSearch: any[] = []
 
       searchedData.forEach((element) => {
@@ -113,7 +113,7 @@ export const Search = () => {
       // Dispatch the filtered data to Redux state
       dispatch(setFilteredData(searchResult))
     } else {
-      dispatch(setIsSearch(false))
+      dispatch(setDefaultFilteredData())
     }
   }
 
@@ -135,7 +135,7 @@ export const Search = () => {
           title="Сбросить поиск"
           onClick={() => {
             setSearchValue("")
-            dispatch(setIsSearch(false))
+
             dispatch(setDefaultFilteredData())
           }}
           className="text-red-600 text-2xl cursor-pointer"

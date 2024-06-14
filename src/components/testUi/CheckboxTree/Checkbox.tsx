@@ -92,7 +92,7 @@ export const Checkbox = ({
     }
     return false
   }
-  useEffect(() => {}, [checked, data, isChecked])
+  useEffect(() => {}, [checked, data, isChecked, expandAll])
   const isHalfChecked = (): boolean => {
     if (!isChecked() && data[keyword] !== undefined) {
       const allVehicleUids = getAllVehicleUids(data[keyword])

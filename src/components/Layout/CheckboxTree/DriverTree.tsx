@@ -44,7 +44,7 @@ export const DriverTree = () => {
     } else {
       setIsInitialLoad(false) // Устанавливаем, что первоначальная загрузка прошла
     }
-  }, [checked])
+  }, [checked, isSearch])
 
   // Debounce the update to prevent rapid state changes
   const debouncedSetChecked = debounce((newChecked: string[]) => {
@@ -60,7 +60,6 @@ export const DriverTree = () => {
     typeof filteredData !== "string" && filteredData != null
       ? driversCheckboxTree(filteredData)
       : []
-  console.log(groups)
 
   return (
     <>

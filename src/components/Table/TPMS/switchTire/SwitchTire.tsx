@@ -3,6 +3,7 @@ import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { DateTime } from "ts-luxon"
 
+import { Calendar } from "../../../../components/Layout/CustomDateRangePicker /Calendar/Calendar"
 import { setEndTiming } from "../../../../store/reducers/security/security"
 import { ISwitchReq, setOpenSwitch } from "../../../../store/reducers/switchTire/switchTire"
 import { switchTireThunk } from "../../../../store/reducers/switchTire/switchTireThunk"
@@ -15,8 +16,9 @@ export const SwitchTire = () => {
   const [switchTireId, setSwitchTireId] = useState(0)
   const [textareaText, setTextareaText] = useState("")
   const [switchAll, setSwitchAll] = useState(false)
+  const [switchDate, setSwitchDate] = useState<DateTime>(DateTime.now())
+  console.log(switchDate.toSeconds())
 
-  const [] = useState()
   const { isOpenChange, tireId, switchHistoryTire } = useSelector(
     (state: RootState) => state.switchTire,
   )
@@ -38,7 +40,7 @@ export const SwitchTire = () => {
       wheel_model_id: tireId != null ? tireId : 0,
       vehicle_uid,
       id: switchHistoryTire == null ? 0 : switchHistoryTire.id,
-      start_date: Math.round(DateTime.now().toSeconds()),
+      start_date: Math.round(switchDate.toSeconds()),
       reason_replacement: textareaText,
     }
     console.log(body)
@@ -82,8 +84,8 @@ export const SwitchTire = () => {
         </div>
         <div className="">
           <p className="text-lg font-light text-center my-4">Дата замены</p>
-          <div className=" px-2 py-1 w-fit mx-auto rounded-lg text-black flex items-center justify-between">
-            <input type="datetime-local" className="bg-transparent text-white" />
+          <div className="  w-fit mx-auto  text-black bg-white  p-5 rounded flex items-center justify-between">
+            <Calendar currentDate={switchDate} setCurrentDate={setSwitchDate} />
           </div>
         </div>
         <div
