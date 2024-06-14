@@ -21,7 +21,7 @@ const LeftBar = () => {
     >
       <img
         onClick={() => dispatch(setRoutePage("main"))}
-        className="logo cursor-pointer transition-all"
+        className="logo cursor-pointer transition-all active:active"
         src="logo.png"
         alt="ARSA"
       />
