@@ -5,7 +5,7 @@ interface IDefaultQuery {
   body?: any
 }
 
-const token = localStorage.getItem("X-Auth") || "0"
+const token = localStorage.getItem("X-Auth")
 
 let tpmsInstance = axios.create({
   baseURL: "https://tpms.arsa.pro/api/",

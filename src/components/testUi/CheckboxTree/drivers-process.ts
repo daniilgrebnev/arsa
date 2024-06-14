@@ -1,37 +1,40 @@
-import { uniq } from "lodash"
-
 export function driversCheckboxTree(groups: any) {
   const groupMap: { [key: number]: any } = {}
   const orphanGroups: any[] = []
   const rootGroups: any[] = []
+  const processedGroupIds: Set<number> = new Set()
 
   // Создание узлов групп и добавление их в groupMap
   groups.forEach((group: any) => {
-    const groupNode: any = { ...group, children: [], type: "group" }
-    groupMap[group.id] = groupNode
+    if (!processedGroupIds.has(group.id)) {
+      processedGroupIds.add(group.id)
 
-    if (group.parent_id === undefined || group.parent_id === null) {
-      rootGroups.push(groupNode)
-    } else if (groupMap[group.parent_id]) {
-      groupMap[group.parent_id].children.push(groupNode)
-    } else {
-      orphanGroups.push(groupNode)
+      const groupNode: any = { ...group, children: [], type: "group" }
+      groupMap[group.id] = groupNode
+
+      if (group.parent_id === undefined || group.parent_id === null) {
+        rootGroups.push(groupNode)
+      } else {
+        if (groupMap[group.parent_id]) {
+          groupMap[group.parent_id].children.push(groupNode)
+        } else {
+          orphanGroups.push(groupNode)
+        }
+      }
     }
   })
 
-  // Добавление водителей в соответствующие группы
+  // Добавление геозон в соответствующие группы
   groups.forEach((group: any) => {
     const currentGroup = groupMap[group.id]
-    if (currentGroup) {
-      if (group.drivers) {
-        currentGroup.children.push(
-          ...group.drivers.map((driver: any) => ({
-            ...driver,
-            type: "driver",
-            name: driver.surname + driver.first_name + driver.patronymic,
-          })),
-        )
-      }
+    if (currentGroup && group.drivers) {
+      currentGroup.children.push(
+        ...group.drivers.map((driver: any) => ({
+          ...driver,
+          type: "driver",
+          name: driver.driver_name,
+        })),
+      )
     }
   })
 
@@ -45,5 +48,5 @@ export function driversCheckboxTree(groups: any) {
     }
   })
 
-  return rootGroups.length === 0 ? uniq(orphanGroups) : uniq(rootGroups)
+  return rootGroups.length === 0 ? orphanGroups : rootGroups
 }

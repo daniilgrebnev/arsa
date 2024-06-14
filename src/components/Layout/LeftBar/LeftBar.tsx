@@ -2,6 +2,7 @@ import { AppDispatch } from "@/store/store"
 import { useEffect } from "react"
 import { useDispatch } from "react-redux"
 import { Link } from "react-router-dom"
+import { thunkGetDriversTree } from "../../../store/reducers/drivers/driverThunk"
 import { thunkGetVehicles } from "../../../store/reducers/vehicles/vehicleThunk"
 import { CheckboxTreeContainer } from "../CheckboxTree/CheckboxTree"
 import { CustomDateRangePicker } from "../CustomDateRangePicker /CustomDateRangePicker"
@@ -10,6 +11,7 @@ const LeftBar = () => {
   const dispatch = useDispatch<AppDispatch>()
   useEffect(() => {
     dispatch(thunkGetVehicles())
+    dispatch(thunkGetDriversTree())
   }, [])
 
   return (

@@ -1,10 +1,12 @@
-import { AppDispatch } from "@/store/store"
+import { AppDispatch, RootState } from "@/store/store"
+import debounce from "lodash/debounce"
 import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import CheckboxTree from "../../../components/testUi/CheckboxTree/CheckboxTree"
 import { driversCheckboxTree } from "../../../components/testUi/CheckboxTree/drivers-process"
-import { apiHandler } from "../../../helpers/apiHandler"
-import { setCheckedDrivers, setDriversData } from "../../../store/reducers/drivers/driverSlice"
+import { setCheckedDrivers } from "../../../store/reducers/drivers/driverSlice"
+import { thunkGetDriversTree } from "../../../store/reducers/drivers/driverThunk"
+import { thunkGetTableData } from "../../../store/reducers/table/tableThunk"
 import { Ok } from "../../../styles/image/Ok"
 
 const DriverLabel: React.FC<{ item: any }> = ({ item }) => {
@@ -17,27 +19,48 @@ const DriverLabel: React.FC<{ item: any }> = ({ item }) => {
 }
 
 export const DriverTree = () => {
-  const [checked, setChecked] = useState<string[]>([])
+  const { data, filteredData, isSearch, checkedDrivers } = useSelector(
+    (state: RootState) => state.driver,
+  )
+  const [checked, setChecked] = useState<string[]>(checkedDrivers)
+  const [pendingChecked, setPendingChecked] = useState<string[]>(checkedDrivers)
   const dispatch = useDispatch<AppDispatch>()
-  const { data, filteredData } = useSelector((state: any) => state.driver)
-  const getTree = (data) => {
-    dispatch(setDriversData(data))
-  }
-  useEffect(() => {
-    const query = {
-      url: "/tpms/v1/ctl/drivers/get_tree_drivers",
-      dispatcher: getTree,
-    }
-    data == null && dispatch(apiHandler({ dispatcher: query.dispatcher, url: query.url }))
 
-    dispatch(setCheckedDrivers(checked))
-  }, [checked])
+  const checkedVehicles = useSelector((state: RootState) => state.vehicles.checkedVehicles)
+
+  // Initial fetch of driver data
+  useEffect(() => {
+    dispatch(thunkGetDriversTree())
+  }, [dispatch])
+
+  // Update checked drivers and fetch table data when checked state changes
+  const [isInitialLoad, setIsInitialLoad] = useState(true)
+  useEffect(() => {
+    if (!isInitialLoad) {
+      // Проверяем, что это не первоначальная загрузка
+      const uniqChecked = Array.from(new Set(checked))
+      dispatch(setCheckedDrivers(uniqChecked))
+      dispatch(thunkGetTableData({ vehicle_uids: checkedVehicles, driver_uids: uniqChecked }))
+    } else {
+      setIsInitialLoad(false) // Устанавливаем, что первоначальная загрузка прошла
+    }
+  }, [checked, isSearch])
+
+  // Debounce the update to prevent rapid state changes
+  const debouncedSetChecked = debounce((newChecked: string[]) => {
+    setChecked(newChecked)
+  }, 300)
+
+  const handleCheckedChange = (newChecked: string[]) => {
+    setPendingChecked(newChecked)
+    debouncedSetChecked(newChecked)
+  }
 
   const groups =
     typeof filteredData !== "string" && filteredData != null
       ? driversCheckboxTree(filteredData)
       : []
-  console.log(groups)
+
   return (
     <>
       {filteredData != null && (
@@ -47,8 +70,9 @@ export const DriverTree = () => {
             data={groups}
             keyword={"children"}
             checkField={"driver_uid"}
-            checked={checked}
-            onChecked={setChecked}
+            checked={pendingChecked}
+            onChecked={handleCheckedChange}
+            expandAll={isSearch}
             iconCheck={
               <div className="w-[18px] aspect-square rounded bg-orange-500 flex items-center justify-center align-middle">
                 <Ok fill="white" width={10} />

@@ -1,5 +1,6 @@
 import { AppDispatch, RootState } from "@/store/store"
 import { uniq } from "lodash"
+import debounce from "lodash/debounce"
 import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { NullableDate } from "../../../components/NullableDate/NullableDate"
@@ -26,30 +27,63 @@ const Label: React.FC<{ item: any }> = ({ item }) => {
 }
 
 export const VehicleTree = () => {
-  const { data, filteredData, isSearch } = useSelector((state: RootState) => state.vehicles)
+  const { data, filteredData, isSearch, checkedVehicles } = useSelector(
+    (state: RootState) => state.vehicles,
+  )
+  const checkedDrivers = useSelector((state: RootState) => state.driver.checkedDrivers)
   const dispatch = useDispatch<AppDispatch>()
-  const [checked, setChecked] = useState<string[]>([])
+  const [checked, setChecked] = useState<string[]>(checkedVehicles)
+  const [pendingChecked, setPendingChecked] = useState<string[]>(checkedVehicles)
+
+  // Initial fetch of vehicle data
   useEffect(() => {
-    dispatch(setCheckedVehicles(uniq(checked)))
-    dispatch(thunkGetTableData(checked))
-  }, [checked])
-  useEffect(() => {}, [])
+    if (!data) {
+      dispatch(thunkGetTableData({ vehicle_uids: checkedVehicles, driver_uids: checkedDrivers }))
+    }
+  }, [dispatch, data, checkedVehicles, checkedDrivers])
+
+  // Update checked vehicles and fetch table data when checked state changes
+  const [isInitialLoad, setIsInitialLoad] = useState(true) // Добавляем состояние для отслеживания инициализации
+
+  // Update checked vehicles and fetch table data when checked state changes
+  useEffect(() => {
+    if (!isInitialLoad) {
+      // Проверяем, что это не первоначальная загрузка
+      const uniqChecked = uniq(checked)
+      dispatch(setCheckedVehicles(uniqChecked))
+      dispatch(thunkGetTableData({ vehicle_uids: uniqChecked, driver_uids: checkedDrivers }))
+    } else {
+      setIsInitialLoad(false) // Устанавливаем, что первоначальная загрузка прошла
+    }
+  }, [checked, isSearch]) // Убираем dispatch, checkedVehicles и checkedDrivers из массива зависимостей
+
+  // Debounce the update to prevent rapid state changes
+  const debouncedSetChecked = debounce((newChecked: string[]) => {
+    setChecked(newChecked)
+  }, 300)
+
+  const handleCheckedChange = (newChecked: string[]) => {
+    setPendingChecked(newChecked)
+    debouncedSetChecked(newChecked)
+  }
+
   const groups: any[] = vehicleCheckboxTree(filteredData)
   console.log(groups, filteredData)
+
   return (
     <div className="max-h-[67dvh] overflow-y-auto text-sm w-full">
       <div className="w-full">
-        {typeof data != "string" && data != null && (
+        {typeof data !== "string" && data !== null && (
           <div className="w-full">
-            {filteredData.length != 0 ? (
+            {filteredData.length !== 0 ? (
               <div className="w-full">
                 <CheckboxTree
                   CheckboxLabel={Label}
                   data={groups}
                   keyword={"children"}
                   checkField="vehicle_uid"
-                  checked={checked}
-                  onChecked={setChecked}
+                  checked={pendingChecked}
+                  onChecked={handleCheckedChange}
                   expandAll={isSearch}
                   iconCheck={
                     <div className="w-[18px] aspect-square rounded bg-orange-500 flex items-center justify-center align-middle">
@@ -75,9 +109,9 @@ export const VehicleTree = () => {
         )}
       </div>
 
-      {data == "loading" && <NullableDate text="Загрузка..." color="green" />}
-      {data == "error" && <NullableDate text="Ошибка" color="red" />}
-      {data == null && <NullableDate text="Неверный порядок запросов" color="red" />}
+      {data === "loading" && <NullableDate text="Загрузка..." color="green" />}
+      {data === "error" && <NullableDate text="Ошибка" color="red" />}
+      {data === null && <NullableDate text="Неверный порядок запросов" color="red" />}
     </div>
   )
 }

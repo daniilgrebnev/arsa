@@ -92,7 +92,7 @@ export const Checkbox = ({
     }
     return false
   }
-  useEffect(() => {}, [checked, data, isChecked])
+  useEffect(() => {}, [checked, data, isChecked, expandAll])
   const isHalfChecked = (): boolean => {
     if (!isChecked() && data[keyword] !== undefined) {
       const allVehicleUids = getAllVehicleUids(data[keyword])
@@ -174,7 +174,7 @@ export const Checkbox = ({
         )}
       </div>
       {isOpen && data[keyword] !== undefined && (
-        <div className="ml-2">
+        <div className={`ml-1`}>
           {data[keyword].map((item, index) => (
             <Checkbox
               CheckboxLabel={CheckboxLabel}
