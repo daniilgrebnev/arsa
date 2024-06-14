@@ -22,7 +22,7 @@ const Press = (propsChartData: any) => {
   // 	(state: RootState) => state.security.vehiclesCheked
   // )
   // useEffect(() => {}, [checkedData])
-
+  const now = DateTime.now().toSeconds()
   const notNorm = (data) => {
     const timeCheck = data.filter((item) =>
       item.wheel_pressure.some(
@@ -54,12 +54,10 @@ const Press = (propsChartData: any) => {
       filter: "olderData",
       color: "#f5cc16",
       count: chartData
-        ? chartData.filter(
-            (i, index) =>
-              chartData[index].wheel_pressure.length !== 0 &&
-              Math.round(new Date().getTime() / 1000) - i.last_event_date <
-                i.settings.sensors_valid_time_period &&
-              chartData,
+        ? chartData.filter((item) =>
+            item.wheel_pressure.some(
+              (i) => i.d && now - i.d > item.settings.sensors_valid_time_period,
+            ),
           ).length
         : 100,
     },

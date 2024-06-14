@@ -34,7 +34,7 @@ const CheckboxTree = ({
 }: ICheckboxTreeProps) => {
   useEffect(() => {}, [checked, expandAll])
 
-  useEffect(() => {}, [checked, data])
+  useEffect(() => {}, [checked, data, expandAll])
 
   return (
     <div className="w-full">

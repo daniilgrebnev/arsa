@@ -87,7 +87,8 @@ const filterHandler = (data: ITableData[], filter: string): ITableData[] => {
 
     case "sensorsWrong":
       return data.filter((item) => item.sensors_numbers_error === true)
-
+    case "all":
+      return data
     default:
       return []
   }

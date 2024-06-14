@@ -21,6 +21,7 @@ export const TableFilters = () => {
   const [searchValue, setSearchValue] = useState("")
   const dispatch = useDispatch<AppDispatch>()
   const { filteredData, checkedVehicles } = useSelector((state: RootState) => state.vehicles)
+  const { checkedDrivers } = useSelector((state: RootState) => state.driver)
   const checkedItemsArray: any[] = []
   const items = filteredData
     .filter((item) =>
@@ -40,7 +41,7 @@ export const TableFilters = () => {
   const tableData = useSelector((state: RootState) => state.table.data)
   const { type } = useSelector((state: RootState) => state.filters)
   const reloadHandler = () => {
-    dispatch(thunkGetTableData({ vehicle_uids: checkedItems, driver_uids: [] }))
+    dispatch(thunkGetTableData({ vehicle_uids: checkedVehicles, driver_uids: checkedDrivers }))
   }
 
   const searchHandler = (text) => {
