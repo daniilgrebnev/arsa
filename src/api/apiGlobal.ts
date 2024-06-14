@@ -8,13 +8,20 @@ import { IBodyTableQuery } from "@/store/reducers/table/tableThunk"
 import axios from "axios"
 import { IWheel } from "./../interfaces/wheels"
 
+let originUrl = ""
+
+if (!process.env.NODE_ENV || process.env.NODE_ENV === "development") {
+  originUrl = "https://tpms.arsa.pro"
+} else {
+  originUrl = window.location.origin
+}
 let instance = axios.create({
-  baseURL: "https://tpms.arsa.pro/api/",
+  baseURL: `${originUrl}/api/`,
 })
 
 export const createInstance = (token: string) => {
   instance = axios.create({
-    baseURL: "https://tpms.arsa.pro/api/",
+    baseURL: `${originUrl}/api/`,
     headers: { "X-Auth": token, "Content-Type": "application/json" },
   })
 }

@@ -4,15 +4,21 @@ interface IDefaultQuery {
   url: string
   body?: any
 }
+let originUrl = ""
 
+if (!process.env.NODE_ENV || process.env.NODE_ENV === "development") {
+  originUrl = "https://tpms.arsa.pro"
+} else {
+  originUrl = window.location.origin
+}
+let tpmsInstance = axios.create({
+  baseURL: `${originUrl}/api/`,
+})
 const token = localStorage.getItem("X-Auth")
 
-let tpmsInstance = axios.create({
-  baseURL: "https://tpms.arsa.pro/api/",
-})
 export const createInstance = () => {
   tpmsInstance = axios.create({
-    baseURL: "https://tpms.arsa.pro/api/",
+    baseURL: `${originUrl}/api/`,
     headers: { "X-Auth": token, "Content-Type": "application/json" },
   })
 }
