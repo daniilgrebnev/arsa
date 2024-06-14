@@ -174,7 +174,7 @@ export const Checkbox = ({
         )}
       </div>
       {isOpen && data[keyword] !== undefined && (
-        <div className="ml-2">
+        <div className={`ml-1`}>
           {data[keyword].map((item, index) => (
             <Checkbox
               CheckboxLabel={CheckboxLabel}

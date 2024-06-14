@@ -3,7 +3,12 @@ import { getTableData } from "../../../api/apiGlobal"
 import { setIsAuth } from "../auth/authSlice"
 import { setTableData } from "./table"
 
-export const thunkGetTableData = (body: any) => {
+export interface IBodyTableQuery {
+  vehicle_uids: string[]
+  driver_uids: string[]
+}
+
+export const thunkGetTableData = (body: IBodyTableQuery) => {
   return async (dispatch: AppDispatch) => {
     dispatch(setTableData("loading"))
     const { status, tableData } = await getTableData(body)

@@ -3,7 +3,6 @@ import { AppDispatch, RootState } from "@/store/store"
 import { uniqBy } from "lodash"
 import { useCallback, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import { setDefaultDriverFilterData } from "../../../../store/reducers/drivers/driverSlice"
 import {
   setDefaultGeoZonesFilteredData,
   setGeoZonesFilteredData,
@@ -26,11 +25,11 @@ export const SearchGeoZones = () => {
       if (processText.length > 0 && data && Array.isArray(data)) {
         dispatch(setGeoZonesSearched(true))
 
-        const searchFilter = (filterFunc: (driver: any) => boolean) =>
+        const searchFilter = (filterFunc: (geozone: any) => boolean) =>
           data
             .map((group: any) => ({
               ...group,
-              drivers: group.geozones ? group.geozones.filter(filterFunc) : [],
+              geozones: group.geozones ? group.geozones.filter(filterFunc) : [],
             }))
             .filter((group) => group.geozones && group.geozones.length > 0)
 
@@ -50,10 +49,6 @@ export const SearchGeoZones = () => {
 
         filterByGroupName.push(...additionalFilteredGroups)
 
-        // const filterByTerminalID = searchFilter((driver) =>
-        //   textProcess(driver?.driver_code.toString()).includes(processText),
-        // )
-
         const combineSearches: { [key: number]: IVehicleData } = {}
 
         filterByGroupName.forEach((group) => {
@@ -64,9 +59,6 @@ export const SearchGeoZones = () => {
           filterByName.forEach((group) => {
             combineSearches[group.id] = group
           })
-          // filterByTerminalID.forEach((group) => {
-          //   combineSearches[group.id] = group
-          // })
         } else {
           const addParentGroups = (searchResult: IVehicleData[]) => {
             const parentGroups = searchResult.flatMap((group) =>
@@ -78,7 +70,6 @@ export const SearchGeoZones = () => {
           }
 
           addParentGroups(filterByName)
-          // addParentGroups(filterByTerminalID)
         }
 
         const finalizing: any = Object.values(combineSearches)
@@ -103,13 +94,13 @@ export const SearchGeoZones = () => {
         }
 
         const heighInWork = findAllParents(data, finalizing)
+        console.log(finalizing)
         const finArr = finalizing.concat(uniqBy(heighInWork, "account_id"))
         console.log(finArr)
         dispatch(setGeoZonesFilteredData(finArr))
       } else {
         dispatch(setGeoZonesSearched(false))
-
-        dispatch(setDefaultGeoZonesFilteredData())
+        dispatch(setDefaultGeoZonesFilteredData()) // Dispatch an empty array when no matches are found
       }
     },
     [data, dispatch],
@@ -133,7 +124,7 @@ export const SearchGeoZones = () => {
           title="Сбросить поиск"
           onClick={() => {
             setSearchValue("")
-            dispatch(setDefaultDriverFilterData())
+            dispatch(setDefaultGeoZonesFilteredData())
           }}
           className="text-red-600 text-2xl cursor-pointer"
         >

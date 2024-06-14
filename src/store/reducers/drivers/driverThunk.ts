@@ -1,11 +1,11 @@
 import { AppDispatch } from "@/store/store"
-import { tpmsQuery } from "../../../api/api"
+import { getTreeDrivers } from "../../../api/apiGlobal"
 import { setIsAuth } from "../auth/authSlice"
 import { setDriversData } from "./driverSlice"
 
 export const thunkGetDriversTree = () => {
   return async (dispatch: AppDispatch) => {
-    const { status, data } = await tpmsQuery({ url: "tpms/v1/ctl/drivers/get_tree_drivers" })
+    const { status, data } = await getTreeDrivers()
     dispatch(setDriversData("loading"))
     console.log(data)
     switch (status) {

@@ -4,6 +4,7 @@ import { ISwitchHistoryReq } from "@/interfaces/switchHistory"
 import { ITableData } from "@/interfaces/table"
 import { IWheelChart } from "@/interfaces/wheelChart"
 import { ISwitchReq } from "@/store/reducers/switchTire/switchTire"
+import { IBodyTableQuery } from "@/store/reducers/table/tableThunk"
 import axios from "axios"
 import { IWheel } from "./../interfaces/wheels"
 
@@ -114,10 +115,10 @@ export const getTreeDrivers = async () => {
 }
 
 // Табличные данные
-export const getTableData = async (uuids: any) => {
+export const getTableData = async (bodyTable: IBodyTableQuery) => {
   const body = {
-    vehicle_uids: uuids,
-    driver_uids: [],
+    vehicle_uids: bodyTable.vehicle_uids,
+    driver_uids: bodyTable.driver_uids,
   }
 
   console.log(body)

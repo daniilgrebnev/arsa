@@ -1,122 +1,114 @@
-import { IVehicleData } from "@/interfaces/vehicleTree"
-import { AppDispatch, RootState } from "@/store/store"
+import { AppDispatch } from "@/store/store"
 import { uniqBy } from "lodash"
-import { useCallback, useState } from "react"
+import { useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import {
   setDefaultDriverFilterData,
   setDriverSearch,
   setDriversFilteredData,
 } from "../../../../store/reducers/drivers/driverSlice"
-import { setIsSearch } from "../../../../store/reducers/vehicles/vehicleSlice"
 
 export const SearchDrivers = () => {
   const [searchValue, setSearchValue] = useState("")
   const dispatch = useDispatch<AppDispatch>()
-  const data = useSelector((state: RootState) => state.driver.data)
+  const data = useSelector((state: any) => state.driver.data)
 
   const textProcess = (text: string) => {
     return text ? text.toLowerCase().trim() : ""
   }
 
-  const searchHandler = useCallback(
-    (text: string) => {
-      const processText = textProcess(text)
-      console.log(processText)
-      if (processText.length > 0 && data && Array.isArray(data)) {
-        dispatch(setIsSearch(true))
-        dispatch(setDriverSearch(true))
+  const searchHandler = (text: string) => {
+    let searchedData: any = data
+    const processedText = textProcess(text)
+    dispatch(setDriverSearch(true))
 
-        const searchFilter = (filterFunc: (driver: any) => boolean) =>
-          data
-            .map((group: any) => ({
-              ...group,
-              drivers: group.drivers ? group.drivers.filter(filterFunc) : [],
-            }))
-            .filter((group) => group.drivers && group.drivers.length > 0)
+    const terminalIdSearch: any[] = []
 
-        const filterByName = searchFilter((driver) =>
-          textProcess(`${driver.surname} ${driver.first_name} ${driver.patronymic}`).includes(
-            processText,
-          ),
-        )
-
-        const filterByGroupName = data.filter((group) =>
-          textProcess(group.group_name).includes(processText),
-        )
-
-        const activeParentGroups = filterByGroupName.map((i) => i.id)
-
-        const additionalFilteredGroups = data.filter((group: any) =>
-          activeParentGroups.includes(group.parent_id),
-        )
-
-        filterByGroupName.push(...additionalFilteredGroups)
-
-        const filterByTerminalID = searchFilter((driver) =>
-          textProcess(driver?.driver_code.toString()).includes(processText),
-        )
-
-        const combineSearches: { [key: number]: IVehicleData } = {}
-
-        filterByGroupName.forEach((group) => {
-          combineSearches[group.id] = group
-        })
-
-        if (filterByGroupName.length === 0) {
-          filterByName.forEach((group) => {
-            combineSearches[group.id] = group
-          })
-          filterByTerminalID.forEach((group) => {
-            combineSearches[group.id] = group
-          })
-        } else {
-          const addParentGroups = (searchResult: IVehicleData[]) => {
-            const parentGroups = searchResult.flatMap((group) =>
-              data.filter((parentGroup: any) => parentGroup.id === group.parent_id),
-            )
-            parentGroups.forEach((group) => {
-              combineSearches[group.id] = group
-            })
-          }
-
-          addParentGroups(filterByName)
-          addParentGroups(filterByTerminalID)
-        }
-
-        const finalizing: any = Object.values(combineSearches)
-        const levelMax = Math.max(...finalizing.map((group: any) => group.level))
-
-        const higherLevelGroups = data.filter((group: any) => group.level > levelMax)
-        higherLevelGroups.forEach((group) => {
-          combineSearches[group.id] = group
-        })
-
-        const findAllParents = (items, parents, allFound: any = []) => {
-          let newFound = items.filter((item) =>
-            parents.some((parent) => parent.parent_id === item.id),
-          )
-
-          if (newFound.length === 0) {
-            return allFound
-          } else {
-            allFound.push(...newFound)
-            return findAllParents(items, newFound, allFound)
-          }
-        }
-
-        const heighInWork = findAllParents(data, finalizing)
-        const finArr = finalizing.concat(uniqBy(heighInWork, "account_id"))
-        console.log(finArr)
-        dispatch(setDriversFilteredData(finArr))
-      } else {
-        dispatch(setDriverSearch(false))
-        dispatch(setIsSearch(false))
-        dispatch(setDefaultDriverFilterData())
+    searchedData.forEach((element) => {
+      // Create a new object with all properties of the current element
+      const newElement = {
+        ...element,
+        drivers:
+          // Check if vehicles is not null
+          element.drivers !== null
+            ? // If not null, filter the vehicles array
+              element.drivers.filter(
+                (car) => car.driver_code.toString().trim().toLowerCase() === processedText,
+              )
+            : // If null, keep it as null
+              null,
       }
-    },
-    [data, dispatch],
-  )
+
+      // Push the new object into terminalIdSearch array
+      terminalIdSearch.push(newElement)
+    })
+
+    // Log the resulting array
+    const terminalSearhing = terminalIdSearch.filter(
+      (item) => item.drivers != null && item.drivers.length > 0,
+    )
+    console.log(terminalSearhing)
+
+    const groupNameSearched: any = searchedData.filter((item) =>
+      item.group_name.toLowerCase().trim().includes(processedText),
+    )
+    const childGroupsIds = groupNameSearched.map((item) => item.id)
+    const childGroups = data.filter((item) =>
+      childGroupsIds.some((groups) => item.parent_id === groups && item.id !== groups),
+    )
+
+    const finalGNSearch = [...childGroups, ...groupNameSearched]
+    console.log(finalGNSearch)
+    const vehicleNameSearched: any = []
+    searchedData.forEach((element) => {
+      vehicleNameSearched.push({
+        ...element,
+        drivers:
+          element.drivers !== null
+            ? element.drivers?.filter((car) =>
+                car.driver_name.trim().toLowerCase().includes(processedText),
+              )
+            : null,
+      })
+    })
+    const terminalIdSearched: any[] = []
+    searchedData.forEach((element) => {
+      terminalIdSearched.push({
+        ...element,
+        drivers:
+          element.drivers != null
+            ? element.drivers.filter(
+                (car) => car.driver_code.toString().toLowerCase().trim() === processedText,
+              )
+            : null,
+      })
+    })
+
+    const combineSearches =
+      terminalSearhing.length === 0
+        ? groupNameSearched.length === 0
+          ? vehicleNameSearched.filter((item) => item.drivers != null && item.drivers.length !== 0)
+          : finalGNSearch
+        : terminalSearhing
+
+    const maxLevel = Math.max(...combineSearches.map((item: any) => item.level), 0)
+
+    const highLevelGroups = data.filter((group: any) => group.level < maxLevel)
+
+    const rootGroups = highLevelGroups.filter((group: any) => group.level < maxLevel - 1)
+
+    const filteredHighLevel = highLevelGroups.filter((group: any) =>
+      combineSearches.some((groupFilter: any) => group.id === groupFilter.parent_id),
+    )
+
+    const searchResult = uniqBy(
+      [...filteredHighLevel, ...combineSearches, ...rootGroups],
+      "group_name",
+    )
+    console.log(searchResult)
+    // Dispatch the filtered data to Redux state
+    dispatch(setDriversFilteredData(searchResult))
+  }
 
   return (
     <div>

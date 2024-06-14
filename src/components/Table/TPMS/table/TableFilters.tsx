@@ -40,7 +40,7 @@ export const TableFilters = () => {
   const tableData = useSelector((state: RootState) => state.table.data)
   const { type } = useSelector((state: RootState) => state.filters)
   const reloadHandler = () => {
-    dispatch(thunkGetTableData(checkedItems))
+    dispatch(thunkGetTableData({ vehicle_uids: checkedItems, driver_uids: [] }))
   }
 
   const searchHandler = (text) => {
