@@ -13,7 +13,10 @@ let originUrl = ""
 if (!process.env.NODE_ENV || process.env.NODE_ENV === "development") {
   originUrl = "https://tpms.arsa.pro"
 } else {
-  originUrl = window.location.origin
+  originUrl = originUrl =
+    window.location.origin == "https://arsa-dev-tpms.vercel.app"
+      ? "https://tpms.arsa.pro"
+      : window.location.origin
 }
 let instance = axios.create({
   baseURL: `${originUrl}/api/`,
