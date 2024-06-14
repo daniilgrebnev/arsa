@@ -35,6 +35,7 @@ export const CustomDateRangePicker = () => {
         setEndDate={setEndDate}
         startDate={startDate}
         setStartDate={setStartDate}
+        setActiveDate={setActiveTiming}
       />
       <div className="date-range__wrapper">
         <button className="date-range__btn" onClick={() => setIsOpenPopup(true)}>

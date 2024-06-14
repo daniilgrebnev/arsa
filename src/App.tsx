@@ -7,8 +7,6 @@ import { Table } from "./pages/Table"
 import { RootState } from "./store/store"
 
 function App() {
-  // const dispatch: any = useDispatch()
-  // const { isAuth } = useSelector((state: RootState) => state.auth)
   const { page } = useSelector((state: RootState) => state.router)
   return (
     <>

@@ -12,6 +12,7 @@ type propsType = {
   isOpenPopup: boolean
   setIsOpenPopup: (isOpen: boolean) => void
   children?: React.ReactNode
+  setActiveDate?: (id: number) => void
 }
 
 export const CalendarPopup: React.FC<propsType> = ({
@@ -22,6 +23,7 @@ export const CalendarPopup: React.FC<propsType> = ({
   isOpenPopup,
   setIsOpenPopup,
   children,
+  setActiveDate,
 }) => {
   const [currentStartDate, setCurrentStartDate] = useState(startDate)
   const [currentEndDate, setCurrentEndDate] = useState(endDate)
@@ -162,6 +164,7 @@ export const CalendarPopup: React.FC<propsType> = ({
                 setIsOpenPopup(false)
                 setEndDate(currentEndDate)
                 setStartDate(currentStartDate)
+                if (setActiveDate) setActiveDate(activeTiming)
               }}
             >
               Готово
