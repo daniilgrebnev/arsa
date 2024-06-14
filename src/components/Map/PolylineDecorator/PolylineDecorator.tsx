@@ -1,16 +1,16 @@
-import { useEffect, useRef } from "react";
-import L from "leaflet";
-import { Polyline, useMap } from "react-leaflet";
-import "leaflet-polylinedecorator";
+import { useEffect, useRef } from "react"
+import L from "leaflet"
+import { Polyline, useMap } from "react-leaflet"
+import "leaflet-polylinedecorator"
 
 export const PolylineDecorator = (props) => {
-  const polyRef = useRef<any>(null);
-  const map = useMap();
-  const decoratorRef = useRef<any>(null); // Создаем ссылку на декоратор
+  const polyRef = useRef<any>(null)
+  const map = useMap()
+  const decoratorRef = useRef<any>(null) // Создаем ссылку на декоратор
 
   useEffect(() => {
     if (polyRef.current) {
-      const polyline = polyRef.current;
+      const polyline = polyRef.current
 
       // Добавляем стрелки к линии
       const decorator = L.polylineDecorator(polyline, {
@@ -30,26 +30,26 @@ export const PolylineDecorator = (props) => {
             }),
           },
         ],
-      }).addTo(map);
+      }).addTo(map)
 
-      decoratorRef.current = decorator; // Сохраняем ссылку на декоратор
+      decoratorRef.current = decorator // Сохраняем ссылку на декоратор
     }
 
     return () => {
       if (decoratorRef.current) {
-        decoratorRef.current.clearLayers(); // Удаляем все слои (стрелки) из декоратора
+        decoratorRef.current.clearLayers() // Удаляем все слои (стрелки) из декоратора
         map.eachLayer((layer) => {
           if (layer instanceof L.PolylineDecorator) {
-            map.removeLayer(decoratorRef.current);
+            map.removeLayer(decoratorRef.current)
           }
-        });
+        })
       }
-    };
-  }, []);
+    }
+  })
 
   return (
     <>
       <Polyline ref={polyRef} {...props} />
     </>
-  );
-};
+  )
+}

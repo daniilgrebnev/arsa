@@ -6,6 +6,7 @@ import React, { useEffect, useState } from "react"
 import { useSelector } from "react-redux"
 import { useDispatch } from "react-redux"
 import {
+  setAllGeozoneInfo,
   setEditMap,
   setIsOpenMenuFigure,
   setIsOpenMenuMap,
@@ -20,7 +21,8 @@ export const MapPage = () => {
   const isOpen = useSelector((state: RootState) => state.map.isOpenMenuMap)
   const tracks = useSelector((state: RootState) => state.map.tracks)
   // const chekedGeozone = useSelector((state: RootState) => state.security.geozonesCheked)
-  const chekedGeozone = useSelector((state: RootState) => state.map.infoGeozones)
+  const chekedGeozone = useSelector((state: RootState) => state.geoZones.checkedGeoZones)
+  const geozonesInfo = useSelector((state: RootState) => state.map.infoGeozones)
   const menuFigure = useSelector((state: RootState) => state.map.isOpenMenuFigure)
   const isEditor = useSelector((state: RootState) => state.map.editMap)
   const vehicleCheked = useSelector((state: RootState) => state.vehicles.checkedVehicles)
@@ -57,14 +59,17 @@ export const MapPage = () => {
   }, [vehicleCheked, endDate, startDate])
 
   useEffect(() => {
-    if (chekedGeozoneA.length > 5) {
+    if (chekedGeozone.length > 5) {
       alert("Можно показать не более 5 треков")
       return
     }
-    if (chekedGeozoneA.length > 0) {
-      dispatch(getGeozones(chekedGeozoneA))
+    if (chekedGeozone.length === 0) {
+      dispatch(setAllGeozoneInfo([]))
     }
-  }, [])
+    if (chekedGeozone.length > 0) {
+      dispatch(getGeozones(chekedGeozone))
+    }
+  }, [chekedGeozone, startDate, endDate])
 
   return (
     <div>
@@ -90,7 +95,7 @@ export const MapPage = () => {
           tracks={tracks}
           isEditor={isEditor}
           isOpenMenuFigure={menuFigure}
-          chekedGeozone={chekedGeozone}
+          chekedGeozone={geozonesInfo}
         >
           <SettingsEvents />
         </MyMapContainer>
