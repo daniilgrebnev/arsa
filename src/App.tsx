@@ -1,23 +1,23 @@
-import { Route, Routes } from "react-router"
 import { Layout } from "./components/Layout/Layout"
-import { Main } from "./pages/Main"
 
+import { useSelector } from "react-redux"
+import { Main } from "./pages/Main"
 import { MapPage } from "./pages/Map"
 import { Table } from "./pages/Table"
+import { RootState } from "./store/store"
 
 function App() {
   // const dispatch: any = useDispatch()
   // const { isAuth } = useSelector((state: RootState) => state.auth)
-
+  const { page } = useSelector((state: RootState) => state.router)
   return (
     <>
       <Layout>
-        <Routes>
-          <Route path="/" element={<Main />}></Route>
-          <Route path="/table" element={<Table />}></Route>
-          <Route path="/map" element={<MapPage />}></Route>
-          <Route path="/asd" element={<MapPage />}></Route>
-        </Routes>
+        <>
+          {page === "main" && <Main />}
+          {page === "tpms" && <Table />}
+          {page === "map" && <MapPage />}
+        </>
       </Layout>
     </>
   )

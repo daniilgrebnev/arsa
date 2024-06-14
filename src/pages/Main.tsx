@@ -1,22 +1,25 @@
-import { Link } from "react-router-dom"
+import { AppDispatch } from "@/store/store"
+import { useDispatch } from "react-redux"
+import { TPages, setRoutePage } from "../store/reducers/routing/routerSlice"
 
 interface IPages {
   page: string
   image: string
-  link: string
+  link: TPages
 }
 
 export const Main = () => {
+  const dispatch = useDispatch<AppDispatch>()
   const items: IPages[] = [
     {
       page: "СКДШ",
       image: "images/TPMS.png",
-      link: "/table",
+      link: "tpms",
     },
     {
       page: "Карта",
       image: "images/map.png",
-      link: "/map",
+      link: "map",
     },
   ]
   return (
@@ -28,7 +31,11 @@ export const Main = () => {
         className="w-full  p-10 mx-auto gap-7 flex flex-wrap items-center justify-center"
       >
         {items.map((page, index) => (
-          <Link key={index} to={page.link}>
+          <div
+            key={index}
+            className="cursor-pointer"
+            onClick={() => dispatch(setRoutePage(page.link))}
+          >
             <div className=" w-[300px] h-[200px]  border border-orange-600 mx-auto rounded-lg overflow-hidden transition-all hover:bg-gray-100">
               <img
                 className="w-full h-4/5 rounded-lg p-1 overflow-hidden  mx-auto"
@@ -39,7 +46,7 @@ export const Main = () => {
                 {page.page}
               </div>
             </div>
-          </Link>
+          </div>
         ))}
       </div>
     </div>
