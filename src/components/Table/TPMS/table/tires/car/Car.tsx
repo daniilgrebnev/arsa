@@ -6,11 +6,9 @@ import { useDispatch, useSelector } from "react-redux"
 import { ErrorBlock } from "../../../../../../components/Errors/ErrorBlock"
 import { NullableDate } from "../../../../../../components/NullableDate/NullableDate"
 import { axlesInit } from "../../../../../../helpers/axlesInitter"
-import { getFullVehicleInfo } from "../../../../../../helpers/getfullVehicleInfo"
 import { setOpenCatalog } from "../../../../../../store/reducers/catalog/catalog"
 import { getCatalogThunk } from "../../../../../../store/reducers/catalog/catalogThunk"
 import { setOpenSwitchHistory } from "../../../../../../store/reducers/switchTireHistory/switchTireHistory"
-import { setOpenFuel } from "../../../../../../store/reducers/testingUI/fuel/fuel"
 import { InfoWidget } from "./InfoWidget"
 import { Truck } from "./carTypes/Truck"
 import { CatalogIcon } from "./icons/CatalogIcon"
@@ -41,7 +39,7 @@ const Car = () => {
   const account_id = useSelector(
     (state: RootState) => typeof state.car.data != "string" && state.car.data?.data?.account_id,
   )
-  const wheelsInfo = getFullVehicleInfo(dataArr)
+
   useEffect(() => {
     setOpenInfoWidget(isOpenWidget)
   }, [data, isOpenWidget, wheel_id])
@@ -56,12 +54,6 @@ const Car = () => {
             style={{ gridTemplateColumns: "30% 30% 30%" }}
             className=" w-full absolute top-0  h-[7%] bg-gray-300 text-sm grid items-center justify-between"
           >
-            <div
-              onMouseUp={() => dispatch(setOpenFuel(true))}
-              className="absolute right-16 top-16 cursor-pointer hover:text-orange-400"
-            >
-              Топливо тест
-            </div>
             <span
               title={typeof dataArr != "undefined" ? dataArr.vehicle_name : ""}
               className="text-nowrap cursor-default text-ellipsis overflow-hidden"
@@ -72,23 +64,30 @@ const Car = () => {
               title={
                 typeof dataArr != "undefined" && dataArr.driver.driver_name !== null
                   ? dataArr.driver.driver_name
-                  : "Нет данных о водителе"
+                  : dataArr.driver.driver_code
+                    ? dataArr.driver.driver_code.toString()
+                    : "Н/д"
               }
               className="text-nowrap cursor-default text-ellipsis overflow-hidden"
             >
               {dataArr.driver.driver_name !== null ? (
                 dataArr.driver.driver_name
+              ) : dataArr.driver.driver_code ? (
+                dataArr.driver.driver_code
               ) : (
                 <span className="text-red-600">Водитель - н\д</span>
               )}
             </span>
-
-            <span
-              title={moment(dataArr.vehicle_last_event_date * 1000).fromNow()}
-              className="text-nowrap cursor-default text-ellipsis overflow-hidden"
-            >
-              {moment(dataArr.vehicle_last_event_date * 1000).format("HH:mm  DD.MM.yyyy")}
-            </span>
+            {dataArr.vehicle_last_event_date > 0 ? (
+              <span
+                title={moment(dataArr.vehicle_last_event_date * 1000).fromNow()}
+                className="text-nowrap cursor-default text-ellipsis overflow-hidden"
+              >
+                {moment(dataArr.vehicle_last_event_date * 1000).format("HH:mm  DD.MM.yyyy")}
+              </span>
+            ) : (
+              <p className="text-red-500">Никогда</p>
+            )}
           </div>
         )}
 
@@ -134,8 +133,16 @@ const Car = () => {
           </div>
         </div>
         {data == "loading" && <NullableDate color="#049f38" text="Загрузка" />}
-        {data == null && <NullableDate color="#9f8204" text="Не выбран объект" />}
-        {axles == null && <NullableDate color="#d00505" text="Нет датчиков" />}
+        {data == null && (
+          <div className="absolute bottom-0 h-[93%] left-0 w-full">
+            <NullableDate color="#9f8204" text="Не выбран объект" />
+          </div>
+        )}
+        {axles == null && (
+          <div className="absolute bottom-0 h-[93%] left-0 w-full">
+            <NullableDate color="#d00505" text="Нет датчиков" />
+          </div>
+        )}
       </div>
     </div>
   )

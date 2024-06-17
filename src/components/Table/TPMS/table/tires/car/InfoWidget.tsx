@@ -30,7 +30,8 @@ export const InfoWidget = (state: any) => {
           dataName: "press",
           title: "Давление",
           value:
-            currentVehicle?.data.sensor_data.press >= 0
+            currentVehicle?.data.sensor_data.press >= 0 &&
+            currentVehicle.data.sensor_data.press != null
               ? currentVehicle?.data.sensor_data.press + " кПа"
               : "Н/д",
         },
@@ -38,7 +39,7 @@ export const InfoWidget = (state: any) => {
           dataName: "temp",
           title: "Температура",
           value:
-            currentVehicle?.data.sensor_data.t >= 0
+            currentVehicle?.data.sensor_data.t >= 0 && currentVehicle.data.sensor_data.t != null
               ? currentVehicle?.data.sensor_data.t + "ºC"
               : "Н/д",
         },

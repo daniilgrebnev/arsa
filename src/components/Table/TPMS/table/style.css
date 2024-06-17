@@ -47,7 +47,7 @@ th p {
   text-overflow: ellipsis; /* добавляем троеточие, если текст не помещается */
 }
 tbody tr:hover {
-  background: #c5dbf7 !important;
+  background: #f7ddc5 !important;
   cursor: pointer;
 }
 tr {
@@ -57,7 +57,7 @@ tr {
   overflow: hidden;
 }
 tbody tr.active {
-  background: #84bcff !important	;
+  background: #ffad84 !important	;
 }
 thead {
   color: white;
