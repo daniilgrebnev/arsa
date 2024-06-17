@@ -29,7 +29,7 @@ export const Checkbox = ({
   expandAll,
   CheckboxLabel,
 }: ICheckboxProps) => {
-  const [isOpen, setIsOpen] = useState(expandAll || false)
+  const [isOpen, setIsOpen] = useState(false)
 
   const handleToggle = () => {
     setIsOpen(!isOpen)
@@ -92,7 +92,9 @@ export const Checkbox = ({
     }
     return false
   }
-  useEffect(() => {}, [checked, data, isChecked, expandAll])
+  useEffect(() => {
+    setIsOpen(expandAll || false)
+  }, [checked, data, isChecked, expandAll])
   const isHalfChecked = (): boolean => {
     if (!isChecked() && data[keyword] !== undefined) {
       const allVehicleUids = getAllVehicleUids(data[keyword])

@@ -32,13 +32,11 @@ const CheckboxTree = ({
   expandAll,
   CheckboxLabel,
 }: ICheckboxTreeProps) => {
-  useEffect(() => {}, [checked, expandAll])
-
-  useEffect(() => {}, [checked, data, expandAll])
+  useEffect(() => {}, [checked, expandAll, data])
 
   return (
     <div className="w-full">
-      {data.map((i: any, index) => (
+      {data.map((i, index) => (
         <Checkbox
           CheckboxLabel={CheckboxLabel}
           iconCheck={iconCheck}
