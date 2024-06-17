@@ -12,7 +12,7 @@ interface ICheckboxProps {
   iconNonCheck?: React.ReactNode
   iconNonExpand?: React.ReactNode
   CheckboxLabel?: React.ComponentType<{ item: any }>
-  expandAll?: boolean | undefined
+  expandAll?: boolean
 }
 
 export const Checkbox = ({
@@ -29,10 +29,14 @@ export const Checkbox = ({
   expandAll,
   CheckboxLabel,
 }: ICheckboxProps) => {
-  const [isOpen, setIsOpen] = useState(false)
+  const [isOpen, setIsOpen] = useState(expandAll || false)
+
+  useEffect(() => {
+    setIsOpen(expandAll || false)
+  }, [expandAll])
 
   const handleToggle = () => {
-    setIsOpen(!isOpen)
+    setIsOpen((prev) => !prev)
   }
 
   const handleCheckboxChange = (isChecked: boolean) => {
@@ -85,22 +89,22 @@ export const Checkbox = ({
       const allVehicleUids = getAllVehicleUids(data[keyword])
       return (
         allVehicleUids.length > 0 &&
-        allVehicleUids.every((uid) => checked != undefined && checked.includes(uid))
+        allVehicleUids.every((uid) => checked !== undefined && checked.includes(uid))
       )
     } else if (data[keyword] === undefined) {
-      return checked != undefined && checked.includes(data[checkField])
+      return checked !== undefined && checked.includes(data[checkField])
     }
     return false
   }
-  useEffect(() => {
-    setIsOpen(expandAll || false)
-  }, [checked, data, isChecked, expandAll])
+
+  useEffect(() => {}, [checked, data, isChecked, expandAll])
+
   const isHalfChecked = (): boolean => {
     if (!isChecked() && data[keyword] !== undefined) {
       const allVehicleUids = getAllVehicleUids(data[keyword])
       return (
-        checked != undefined &&
-        allVehicleUids.some((id) => checked != undefined && checked.includes(id))
+        checked !== undefined &&
+        allVehicleUids.some((id) => checked !== undefined && checked.includes(id))
       )
     } else {
       return false
@@ -121,7 +125,9 @@ export const Checkbox = ({
         <input
           type="checkbox"
           checked={isChecked()}
-          className={`${isHalfChecked() && "shadow-lg shadow-black"} + ${isChecked() && "shadow-2xl shadow-black"} ${checkItemsIsFull && "hidden"} `}
+          className={`${isHalfChecked() && "shadow-lg shadow-black"} + ${
+            isChecked() && "shadow-2xl shadow-black"
+          } ${checkItemsIsFull && "hidden"} `}
           onChange={handleInputChange}
         />
         <div className=" ">

@@ -1,4 +1,4 @@
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { Checkbox } from "./Checkbox"
 
 interface ICheckboxTreeProps {
@@ -13,13 +13,11 @@ interface ICheckboxTreeProps {
   CheckboxLabel?: React.ComponentType<any>
   expandAll?: boolean
   onChecked: React.Dispatch<React.SetStateAction<any>>
-
   checked: any
 }
 
 const CheckboxTree = ({
   data,
-
   keyword,
   checkField,
   onChecked,
@@ -32,11 +30,15 @@ const CheckboxTree = ({
   expandAll,
   CheckboxLabel,
 }: ICheckboxTreeProps) => {
-  useEffect(() => {}, [checked, expandAll, data])
+  const [expandAllGroups, setExpandAllGroups] = useState(expandAll || false)
+
+  useEffect(() => {
+    setExpandAllGroups(expandAll || false)
+  }, [expandAll])
 
   return (
     <div className="w-full">
-      {data.map((i, index) => (
+      {data.map((item, index) => (
         <Checkbox
           CheckboxLabel={CheckboxLabel}
           iconCheck={iconCheck}
@@ -45,12 +47,12 @@ const CheckboxTree = ({
           iconNonCheck={iconNonCheck}
           iconNonExpand={iconNonExpand}
           key={index}
-          data={i}
+          data={item}
           checkField={checkField}
           keyword={keyword}
           setChecked={onChecked}
           checked={checked}
-          expandAll={expandAll}
+          expandAll={expandAllGroups}
         />
       ))}
     </div>

@@ -34,12 +34,11 @@ export const VehicleTree = () => {
   const dispatch = useDispatch<AppDispatch>()
   const [checked, setChecked] = useState<string[]>(checkedVehicles)
   const [pendingChecked, setPendingChecked] = useState<string[]>(checkedVehicles)
-  const [search, setSearch] = useState(false)
+
   // Initial fetch of vehicle data
   useEffect(() => {
     if (!data) {
       dispatch(thunkGetTableData({ vehicle_uids: checkedVehicles, driver_uids: checkedDrivers }))
-      setSearch(isSearch)
     }
   }, [dispatch, data, checkedVehicles, checkedDrivers, isSearch])
 
@@ -50,7 +49,7 @@ export const VehicleTree = () => {
   useEffect(() => {
     if (!isInitialLoad) {
       // Проверяем, что это не первоначальная загрузка
-      setSearch(isSearch)
+
       const uniqChecked = uniq(checked)
       dispatch(setCheckedVehicles(uniqChecked))
       dispatch(thunkGetTableData({ vehicle_uids: uniqChecked, driver_uids: checkedDrivers }))
@@ -86,7 +85,7 @@ export const VehicleTree = () => {
                   checkField="vehicle_uid"
                   checked={pendingChecked}
                   onChecked={handleCheckedChange}
-                  expandAll={search}
+                  expandAll={isSearch}
                   iconCheck={
                     <div className="w-[18px] aspect-square rounded bg-orange-500 flex items-center justify-center align-middle">
                       <Ok fill="white" width={10} />
