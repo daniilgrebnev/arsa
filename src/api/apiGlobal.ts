@@ -18,12 +18,19 @@ if (!process.env.NODE_ENV || process.env.NODE_ENV === "development") {
       ? "https://tpms.arsa.pro"
       : window.location.origin
 }
-let instance = axios.create({
+let tpmsInstance = axios.create({
   baseURL: `${originUrl}/api/`,
 })
 
+const lToken = localStorage.getItem("X-Auth")
+
+let serverInstance = axios.create({
+  baseURL: "https://server.arsa.pro/api/",
+  headers: { "X-Auth": lToken, "Content-Type": "application/json" },
+})
+
 export const createInstance = (token: string) => {
-  instance = axios.create({
+  tpmsInstance = axios.create({
     baseURL: `${originUrl}/api/`,
     headers: { "X-Auth": token, "Content-Type": "application/json" },
   })
@@ -31,7 +38,7 @@ export const createInstance = (token: string) => {
 
 export const getInfoPointEvent = async (uid: string, start_date: number, end_date: number) => {
   try {
-    const res = await instance.post(
+    const res = await tpmsInstance.post(
       "https://server.arsa.pro/api/svr/v1/reports/tracks/get_events",
       {
         vehicle_uid: uid,
@@ -50,7 +57,7 @@ export const getInfoPointEvent = async (uid: string, start_date: number, end_dat
 // Авторизация
 export const authAPI = async (body: ILogPassAuth) => {
   try {
-    const response = await instance.post("auth/login", {
+    const response = await tpmsInstance.post("auth/login", {
       user_login: body.login,
       user_password: body.password,
     })
@@ -67,7 +74,7 @@ export const authAPI = async (body: ILogPassAuth) => {
 
 export const codeAuth = async (code: string): Promise<number> => {
   try {
-    const res = await instance.post("/auth/confirm", { confirm: code })
+    const res = await tpmsInstance.post("/auth/confirm", { confirm: code })
     return res.status
   } catch (error) {
     console.error("Error during authentication:", error)
@@ -84,7 +91,7 @@ export const codeAuth = async (code: string): Promise<number> => {
 
 export const getGeozone = async (uids: string[]) => {
   try {
-    const response = await instance.post(
+    const response = await tpmsInstance.post(
       "https://server.arsa.pro/api/svr/v1/ctl/geozones/get_geozones_detail",
       { geozone_uids: uids },
     )
@@ -95,9 +102,24 @@ export const getGeozone = async (uids: string[]) => {
   }
 }
 
+export const geoZonesGetTree = async () => {
+  try {
+    const { status, data } = await serverInstance.post("svr/v1/ctl/geozones/get_tree_geozones")
+    return { status, data: data.data }
+  } catch (error) {
+    console.error("Error during authentication:", error)
+    if (axios.isAxiosError(error) && error.response) {
+      // Return the actual HTTP status code from the response
+      return { status: error.response.status, data: null }
+    }
+    // Return a generic error code if the error is not from an Axios response
+    return { status: 500, data: null }
+  }
+}
+
 export const getTrackAPI = async (uid: string, start_time: any, end_time: any) => {
   try {
-    const response = await instance.post(
+    const response = await tpmsInstance.post(
       "https://server.arsa.pro/api/svr/v1/reports/tracks/get_track",
       {
         vehicle_uid: uid, // uid машины *
@@ -117,7 +139,7 @@ export const getTrackAPI = async (uid: string, start_time: any, end_time: any) =
 //Получение Дерева машин
 export const getTreeGroupsVehicles = async () => {
   try {
-    const { data, status } = await instance.post("tpms/v1/ctl/vehicles/get_tree_vehicles")
+    const { data, status } = await tpmsInstance.post("tpms/v1/ctl/vehicles/get_tree_vehicles")
     return { data, status }
   } catch (error: any) {
     console.error("Error fetching report:", error)
@@ -128,7 +150,7 @@ export const getTreeGroupsVehicles = async () => {
 
 export const getTreeDrivers = async () => {
   try {
-    const { data, status } = await instance.post("tpms/v1/ctl/drivers/get_tree_drivers")
+    const { data, status } = await tpmsInstance.post("tpms/v1/ctl/drivers/get_tree_drivers")
     return { data, status }
   } catch (error: any) {
     console.error("Error fetching report:", error)
@@ -146,7 +168,7 @@ export const getTableData = async (bodyTable: IBodyTableQuery) => {
 
   console.log(body)
   try {
-    const response = await instance.post("tpms/v1/reports/get_report_tpms", body)
+    const response = await tpmsInstance.post("tpms/v1/reports/get_report_tpms", body)
     const tableData = response.data.data as ITableData
     const status = response.status
     console.log(status)
@@ -164,7 +186,10 @@ export const getCarData = async (id: string) => {
     vehicle_uid: id,
   }
   try {
-    const response = await instance.post("tpms/v1/reports/wheels/get_pressure_current_data", body)
+    const response = await tpmsInstance.post(
+      "tpms/v1/reports/wheels/get_pressure_current_data",
+      body,
+    )
     const carData = response.data
     const status = response.status
     return { carData, status }
@@ -186,7 +211,7 @@ export const getWheelChartData = async (body: IWheelChartQueryParams) => {
   let wheelChartData: IWheelChart
   let status
 
-  const response = await instance.post("tpms/v1/reports/wheels/get_sensor_data", body, {
+  const response = await tpmsInstance.post("tpms/v1/reports/wheels/get_sensor_data", body, {
     timeout: 120000, // Таймаут в миллисекундах (2 минуты)
   })
   wheelChartData = response.data
@@ -200,7 +225,7 @@ export const getCatalogList = async (id) => {
     account_id: id,
   }
   try {
-    const response = await instance.post("tpms/v1/ctl/vehicles/wheels/get_wheel_models", body)
+    const response = await tpmsInstance.post("tpms/v1/ctl/vehicles/wheels/get_wheel_models", body)
     const finalRes = response.data.data
     return finalRes
   } catch (e) {
@@ -216,7 +241,7 @@ export const createUpdateWheelModel = async ({ id, comment, name }: IWheel) => {
     name,
   }
   try {
-    const response = await instance.post("tpms/v1/ctl/vehicles/wheels/post_wheel_model", body)
+    const response = await tpmsInstance.post("tpms/v1/ctl/vehicles/wheels/post_wheel_model", body)
     return response.data
   } catch (e) {
     console.error(e)
@@ -229,7 +254,7 @@ export const deleteWheelModel = async (id: number) => {
     id,
   }
   try {
-    const response = await instance.post("tpms/v1/ctl/vehicles/wheels/delete_wheel_model", body)
+    const response = await tpmsInstance.post("tpms/v1/ctl/vehicles/wheels/delete_wheel_model", body)
     return response.data
   } catch (e) {
     console.error(e)
@@ -239,7 +264,7 @@ export const deleteWheelModel = async (id: number) => {
 // Замена шины на машине
 export const setSwitchTire = async (body: ISwitchReq) => {
   try {
-    const response = await instance.post("tpms/v1/vehicle/wheels/post_wheel_installation", body)
+    const response = await tpmsInstance.post("tpms/v1/vehicle/wheels/post_wheel_installation", body)
     return response.data
   } catch (e) {
     console.error(e)
@@ -249,7 +274,10 @@ export const setSwitchTire = async (body: ISwitchReq) => {
 // Получить историю замены
 export const getSwitchHistory = async (body: ISwitchHistoryReq) => {
   try {
-    const response = await instance.post("tpms/v1/vehicles/wheels/get_wheel_installations", body)
+    const response = await tpmsInstance.post(
+      "tpms/v1/vehicles/wheels/get_wheel_installations",
+      body,
+    )
     return response.data
   } catch (e) {
     console.error(e)
@@ -259,7 +287,7 @@ export const getSwitchHistory = async (body: ISwitchHistoryReq) => {
 // Удалить историю замены
 export const removeSwitchHistory = async (id: number) => {
   try {
-    const response = await instance.post("tpms/v1/vehicles/wheels/delete_wheel_installation", {
+    const response = await tpmsInstance.post("tpms/v1/vehicles/wheels/delete_wheel_installation", {
       id,
     })
     return response.data

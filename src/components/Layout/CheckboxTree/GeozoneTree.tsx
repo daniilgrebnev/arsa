@@ -3,30 +3,22 @@ import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import CheckboxTree from "../../../components/testUi/CheckboxTree/CheckboxTree"
 import { geoZoneCheckboxTree } from "../../../components/testUi/CheckboxTree/geo-zones-process"
-import { apiHandler } from "../../../helpers/apiHandler"
-import { setCheckedGeoZones, setGeoZonesData } from "../../../store/reducers/geozones/geozonesSlice"
+import { thunkGetGeoZonesTree } from "../../../store/reducers/geozones/thunkGeozones"
 import { Ok } from "../../../styles/image/Ok"
 
 export const GeozoneTree = () => {
   const data = useSelector((state: RootState) => state.geoZones.filteredData)
+  const fetchedData = useSelector((state: RootState) => state.geoZones.data)
   const checkedZones = useSelector((state: RootState) => state.geoZones.checkedGeoZones)
   const dispatch = useDispatch<AppDispatch>()
-  const getTree = (data) => {
-    dispatch(setGeoZonesData(data))
-  }
+
   const [checked, setChecked] = useState<string[]>([])
   useEffect(() => {
-    const query = {
-      url: "/tpms/v1/ctl/geozones/get_tree_geozones",
-      dispatcher: getTree,
-    }
-    data == null && dispatch(apiHandler({ dispatcher: query.dispatcher, url: query.url }))
-
-    dispatch(setCheckedGeoZones(checked))
+    data == null && dispatch(thunkGetGeoZonesTree())
   }, [checked])
 
-  const groups = data != null ? geoZoneCheckboxTree(data) : []
-
+  const groups = data != null ? geoZoneCheckboxTree(fetchedData) : []
+  console.log(data)
   return (
     <div className="text-sm">
       <CheckboxTree
