@@ -1,0 +1,6 @@
+.table {
+  display: flex;
+}
+.table-col {
+  width: fit-content;
+}
