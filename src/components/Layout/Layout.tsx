@@ -14,7 +14,7 @@ export const Layout = ({
 }>) => {
   const { isAuth } = useSelector((state: RootState) => state.auth)
   const { isOpen } = useSelector((state: RootState) => state.objectSettings)
-  const { test } = useSelector((state: RootState) => state.security)
+  const tableData = useSelector((state: RootState) => state.table.data)
   const dispatch = useDispatch<AppDispatch>()
 
   return (
@@ -22,7 +22,7 @@ export const Layout = ({
       {isAuth == true ? (
         <>
           {/* <div className="absolute w-screen z-[100] h-screen bg-gray-100 top-0 left-0 flex items-center justify-center">
-            {test && test.length != 0 && <CheckboxTree data={test.data} keyword={"children"} />}
+            <Table />
           </div> */}
           {isOpen && <ObjectSettings />}
           <ResizablePanelGroup

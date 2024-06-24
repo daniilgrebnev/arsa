@@ -19,9 +19,7 @@ const DriverLabel: React.FC<{ item: any }> = ({ item }) => {
 }
 
 export const DriverTree = () => {
-  const { data, filteredData, isSearch, checkedDrivers } = useSelector(
-    (state: RootState) => state.driver,
-  )
+  const { filteredData, isSearch, checkedDrivers } = useSelector((state: RootState) => state.driver)
   const [checked, setChecked] = useState<string[]>(checkedDrivers)
   const [pendingChecked, setPendingChecked] = useState<string[]>(checkedDrivers)
   const dispatch = useDispatch<AppDispatch>()
