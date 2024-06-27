@@ -19,6 +19,7 @@
     "axios": "^1.6.8",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
+    "css-element-queries": "^1.2.3",
     "leaflet-css": "^0.1.0",
     "leaflet-polylinedecorator": "^1.6.0",
     "leaflet.markercluster": "^1.5.3",

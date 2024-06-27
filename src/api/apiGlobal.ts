@@ -75,6 +75,7 @@ export const authAPI = async (body: ILogPassAuth) => {
 export const codeAuth = async (code: string): Promise<number> => {
   try {
     const res = await tpmsInstance.post("/auth/confirm", { confirm: code })
+
     return res.status
   } catch (error) {
     console.error("Error during authentication:", error)

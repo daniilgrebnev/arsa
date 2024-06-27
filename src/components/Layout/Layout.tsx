@@ -21,7 +21,7 @@ export const Layout = ({
     <div>
       {isAuth == true ? (
         <>
-          {/* <div className="absolute w-screen z-[100] h-screen bg-gray-100 top-0 left-0 flex items-center justify-center">
+          {/* <div className="absolute w-1/3 z-[100] h-screen bg-gray-100 top-0 right-0 flex items-center justify-center">
             <Table />
           </div> */}
           {isOpen && <ObjectSettings />}

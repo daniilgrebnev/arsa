@@ -2,7 +2,7 @@ import { IWheelAx } from "@/interfaces/objectSettings"
 import { AppDispatch, RootState } from "@/store/store"
 import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import { createAxle } from "../../../../../../store/reducers/objectSettings/objectSettings"
+import { createAxle } from "src/store/reducers/objectSettings/objectSettings"
 import { Axle } from "./innerComponents/Axle"
 import { Plus } from "./innerComponents/icons/Plus"
 
