@@ -16,6 +16,21 @@ interface INewDataPropsType {
   id: number
   position: "left" | "right"
 }
+interface ISpeedViolationProps {
+  field:
+    | "max_limit"
+    | "reg_limit"
+    | "is_enabled"
+    | "reg_time_limit"
+    | "reg_critical_limit"
+    | "use_road_signs_instead_max_limit"
+  value: boolean | string
+}
+export interface INewNormsPropsType {
+  field: "pressure_norm" | "pressure_delta" | "temperature_max"
+  id: number
+  value: number
+}
 type IItemData = {
   tab: string
   title: string
@@ -183,6 +198,47 @@ const settingsSlice = createSlice({
         }))
       }
     },
+    updateNorms: (state: ISettingState, action: PayloadAction<INewNormsPropsType>) => {
+      const { id, field, value } = action.payload
+      if (id > 0) {
+        const item = state.newData.wheel_axes?.find((i) => i.id === id)
+
+        // Update the field if the item is found
+        if (item) {
+          item[field] = value
+        }
+      } else {
+        const item = state.newData.wheel_axes?.find((i) => i.innerAxleId === id)
+
+        // Update the field if the item is found
+        if (item) {
+          item[field] = value
+        }
+      }
+    },
+    updateDiagControl: (state: ISettingState, action: PayloadAction<boolean>) => {
+      if (state.newData.diag) {
+        state.newData.diag.control = action.payload
+      } else {
+        console.log("Непредвиденная ошибка")
+      }
+    },
+
+    updateSpeedViolationData: (
+      state: ISettingState,
+      action: PayloadAction<ISpeedViolationProps | any>,
+    ) => {
+      const { field, value } = action.payload
+      const valueType = typeof value
+      const item = state.newData.speed_control_violation
+      if (item) {
+        if (typeof item[field] === "boolean" && valueType === "boolean") {
+          item[field] = value
+        } else if (typeof item[field] == "string" && valueType == "string") {
+          item[field] = value
+        }
+      }
+    },
   },
 })
 
@@ -195,5 +251,8 @@ export const {
   removeWheel,
   removeAxle,
   updateSensorNumber,
+  updateNorms,
+  updateDiagControl,
+  updateSpeedViolationData,
 } = settingsSlice.actions
 export default settingsSlice.reducer

@@ -3,7 +3,9 @@ import React, { useEffect, useRef } from "react"
 import { useSelector } from "react-redux"
 import { testData } from "../testData"
 import { ObjectSettingsAxles } from "./ObjectSettingsContentItems/Axle/ObjectSettingsAxles"
+import { Diag } from "./ObjectSettingsContentItems/Diag/Diag"
 import { ObjectSettingsMain } from "./ObjectSettingsContentItems/Main/ObjectSettingsMain"
+import { SpeedControl } from "./ObjectSettingsContentItems/Speed/SpeedControl"
 
 interface DataView {
   tab: string
@@ -57,6 +59,10 @@ export const ObjectSettingsContent: React.FC = () => {
             )}
             {item.tab === "wheel_axes" && (
               <ObjectSettingsAxles {...dataToView.filter((i) => i.tab === "wheel_axes")[0]} />
+            )}
+            {item.tab === "diag" && <Diag {...dataToView.filter((i) => i.tab === "diag")[0]} />}
+            {item.tab === "speed_control_violation" && (
+              <SpeedControl {...dataToView.filter((i) => i.tab === "speed_control_violation")[0]} />
             )}
           </div>
         ))}
