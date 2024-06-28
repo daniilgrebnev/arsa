@@ -6,6 +6,7 @@ import { ObjectSettingsAxles } from "./ObjectSettingsContentItems/Axle/ObjectSet
 import { Diag } from "./ObjectSettingsContentItems/Diag/Diag"
 import { ObjectSettingsMain } from "./ObjectSettingsContentItems/Main/ObjectSettingsMain"
 import { SpeedControl } from "./ObjectSettingsContentItems/Speed/SpeedControl"
+import { Driver } from "./ObjectSettingsContentItems/driver/Driver"
 
 interface DataView {
   tab: string
@@ -63,6 +64,9 @@ export const ObjectSettingsContent: React.FC = () => {
             {item.tab === "diag" && <Diag {...dataToView.filter((i) => i.tab === "diag")[0]} />}
             {item.tab === "speed_control_violation" && (
               <SpeedControl {...dataToView.filter((i) => i.tab === "speed_control_violation")[0]} />
+            )}
+            {item.tab === "driver_settings" && (
+              <Driver {...dataToView.filter((i) => i.tab === "driver_settings")[0]} />
             )}
           </div>
         ))}

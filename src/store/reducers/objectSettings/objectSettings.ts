@@ -1,6 +1,5 @@
 import { IData } from "@/interfaces/global"
 import {
-  IDriverSettings,
   IObjectSettingsData,
   IObjectSettingsDiag,
   IObjectSettingsMain,
@@ -9,6 +8,7 @@ import {
 } from "@/interfaces/objectSettings"
 import { PayloadAction, createSlice } from "@reduxjs/toolkit"
 import { objectSettingsRuNames } from "../../../components/Layout/Settings/objectSettingsRuNames"
+import { IDriverSettings } from "./../../../interfaces/objectSettings"
 import { axleCreator } from "./objectTemplates/axleTemplate"
 import { wheelCreator } from "./objectTemplates/wheelTemplate"
 
@@ -25,6 +25,18 @@ interface ISpeedViolationProps {
     | "reg_critical_limit"
     | "use_road_signs_instead_max_limit"
   value: boolean | string
+}
+interface IDriverSettingsEvent {
+  field:
+    | "is_enabled"
+    | "end_registration_by_removing_card"
+    | "end_registration_by_turning_off_ignition"
+    | "restore_registration_if_card_reapplied_within"
+  value: boolean | number
+}
+interface IDriverSettingsCPM {
+  field: "addr" | "func" | "regNo" | "dataSource" | "use_as_driver_code"
+  value: boolean | number
 }
 export interface INewNormsPropsType {
   field: "pressure_norm" | "pressure_delta" | "temperature_max"
@@ -239,6 +251,43 @@ const settingsSlice = createSlice({
         }
       }
     },
+    updateDriverSettingsEvents: (
+      state: ISettingState,
+      action: PayloadAction<IDriverSettingsEvent | any>,
+    ) => {
+      const { field, value } = action.payload
+      const valueType = typeof value
+      const item = state.newData.driver_settings?.driver_events
+      console.log(value)
+      if (item) {
+        if (typeof item[field] === "boolean" && valueType === "boolean") {
+          item[field] = value
+        } else if (typeof item[field] == "number" && valueType == "number") {
+          item[field] = value
+        }
+      }
+    },
+    updateDriverSettingsCPM: (
+      state: ISettingState,
+      action: PayloadAction<IDriverSettingsCPM | any>,
+    ) => {
+      const { field, value } = action.payload
+      const valueType = typeof value
+      const item = state.newData.driver_settings?.CustomProtocolMonitoring
+      if (item) {
+        if (typeof item[field] === "boolean" && valueType === "boolean") {
+          item[field] = value
+        } else if (typeof item[field] == "number" && valueType == "number") {
+          item[field] = value
+        }
+      }
+    },
+    updateDriverSettingsEventsRRCRW: (state: ISettingState, action: PayloadAction<number>) => {
+      if (state.newData.driver_settings && state.newData.driver_settings.driver_events) {
+        state.newData.driver_settings.driver_events.restore_registration_if_card_reapplied_within =
+          action.payload
+      }
+    },
   },
 })
 
@@ -254,5 +303,8 @@ export const {
   updateNorms,
   updateDiagControl,
   updateSpeedViolationData,
+  updateDriverSettingsCPM,
+  updateDriverSettingsEvents,
+  updateDriverSettingsEventsRRCRW,
 } = settingsSlice.actions
 export default settingsSlice.reducer

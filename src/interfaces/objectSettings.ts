@@ -11,7 +11,7 @@ export interface IObjectSettingsDiag {
 }
 
 export interface IDriverSettings {
-  driver_events: DriverEvents
+  driver_events: IDriverEvents
   CustomProtocolMonitoring: CustomProtocolMonitoring
 }
 
@@ -23,7 +23,7 @@ export interface CustomProtocolMonitoring {
   use_as_driver_code: boolean
 }
 
-export interface DriverEvents {
+export interface IDriverEvents {
   is_enabled: boolean
   end_registration_by_removing_card: boolean
   end_registration_by_turning_off_ignition: boolean

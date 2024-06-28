@@ -55,7 +55,7 @@ export const SpeedControl: React.FC<any> = (speedData) => {
   ]
   return (
     <div>
-      <h1 className="text-center text-3xl mb-5 font-light">{speedData.title}</h1>
+      <h1 className="text-center text-3xl mb-10 font-light">{speedData.title}</h1>
       <div className="grid grid-cols-2 px-52 gap-y-5 gap-x-32 w-full justify-center items-center">
         {data.map((item, index) => (
           <ObjectSettingsItem

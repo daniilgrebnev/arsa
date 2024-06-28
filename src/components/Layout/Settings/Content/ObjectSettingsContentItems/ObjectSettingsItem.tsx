@@ -3,7 +3,7 @@ import React from "react"
 import { CheckboxComponent } from "../helpComponents/CheckboxComponent"
 import { SwitchComponent } from "../helpComponents/SwitchComponent"
 import { TextareaComponent } from "../helpComponents/TextareaComponent"
-interface ISwitchBody {
+export interface ISwitchBody {
   option: any
   name: string
 }
