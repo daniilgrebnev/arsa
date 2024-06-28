@@ -1,10 +1,16 @@
 import { IObjectSettingsMain } from "@/interfaces/objectSettings"
-import React, { useState } from "react"
+import { AppDispatch } from "@/store/store"
+import React, { useEffect, useState } from "react"
+import { useDispatch } from "react-redux"
+import { updateObjectSettingsMain } from "src/store/reducers/objectSettings/objectSettings"
 import { ObjectSettingsItem } from "../ObjectSettingsItem"
 
 export const ObjectSettingsMain: React.FC<any> = (main) => {
   const [data, setData] = useState<IObjectSettingsMain>(main.data)
-  console.log(data)
+  const dispatch = useDispatch<AppDispatch>()
+  useEffect(() => {
+    dispatch(updateObjectSettingsMain(data))
+  }, [data])
   const handleNumericalInput = (text: string) => {
     const input = Number(text)
 

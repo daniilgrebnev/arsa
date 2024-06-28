@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux"
 import { createAxle } from "src/store/reducers/objectSettings/objectSettings"
 import { Axle } from "./innerComponents/Axle"
 import { CorrectValue } from "./innerComponents/CorrectValue"
+import { ValidTime } from "./innerComponents/ValidTime"
 import { Plus } from "./innerComponents/icons/Plus"
 
 export const ObjectSettingsAxles: React.FC<any> = (axes, onChange: (e: any) => void) => {
@@ -48,6 +49,7 @@ export const ObjectSettingsAxles: React.FC<any> = (axes, onChange: (e: any) => v
           </div>
         </div>
       </div>
+      <ValidTime />
       <CorrectValue />
     </div>
   )

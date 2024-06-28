@@ -53,7 +53,7 @@ export const ObjectSettingsContent: React.FC = () => {
             key={item.tab}
             id={item.tab}
             ref={refs.current[item.tab]}
-            className="w-full overflow-hidden overflow-y-auto min-h-[70dvh] max-h-[70dvh] bg-gray-100 flex items-start p-4 justify-center"
+            className="w-full overflow-hidden overflow-y-auto min-h-[70dvh] max-h-[70dvh]  flex items-start p-4 justify-center"
           >
             {item.tab === "main" && (
               <ObjectSettingsMain {...dataToView.filter((i) => i.tab === "main")[0]} />

@@ -4,6 +4,7 @@ import {
   IObjectSettingsDiag,
   IObjectSettingsMain,
   ISpeedControlViolation,
+  PressureNormKoef,
   Tpms,
 } from "@/interfaces/objectSettings"
 import { PayloadAction, createSlice } from "@reduxjs/toolkit"
@@ -78,7 +79,7 @@ interface ISettingState extends IData<IObjectSettingsData> {
 const initialState: ISettingState = {
   data: null,
   isOpen: false,
-  activeTab: "main",
+  activeTab: "diag",
   dataToView: null,
   newData: {
     main: null,
@@ -295,6 +296,20 @@ const settingsSlice = createSlice({
           action.payload
       }
     },
+    updateObjectSettingsMain: (
+      state: ISettingState,
+      action: PayloadAction<IObjectSettingsMain>,
+    ) => {
+      state.newData.main = action.payload
+    },
+    updateObjectSettingsCorrectKoef: (
+      state: ISettingState,
+      action: PayloadAction<PressureNormKoef[]>,
+    ) => {
+      if (state.newData.tpms != null) {
+        state.newData.tpms.settings.wheel_axes.pressure_norm_koef = action.payload
+      }
+    },
   },
 })
 
@@ -313,5 +328,7 @@ export const {
   updateDriverSettingsCPM,
   updateDriverSettingsEvents,
   updateDriverSettingsEventsRRCRW,
+  updateObjectSettingsMain,
+  updateObjectSettingsCorrectKoef,
 } = settingsSlice.actions
 export default settingsSlice.reducer
