@@ -53,7 +53,21 @@ export const getInfoPointEvent = async (uid: string, start_date: number, end_dat
     return { error: "Ошибка запроса данных" }
   }
 }
-
+export const getObjectSettings = async (vehicle_uid: string) => {
+  try {
+    const response = await serverInstance.post("svr/v1/ctl/vehicles/get_vehicle_profile", {
+      vehicle_uid: vehicle_uid,
+    })
+    return { status: response.status, data: response.data.data }
+  } catch (error) {
+    console.log(error)
+    if (axios.isAxiosError(error) && error.response) {
+      return { status: error.response.status, data: null }
+    } else {
+      return { error: "Ошибка" }
+    }
+  }
+}
 // Авторизация
 export const authAPI = async (body: ILogPassAuth) => {
   try {

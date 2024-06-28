@@ -58,15 +58,15 @@ export const ObjectSettingsContent: React.FC = () => {
             {item.tab === "main" && (
               <ObjectSettingsMain {...dataToView.filter((i) => i.tab === "main")[0]} />
             )}
-            {item.tab === "wheel_axes" && (
-              <ObjectSettingsAxles {...dataToView.filter((i) => i.tab === "wheel_axes")[0]} />
+            {item.tab === "tpms" && (
+              <ObjectSettingsAxles {...dataToView.filter((i) => i.tab === "tpms")[0]} />
             )}
             {item.tab === "diag" && <Diag {...dataToView.filter((i) => i.tab === "diag")[0]} />}
-            {item.tab === "speed_control_violation" && (
-              <SpeedControl {...dataToView.filter((i) => i.tab === "speed_control_violation")[0]} />
+            {item.tab === "speed_control" && (
+              <SpeedControl {...dataToView.filter((i) => i.tab === "speed_control")[0]} />
             )}
-            {item.tab === "driver_settings" && (
-              <Driver {...dataToView.filter((i) => i.tab === "driver_settings")[0]} />
+            {item.tab === "driver_cards" && (
+              <Driver {...dataToView.filter((i) => i.tab === "driver_cards")[0]} />
             )}
           </div>
         ))}

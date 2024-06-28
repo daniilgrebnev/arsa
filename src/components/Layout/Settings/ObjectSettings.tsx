@@ -1,20 +1,17 @@
 import { AppDispatch } from "@/store/store"
 import { useEffect } from "react"
 import { useDispatch } from "react-redux"
-import {
-  setObjectSettingsData,
-  setOpenSettings,
-} from "../../../store/reducers/objectSettings/objectSettings"
+import { thunkGetObjectSettings } from "src/store/reducers/objectSettings/objectSettingsThunk"
+import { setOpenSettings } from "../../../store/reducers/objectSettings/objectSettings"
 import { ObjectSettingsContent } from "./Content/ObjectSettingsContent"
 import { ObjectSettingsNavbar } from "./Navbar/ObjectSettingsNavbar"
-import apiTest from "./apiTest.json"
 
 export const ObjectSettings = () => {
   const dispatch = useDispatch<AppDispatch>()
   // const { data } = useSelector((state: RootState) => state.objectSettings)
 
   useEffect(() => {
-    dispatch(setObjectSettingsData({ data: apiTest }))
+    dispatch(thunkGetObjectSettings("366fdb83-2f7a-d2da-bd67-9898f0adadf1"))
   }, [])
 
   // console.log(data)

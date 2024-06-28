@@ -4,11 +4,12 @@ interface INewWheel extends IObjectWheel {
   innerWheelId: number
 }
 
-const wheelTemplate: INewWheel = {
+const wheelTemplate: IObjectWheel = {
   id: 0,
-  innerWheelId: 0,
+  innerAxleId: 0,
   position: "",
   sensor_number: 0,
+  innerWheelId: 0,
 }
 function getRandomNumber(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min

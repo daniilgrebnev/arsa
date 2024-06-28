@@ -9,7 +9,9 @@ import { Plus } from "./innerComponents/icons/Plus"
 
 export const ObjectSettingsAxles: React.FC<any> = (axes, onChange: (e: any) => void) => {
   const dispatch = useDispatch<AppDispatch>()
-  const { wheel_axes } = useSelector((state: RootState) => state.objectSettings.newData)
+  const wheel_axes = useSelector(
+    (state: RootState) => state.objectSettings.newData.tpms?.wheel_axes,
+  )
   const [data, setData] = useState<IWheelAx[]>()
   const axlesData: IWheelAx[] = axes.data
   useEffect(() => {

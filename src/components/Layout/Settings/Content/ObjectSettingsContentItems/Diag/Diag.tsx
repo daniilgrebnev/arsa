@@ -13,7 +13,7 @@ export const Diag: React.FC<any> = (diag) => {
         <div className="grid grid-cols-2 px-52 gap-y-5 gap-x-32 w-full justify-center items-center">
           <ObjectSettingsItem
             title={"Контроль"}
-            value={data?.control}
+            value={data?.is_enabled}
             onChange={(e) => {
               const target = e.target as HTMLInputElement
               dispatch(updateDiagControl(target.checked))

@@ -4,7 +4,7 @@ import {
   IObjectSettingsDiag,
   IObjectSettingsMain,
   ISpeedControlViolation,
-  IWheelAx,
+  Tpms,
 } from "@/interfaces/objectSettings"
 import { PayloadAction, createSlice } from "@reduxjs/toolkit"
 import { objectSettingsRuNames } from "../../../components/Layout/Settings/objectSettingsRuNames"
@@ -51,25 +51,27 @@ type IItemData = {
     | IObjectSettingsDiag
     | IDriverSettings
     | ISpeedControlViolation
-    | IWheelAx[]
+    | Tpms[]
 }
 interface INewData {
   main: IObjectSettingsMain
   diag: IObjectSettingsDiag
-  driver_settings: IDriverSettings
-  speed_control_violation: ISpeedControlViolation
-  wheel_axes: IWheelAx[]
+  driver_cards: IDriverSettings
+  speed_control: ISpeedControlViolation
+  tpms: Tpms
 }
 interface ISettingState extends IData<IObjectSettingsData> {
+  [x: string]: any
+
   isOpen: boolean
   activeTab: string
   dataToView: IItemData[] | null
   newData: {
     main: IObjectSettingsMain | null
     diag: IObjectSettingsDiag | null
-    driver_settings: IDriverSettings | null
-    speed_control_violation: ISpeedControlViolation | null
-    wheel_axes: IWheelAx[] | null
+    driver_cards: IDriverSettings | null
+    speed_control: ISpeedControlViolation | null
+    tpms: Tpms | null
   }
 }
 
@@ -81,9 +83,9 @@ const initialState: ISettingState = {
   newData: {
     main: null,
     diag: null,
-    driver_settings: null,
-    speed_control_violation: null,
-    wheel_axes: null,
+    driver_cards: null,
+    speed_control: null,
+    tpms: null,
   },
 }
 
@@ -103,7 +105,12 @@ const settingsSlice = createSlice({
     ) => {
       const dataFromApi = action.payload.data
       state.data = dataFromApi
-      if (dataFromApi !== null && typeof dataFromApi != "string") {
+      if (
+        dataFromApi !== null &&
+        typeof dataFromApi != "string" &&
+        typeof state.data != "string" &&
+        state.data != null
+      ) {
         const arr: any = []
         for (let i = 0; Object.keys(dataFromApi).length > i; i++) {
           arr.push({
@@ -112,21 +119,19 @@ const settingsSlice = createSlice({
             data: dataFromApi[Object.keys(dataFromApi)[i]],
           })
         }
-        state.dataToView = arr
-      }
-      if (typeof state.data != "string" && state.data != null) {
         state.newData.main = state.data.main
-        state.newData.diag = state.data.diag
-        state.newData.driver_settings = state.data.driver_settings
-        state.newData.wheel_axes = state.data.wheel_axes
-        state.newData.speed_control_violation = state.data.speed_control_violation
+        state.newData.diag = state.data?.diag
+        state.newData.driver_cards = state.data?.driver_cards
+        state.newData.tpms = state.data?.tpms
+        state.newData.speed_control = state.data?.speed_control
+        state.dataToView = arr
       }
     },
     setNewData: (state: ISettingState) => {
       return
     },
     createAxle: (state: ISettingState) => {
-      state.newData.wheel_axes?.push(axleCreator())
+      state.newData.tpms?.wheel_axes?.push(axleCreator())
     },
     createWheel: (state: ISettingState, action: PayloadAction<INewDataPropsType>) => {
       const id = action.payload.id
@@ -134,20 +139,20 @@ const settingsSlice = createSlice({
       if (id > 0) {
         switch (position) {
           case "left":
-            state.newData.wheel_axes?.find((i) => i.id == id)?.wheels[0].push(wheelCreator())
+            state.newData.tpms?.wheel_axes?.find((i) => i.id == id)?.wheels[0].push(wheelCreator())
             break
           case "right":
-            state.newData.wheel_axes?.find((i) => i.id == id)?.wheels[1].push(wheelCreator())
+            state.newData.tpms?.wheel_axes?.find((i) => i.id == id)?.wheels[1].push(wheelCreator())
         }
       } else {
         switch (position) {
           case "left":
-            state.newData.wheel_axes
+            state.newData.tpms?.wheel_axes
               ?.find((i) => i.innerAxleId == id)
               ?.wheels[0].push(wheelCreator())
             break
           case "right":
-            state.newData.wheel_axes
+            state.newData.tpms?.wheel_axes
               ?.find((i) => i.innerAxleId == id)
               ?.wheels[1].push(wheelCreator())
             break
@@ -158,8 +163,8 @@ const settingsSlice = createSlice({
       const id = action.payload
       console.log(id)
 
-      if (state.newData.wheel_axes) {
-        state.newData.wheel_axes = state.newData.wheel_axes.map((axle) => ({
+      if (state.newData.tpms?.wheel_axes) {
+        state.newData.tpms.wheel_axes = state.newData.tpms?.wheel_axes.map((axle) => ({
           ...axle,
           wheels: axle.wheels.map((wheel) =>
             id > 0
@@ -168,23 +173,25 @@ const settingsSlice = createSlice({
           ),
         }))
       } else {
-        state.newData.wheel_axes = null
+        state.newData.tpms = null
       }
     },
     removeAxle: (state: ISettingState, action: PayloadAction<number>) => {
       const axleId = action.payload
       console.log(axleId)
 
-      if (state.newData.wheel_axes) {
+      if (state.newData.tpms?.wheel_axes) {
         if (axleId > 0) {
-          state.newData.wheel_axes = state.newData.wheel_axes.filter((axle) => axle.id !== axleId)
+          state.newData.tpms.wheel_axes = state.newData.tpms.wheel_axes.filter(
+            (axle) => axle.id !== axleId,
+          )
         } else {
-          state.newData.wheel_axes = state.newData.wheel_axes.filter(
+          state.newData.tpms.wheel_axes = state.newData.tpms.wheel_axes.filter(
             (axle) => axle.innerAxleId !== axleId,
           )
         }
       } else {
-        state.newData.wheel_axes = null
+        state.newData.tpms = null
       }
     },
     updateSensorNumber: (
@@ -195,9 +202,9 @@ const settingsSlice = createSlice({
       console.log(`Updating sensor number for wheelId: ${wheelId} with text: ${text}`)
 
       // Проверка, существует ли массив wheel_axes
-      if (state.newData.wheel_axes) {
+      if (state.newData.tpms?.wheel_axes) {
         // Обновление состояния
-        state.newData.wheel_axes = state.newData.wheel_axes.map((axle) => ({
+        state.newData.tpms.wheel_axes = state.newData.tpms.wheel_axes.map((axle) => ({
           ...axle,
           wheels: axle.wheels.map((wheelArray) =>
             wheelArray.map((wheel) =>
@@ -213,14 +220,14 @@ const settingsSlice = createSlice({
     updateNorms: (state: ISettingState, action: PayloadAction<INewNormsPropsType>) => {
       const { id, field, value } = action.payload
       if (id > 0) {
-        const item = state.newData.wheel_axes?.find((i) => i.id === id)
+        const item = state.newData.tpms?.wheel_axes?.find((i) => i.id === id)
 
         // Update the field if the item is found
         if (item) {
           item[field] = value
         }
       } else {
-        const item = state.newData.wheel_axes?.find((i) => i.innerAxleId === id)
+        const item = state.newData.tpms?.wheel_axes?.find((i) => i.innerAxleId === id)
 
         // Update the field if the item is found
         if (item) {
@@ -230,7 +237,7 @@ const settingsSlice = createSlice({
     },
     updateDiagControl: (state: ISettingState, action: PayloadAction<boolean>) => {
       if (state.newData.diag) {
-        state.newData.diag.control = action.payload
+        state.newData.diag.is_enabled = action.payload
       } else {
         console.log("Непредвиденная ошибка")
       }
@@ -242,7 +249,7 @@ const settingsSlice = createSlice({
     ) => {
       const { field, value } = action.payload
       const valueType = typeof value
-      const item = state.newData.speed_control_violation
+      const item = state.newData.speed_control
       if (item) {
         if (typeof item[field] === "boolean" && valueType === "boolean") {
           item[field] = value
@@ -257,7 +264,7 @@ const settingsSlice = createSlice({
     ) => {
       const { field, value } = action.payload
       const valueType = typeof value
-      const item = state.newData.driver_settings?.driver_events
+      const item = state.newData.driver_cards?.driver_events
       console.log(value)
       if (item) {
         if (typeof item[field] === "boolean" && valueType === "boolean") {
@@ -273,7 +280,7 @@ const settingsSlice = createSlice({
     ) => {
       const { field, value } = action.payload
       const valueType = typeof value
-      const item = state.newData.driver_settings?.CustomProtocolMonitoring
+      const item = state.newData.driver_cards?.CustomProtocolMonitoring
       if (item) {
         if (typeof item[field] === "boolean" && valueType === "boolean") {
           item[field] = value
@@ -283,8 +290,8 @@ const settingsSlice = createSlice({
       }
     },
     updateDriverSettingsEventsRRCRW: (state: ISettingState, action: PayloadAction<number>) => {
-      if (state.newData.driver_settings && state.newData.driver_settings.driver_events) {
-        state.newData.driver_settings.driver_events.restore_registration_if_card_reapplied_within =
+      if (state.newData.driver_cards && state.newData.driver_cards.driver_events) {
+        state.newData.driver_cards.driver_events.restore_registration_if_card_reapplied_within =
           action.payload
       }
     },

@@ -17,9 +17,7 @@ export const SpeedControl: React.FC<any> = (speedData) => {
     name: string
   }
   const dispatch = useDispatch<AppDispatch>()
-  const scv = useSelector(
-    (state: RootState) => state.objectSettings.newData.speed_control_violation,
-  )
+  const scv = useSelector((state: RootState) => state.objectSettings.newData.speed_control)
   const data: ISpeedControlData[] = [
     {
       name: "Максимальная разрешенная скорость",

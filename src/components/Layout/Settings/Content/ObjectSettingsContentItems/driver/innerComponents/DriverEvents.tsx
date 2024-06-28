@@ -40,7 +40,7 @@ export const DriverEvents: React.FC = () => {
   const [min, setMin] = useState(0)
   const [sec, setSec] = useState(0)
   const data = useSelector(
-    (state: RootState) => state.objectSettings.newData.driver_settings?.driver_events,
+    (state: RootState) => state.objectSettings.newData.driver_cards?.driver_events,
   )
   useEffect(() => {
     const timeMin = DateTime.fromSeconds(
@@ -83,15 +83,14 @@ export const DriverEvents: React.FC = () => {
   ]
 
   const changeHandler = ({ value, field }: IChangeProps) => {
-    console.log(Number(value))
-    if (typeof value == "string" && !Number.isNaN(Number(value[value.length - 1]))) {
-      dispatch(
-        updateDriverSettingsEvents({
-          field,
-          value: Number(value),
-        }),
-      )
-    }
+    console.log(value)
+
+    dispatch(
+      updateDriverSettingsEvents({
+        field,
+        value: value,
+      }),
+    )
   }
 
   const changeSec = (number: number) => {
@@ -121,10 +120,12 @@ export const DriverEvents: React.FC = () => {
                 value={item.value}
                 onChange={(e) => {
                   const target = e.target as HTMLInputElement
-                  changeHandler({
-                    value: target.value,
-                    field: item.field,
-                  })
+                  dispatch(
+                    updateDriverSettingsEvents({
+                      value: target.checked,
+                      field: item.field,
+                    }),
+                  )
                 }}
                 type={typeof item.value == "boolean" ? "checkbox" : "text"}
               />

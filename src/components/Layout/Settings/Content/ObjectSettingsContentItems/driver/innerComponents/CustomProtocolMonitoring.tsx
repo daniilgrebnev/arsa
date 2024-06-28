@@ -10,7 +10,7 @@ interface IData {
 }
 export const CustomProtocolMonitoring = () => {
   const cpm = useSelector(
-    (state: RootState) => state.objectSettings.newData.driver_settings?.CustomProtocolMonitoring,
+    (state: RootState) => state.objectSettings.newData.driver_cards?.CustomProtocolMonitoring,
   )
   const dispatch = useDispatch<AppDispatch>()
   const data: IData[] = [
