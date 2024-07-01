@@ -51,6 +51,29 @@ export const SpeedControl: React.FC<any> = (speedData) => {
         scv?.use_road_signs_instead_max_limit != undefined && scv.use_road_signs_instead_max_limit,
     },
   ]
+  const handleChange = (field: string, target) => {
+    let currentValue = typeof target.value == "boolean" ? 0 : target.value
+
+    // Remove leading zeros
+    if (
+      currentValue !== undefined &&
+      currentValue != 0 &&
+      currentValue.length > 1 &&
+      currentValue[0] === "0"
+    ) {
+      currentValue = currentValue.slice(1)
+    }
+
+    // Ensure the value is a valid number
+    const numericValue: any = isNaN(Number(currentValue)) ? 0 : Number(currentValue)
+
+    dispatch(
+      updateSpeedViolationData({
+        field: field,
+        value: typeof target.value === "boolean" ? target.checked : numericValue,
+      }),
+    )
+  }
   return (
     <div>
       <h1 className="text-center text-3xl mb-10 font-light">{speedData.title}</h1>
@@ -61,14 +84,9 @@ export const SpeedControl: React.FC<any> = (speedData) => {
             value={item.value != undefined ? item.value : 0}
             onChange={(e) => {
               const target = e.target as HTMLInputElement
-              dispatch(
-                updateSpeedViolationData({
-                  field: item.field,
-                  value: typeof item.value === "boolean" ? target.checked : target.value,
-                }),
-              )
+              handleChange(item.field, target)
             }}
-            type={typeof item.value === "boolean" ? "checkbox" : "number"}
+            type={typeof item.value === "boolean" ? "checkbox" : "text"}
           />
         ))}
       </div>
