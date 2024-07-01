@@ -310,6 +310,14 @@ const settingsSlice = createSlice({
         state.newData.tpms.settings.wheel_axes.pressure_norm_koef = action.payload
       }
     },
+    updateObjectSettingsWheelsPressValidTime: (
+      state: ISettingState,
+      action: PayloadAction<number>,
+    ) => {
+      if (state.newData.tpms?.settings.sensors.valid_time_period != null) {
+        state.newData.tpms.settings.sensors.valid_time_period = action.payload
+      }
+    },
   },
 })
 
@@ -330,5 +338,6 @@ export const {
   updateDriverSettingsEventsRRCRW,
   updateObjectSettingsMain,
   updateObjectSettingsCorrectKoef,
+  updateObjectSettingsWheelsPressValidTime,
 } = settingsSlice.actions
 export default settingsSlice.reducer

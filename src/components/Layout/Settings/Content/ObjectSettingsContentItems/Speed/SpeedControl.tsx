@@ -58,7 +58,7 @@ export const SpeedControl: React.FC<any> = (speedData) => {
         {data.map((item, index) => (
           <ObjectSettingsItem
             title={item.name}
-            value={item.value}
+            value={item.value != undefined ? item.value : 0}
             onChange={(e) => {
               const target = e.target as HTMLInputElement
               dispatch(
@@ -68,7 +68,7 @@ export const SpeedControl: React.FC<any> = (speedData) => {
                 }),
               )
             }}
-            type={typeof item.value === "boolean" ? "checkbox" : "text"}
+            type={typeof item.value === "boolean" ? "checkbox" : "number"}
           />
         ))}
       </div>

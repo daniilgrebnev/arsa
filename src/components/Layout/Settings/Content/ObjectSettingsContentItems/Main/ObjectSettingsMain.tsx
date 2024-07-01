@@ -27,7 +27,7 @@ export const ObjectSettingsMain: React.FC<any> = (main) => {
   return (
     <div className="w-full font-light text-left">
       <h1 className="w-full mb-20 text-3xl text-center">{main.title}</h1>
-      <div className="grid grid-cols-2 px-52 gap-y-5 gap-x-32 w-full justify-center items-center">
+      <div className="grid grid-cols-2 px-52 gap-y-5 gap-x-32 w-fit justify-center items-center">
         <ObjectSettingsItem
           value={data.account_id}
           title="Клиент"

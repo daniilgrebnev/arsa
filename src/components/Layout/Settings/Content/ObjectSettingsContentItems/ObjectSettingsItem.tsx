@@ -1,6 +1,7 @@
 // ObjectSettingsItem.tsx
 import React from "react"
 import { CheckboxComponent } from "../helpComponents/CheckboxComponent"
+import { NumberComponent } from "../helpComponents/NumberComponent"
 import { SwitchComponent } from "../helpComponents/SwitchComponent"
 import { TextareaComponent } from "../helpComponents/TextareaComponent"
 export interface ISwitchBody {
@@ -13,7 +14,7 @@ interface IObjectSettingsItemProps {
   title: string
   value: any
   onChange: (e: TChangedValue) => void
-  type: "checkbox" | "text" | "switch"
+  type: "checkbox" | "text" | "switch" | "number"
 
   body?: ISwitchBody[]
 }
@@ -33,6 +34,7 @@ export const ObjectSettingsItem: React.FC<IObjectSettingsItemProps> = ({
       {type === "switch" && (
         <SwitchComponent value={value} onChange={onChange} body={body ? body : []} />
       )}
+      {type === "number" && <NumberComponent value={value} onChange={onChange} />}
     </>
   )
 }
