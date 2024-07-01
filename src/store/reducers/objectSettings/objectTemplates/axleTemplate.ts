@@ -15,11 +15,12 @@ const axleTemplate: ICreateAxle = {
   pressure_norm: 0,
   pressure_delta: 0,
   temperature_max: 0,
+
   wheels: [],
 }
 
 export const axleCreator = (): ICreateAxle => {
-  const newWheels = [[wheelCreator()], [wheelCreator()]]
+  const newWheels = [[wheelCreator("L")], [wheelCreator("R")]]
   const newAxle: ICreateAxle = {
     ...axleTemplate,
     wheels: newWheels,

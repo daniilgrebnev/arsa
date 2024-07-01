@@ -2,7 +2,10 @@ import { AppDispatch } from "@/store/store"
 import { useEffect } from "react"
 import { useDispatch } from "react-redux"
 import { thunkGetObjectSettings } from "src/store/reducers/objectSettings/objectSettingsThunk"
-import { setOpenSettings } from "../../../store/reducers/objectSettings/objectSettings"
+import {
+  setObjectSettingsVehicleUid,
+  setOpenSettings,
+} from "../../../store/reducers/objectSettings/objectSettings"
 import { ObjectSettingsContent } from "./Content/ObjectSettingsContent"
 import { ObjectSettingsNavbar } from "./Navbar/ObjectSettingsNavbar"
 
@@ -11,7 +14,8 @@ export const ObjectSettings = () => {
   // const { data } = useSelector((state: RootState) => state.objectSettings)
 
   useEffect(() => {
-    dispatch(thunkGetObjectSettings("366fdb83-2f7a-d2da-bd67-9898f0adadf1"))
+    dispatch(thunkGetObjectSettings("08aba997-99d8-5b5d-c060-d8595c0aec6c"))
+    dispatch(setObjectSettingsVehicleUid("08aba997-99d8-5b5d-c060-d8595c0aec6c"))
   }, [])
 
   // console.log(data)

@@ -26,19 +26,21 @@ export const ObjectSettingsAxles: React.FC<any> = (axes, onChange: (e: any) => v
     <div className="w-full h-full">
       <h1 className="text-center text-3xl mb-5 font-light">{axes.title}</h1>
       <div className="">
-        <div className="flex font-light items-center justify-center w-full gap-3 text-center px-12">
-          <div className="text-center w-1/2 text-lg">Оси</div>
-          <div className="grid grid-cols-3 text-lg w-1/2">
+        <div className="flex font-light items-center justify-between gap-3 text-center px-12">
+          <div className="text-center w-1/5  text-lg">Оси</div>
+          <div className="grid grid-cols-3 text-right text-lg w-1/2">
             <div className="">Макс. давление</div>
             <div className="">Допустимое отклонение</div>
             <div className="">Макс. температура</div>
           </div>
         </div>
+
         {wheel_axes?.map((item, index) => (
           <div key={index}>
             <Axle data={item} />
           </div>
         ))}
+
         <div
           onClick={addAxle}
           className=" cursor-pointer flex items-center  justify-center select-none  w-1/2   "

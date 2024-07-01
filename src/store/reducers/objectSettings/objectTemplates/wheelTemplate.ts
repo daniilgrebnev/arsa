@@ -14,8 +14,12 @@ const wheelTemplate: IObjectWheel = {
 function getRandomNumber(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min
 }
-export const wheelCreator = (): INewWheel => {
-  let newWheel: INewWheel = { ...wheelTemplate, innerWheelId: getRandomNumber(-40_000, -10_000) }
+export const wheelCreator = (position: "R" | "L"): INewWheel => {
+  let newWheel: INewWheel = {
+    ...wheelTemplate,
+    innerWheelId: getRandomNumber(-40_000, -10_000),
+    position: position,
+  }
 
   return newWheel
 }

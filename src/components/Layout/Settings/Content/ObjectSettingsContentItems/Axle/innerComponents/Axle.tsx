@@ -24,12 +24,12 @@ export const Axle = ({ data, changeAxle }: IAxle) => {
 
   return (
     <>
-      <div className="flex items-center justify-center gap-3">
+      <div className="flex items-center justify-between gap-3">
         <div
           style={{
             gridTemplateColumns: "46% 8% 46%",
           }}
-          className=" grid grid-cols-3 w-full gap-10 justify-start items-center relative"
+          className=" grid grid-cols-3 w-full  justify-start items-center relative"
         >
           <div className=" grid-cols-2 items-center justify-end  ">
             <div
@@ -38,7 +38,7 @@ export const Axle = ({ data, changeAxle }: IAxle) => {
               }}
               className="flex items-center justify-end "
             >
-              {data.wheels[0].length !== 4 && (
+              {data.wheels[0].length !== 100 && (
                 <div
                   onClick={() =>
                     dispatch(
@@ -66,19 +66,14 @@ export const Axle = ({ data, changeAxle }: IAxle) => {
           </div>
 
           <div className=" items-center ">
-            <div
-              style={{
-                gridTemplateColumns: "70% 5%",
-              }}
-              className="flex items-center justify-start  "
-            >
+            <div className="flex items-center justify-start  ">
               <div className="mr-3">
                 {data.wheels.slice(leftSideHeight).map((item, index) => (
                   <AxleSide key={index} side={item} position="R" />
                 ))}
               </div>
 
-              {data.wheels[1].length !== 4 && (
+              {data.wheels[1].length !== 100 && (
                 <div
                   onClick={() =>
                     dispatch(
@@ -97,7 +92,7 @@ export const Axle = ({ data, changeAxle }: IAxle) => {
           </div>
         </div>
 
-        <div className="grid grid-cols-3 items-center justify-between w-full gap-5">
+        <div className="grid grid-cols-3 items-center justify-between w-1/4 gap-5">
           <AxleNorms
             pressure_delta={data.pressure_delta}
             pressure_norm={data.pressure_norm}

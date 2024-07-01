@@ -13,7 +13,7 @@ export const SpeedControl: React.FC<any> = (speedData) => {
       | "reg_time_limit"
       | "reg_critical_limit"
       | "use_road_signs_instead_max_limit"
-    value: string | boolean
+    value: number | string | boolean
     name: string
   }
   const dispatch = useDispatch<AppDispatch>()
@@ -52,7 +52,7 @@ export const SpeedControl: React.FC<any> = (speedData) => {
     },
   ]
   const handleChange = (field: string, target) => {
-    let currentValue = typeof target.value == "boolean" ? 0 : target.value
+    let currentValue = typeof target.value == "boolean" ? target.checked : target.value
 
     // Remove leading zeros
     if (
@@ -65,7 +65,7 @@ export const SpeedControl: React.FC<any> = (speedData) => {
     }
 
     // Ensure the value is a valid number
-    const numericValue: any = isNaN(Number(currentValue)) ? 0 : Number(currentValue)
+    const numericValue: any = isNaN(Number(currentValue)) ? target.checked : Number(currentValue)
 
     dispatch(
       updateSpeedViolationData({

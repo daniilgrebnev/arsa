@@ -3,6 +3,7 @@ import { ILogPassAuth } from "@/interfaces/auth"
 import { ISwitchHistoryReq } from "@/interfaces/switchHistory"
 import { ITableData } from "@/interfaces/table"
 import { IWheelChart } from "@/interfaces/wheelChart"
+import { IAccounts, INewData } from "@/store/reducers/objectSettings/objectSettings"
 import { ISwitchReq } from "@/store/reducers/switchTire/switchTire"
 import { IBodyTableQuery } from "@/store/reducers/table/tableThunk"
 import axios from "axios"
@@ -21,14 +22,16 @@ if (!process.env.NODE_ENV || process.env.NODE_ENV === "development") {
 let tpmsInstance = axios.create({
   baseURL: `${originUrl}/api/`,
 })
-
-const lToken = localStorage.getItem("X-Auth")
-
 let serverInstance = axios.create({
   baseURL: "https://server.arsa.pro/api/",
-  headers: { "X-Auth": lToken, "Content-Type": "application/json" },
 })
 
+export const createInstanceServer = (token: string) => {
+  serverInstance = axios.create({
+    baseURL: "https://server.arsa.pro/api/",
+    headers: { "X-Auth": token, "Content-Type": "application/json" },
+  })
+}
 export const createInstance = (token: string) => {
   tpmsInstance = axios.create({
     baseURL: `${originUrl}/api/`,
@@ -68,6 +71,7 @@ export const getObjectSettings = async (vehicle_uid: string) => {
     }
   }
 }
+
 // Авторизация
 export const authAPI = async (body: ILogPassAuth) => {
   try {
@@ -101,8 +105,6 @@ export const codeAuth = async (code: string): Promise<number> => {
     return 500
   }
 }
-
-//
 
 export const getGeozone = async (uids: string[]) => {
   try {
@@ -194,6 +196,45 @@ export const getTableData = async (bodyTable: IBodyTableQuery) => {
     return { tableData: null, status }
   }
 }
+
+//Получение плагинов
+export const getPlugins = async () => {
+  try {
+    const res = await serverInstance.post("svr/v1/sys/get_proto_plugins")
+    const plugins = res.data.data
+    const status = res.status
+    return { plugins, status }
+  } catch (error: any) {
+    const status = error.response ? error.response.status : 500
+    return { accounts: null, status }
+  }
+}
+// Сохранить настройки пользователя
+export const saveSettings = async (body: INewData) => {
+  try {
+    const res = await serverInstance.post("svr/v1/ctl/vehicles/post_vehicle_profile", body)
+    const status = res.status
+    return { status }
+  } catch (error: any) {
+    const status = error.response ? error.response.status : 500
+    return { status }
+  }
+}
+
+// Дерево аккаунтов
+export const getAccounts = async () => {
+  try {
+    const res = await serverInstance.post("svr/v1/ctl/accounts/get_tree_accounts")
+    const accounts = res.data.data as IAccounts[]
+    const status = res.status
+    return { accounts, status }
+  } catch (error: any) {
+    const status = error.response ? error.response.status : 500
+    return { accounts: null, status }
+  }
+}
+
+// Плагины аккаунта
 
 // Данные по машине
 export const getCarData = async (id: string) => {

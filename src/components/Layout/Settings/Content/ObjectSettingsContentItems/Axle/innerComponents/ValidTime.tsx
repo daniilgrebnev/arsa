@@ -30,7 +30,7 @@ export const ValidTime = () => {
         rows={1}
         cols={4}
         value={time}
-        className="w-fit resize-none text-center text- font-light flex items-center justify-center"
+        className="w-fit border p-2 rounded px-6 resize-none text-center text- font-light flex items-center justify-center"
         placeholder="кПа"
         onChange={(e) => valueHandler(e)}
       />

@@ -1,11 +1,10 @@
 import { ILogPassAuth } from "@/interfaces/auth"
 import { AppDispatch } from "@/store/store"
-import { authAPI, codeAuth, createInstance } from "../../../api/apiGlobal"
+import { authAPI, codeAuth, createInstance, createInstanceServer } from "../../../api/apiGlobal"
 
 import { thunkGetTestVehicle } from "../security/securityThunk"
 
 import { setAuthData, setIsAuth, setOpenCodeWidget, setPhoneNumber } from "./authSlice"
-
 
 export const thunkAuth = (body: ILogPassAuth) => {
   return async (dispatch: AppDispatch) => {
@@ -29,6 +28,7 @@ export const thunkAuth = (body: ILogPassAuth) => {
       if (status == 200 || status == 202) {
         const token = data.jwt as string
         createInstance(token)
+        createInstanceServer(token)
         localStorage.setItem("X-Auth", token)
         dispatch(setPhoneNumber(data.mobile_phone))
         if (status == 202) {

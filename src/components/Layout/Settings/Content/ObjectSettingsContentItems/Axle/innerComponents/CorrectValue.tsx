@@ -24,8 +24,17 @@ export const CorrectValue = () => {
     setData(newData)
   }
 
-  const setNewKoef = (koef: number, index: number) => {
-    const newData = data.map((item, i) => (i === index ? { ...item, koef: koef } : item))
+  const setNewKoef = (koef: string, index: number) => {
+    let currentValue = koef
+
+    // Remove leading zeros
+    if (currentValue.length > 1 && currentValue[0] === "0") {
+      currentValue = currentValue.slice(1)
+    }
+
+    // Ensure the value is a valid number
+    const numericValue: any = isNaN(Number(currentValue)) ? 0 : Number(currentValue)
+    const newData = data.map((item, i) => (i === index ? { ...item, koef: numericValue } : item))
     setData(newData)
   }
 
@@ -46,7 +55,7 @@ export const CorrectValue = () => {
             </div>
             <div className="border p-4 flex items-center justify-center w-full h-full">
               <textarea
-                onChange={(e) => setNewKoef(Number(e.target.value), index)}
+                onChange={(e) => setNewKoef(e.target.value, index)}
                 value={item.koef}
                 className="resize-none text-center w-full bg-transparent"
               ></textarea>

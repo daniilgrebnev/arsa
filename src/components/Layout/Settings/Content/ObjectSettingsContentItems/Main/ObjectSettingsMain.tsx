@@ -1,16 +1,51 @@
 import { IObjectSettingsMain } from "@/interfaces/objectSettings"
-import { AppDispatch } from "@/store/store"
+import { AppDispatch, RootState } from "@/store/store"
 import React, { useEffect, useState } from "react"
-import { useDispatch } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
+import { vehicleCheckboxTree } from "src/components/testUi/CheckboxTree/checkbox-process"
 import { updateObjectSettingsMain } from "src/store/reducers/objectSettings/objectSettings"
+import {
+  thunkGetAccounts,
+  thunkGetPlugins,
+} from "src/store/reducers/objectSettings/objectSettingsThunk"
 import { ObjectSettingsItem } from "../ObjectSettingsItem"
 
 export const ObjectSettingsMain: React.FC<any> = (main) => {
   const [data, setData] = useState<IObjectSettingsMain>(main.data)
   const dispatch = useDispatch<AppDispatch>()
+  const accounts = useSelector((state: RootState) =>
+    typeof state.objectSettings.accounts != "string" && state.objectSettings.accounts != null
+      ? state.objectSettings.accounts
+      : [],
+  )
+  const plugins = useSelector((state: RootState) =>
+    typeof state.objectSettings.plugins != "string" && state.objectSettings.plugins != null
+      ? state.objectSettings.plugins
+      : [],
+  )
+  console.log(plugins)
   useEffect(() => {
     dispatch(updateObjectSettingsMain(data))
+    accounts.length == 0 && dispatch(thunkGetAccounts())
+    plugins.length == 0 && dispatch(thunkGetPlugins())
   }, [data])
+  useEffect(() => {}, [accounts, plugins])
+  console.log(vehicleCheckboxTree(accounts.filter((item) => item.id != 1)))
+  const accountsDataBody: any = []
+  const pluginsDataBody: any = []
+  accounts.forEach((item, index) => {
+    accountsDataBody.push({
+      option: item.id,
+      name: item.account_name,
+    })
+  })
+  plugins.forEach((item) => {
+    pluginsDataBody.push({
+      option: item.id,
+      name: item.name,
+    })
+  })
+
   const handleNumericalInput = (text: string) => {
     const input = Number(text)
 
@@ -23,7 +58,7 @@ export const ObjectSettingsMain: React.FC<any> = (main) => {
       return null
     }
   }
-
+  console.log(plugins)
   return (
     <div className="w-full font-light text-left">
       <h1 className="w-full mb-20 text-3xl text-center">{main.title}</h1>
@@ -32,6 +67,7 @@ export const ObjectSettingsMain: React.FC<any> = (main) => {
           value={data.account_id}
           title="Клиент"
           type="switch"
+          body={accountsDataBody}
           onChange={(e) =>
             setData({
               ...data,
@@ -71,24 +107,7 @@ export const ObjectSettingsMain: React.FC<any> = (main) => {
           value={data.plugin_id}
           title="Плагин"
           type="switch"
-          body={[
-            {
-              option: 3,
-              name: "Омникомм",
-            },
-            {
-              option: 4,
-              name: "НавТелеком",
-            },
-            {
-              option: 5,
-              name: "Flex",
-            },
-            {
-              option: 9,
-              name: "Rus",
-            },
-          ]}
+          body={pluginsDataBody}
           onChange={(e) => {
             console.log(e.currentTarget.value)
             setData({

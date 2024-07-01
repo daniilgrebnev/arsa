@@ -1,6 +1,7 @@
 import { RootState } from "@/store/store"
 import React, { useEffect, useRef } from "react"
 import { useSelector } from "react-redux"
+import { SaveObjectSettings } from "../Save/SaveObjectSettings"
 import { testData } from "../testData"
 import { ObjectSettingsAxles } from "./ObjectSettingsContentItems/Axle/ObjectSettingsAxles"
 import { Diag } from "./ObjectSettingsContentItems/Diag/Diag"
@@ -71,6 +72,7 @@ export const ObjectSettingsContent: React.FC = () => {
           </div>
         ))}
       </div>
+      <SaveObjectSettings />
     </div>
   )
 }

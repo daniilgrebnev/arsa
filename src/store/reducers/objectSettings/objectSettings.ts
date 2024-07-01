@@ -44,6 +44,10 @@ export interface INewNormsPropsType {
   id: number
   value: number
 }
+export interface IPlugins {
+  id: number
+  name: string
+}
 type IItemData = {
   tab: string
   title: string
@@ -54,16 +58,29 @@ type IItemData = {
     | ISpeedControlViolation
     | Tpms[]
 }
-interface INewData {
+export interface INewData {
   main: IObjectSettingsMain
   diag: IObjectSettingsDiag
   driver_cards: IDriverSettings
   speed_control: ISpeedControlViolation
   tpms: Tpms
+  vehicle_uid: string
+}
+export interface IAccounts {
+  account_name: string
+  create_date: number
+  id: number
+  is_control_user_agent: boolean
+  is_enabled: boolean
+  level: number
+  parent_id?: number
+  rights: number
+  role_id: number
 }
 interface ISettingState extends IData<IObjectSettingsData> {
   [x: string]: any
-
+  accounts: IAccounts[] | null | "error" | "loading"
+  plugins: IPlugins[] | null | "error" | "loading"
   isOpen: boolean
   activeTab: string
   dataToView: IItemData[] | null
@@ -73,11 +90,14 @@ interface ISettingState extends IData<IObjectSettingsData> {
     driver_cards: IDriverSettings | null
     speed_control: ISpeedControlViolation | null
     tpms: Tpms | null
+    vehicle_uid: string
   }
 }
 
 const initialState: ISettingState = {
   data: null,
+  accounts: [],
+  plugins: null,
   isOpen: false,
   activeTab: "diag",
   dataToView: null,
@@ -87,6 +107,7 @@ const initialState: ISettingState = {
     driver_cards: null,
     speed_control: null,
     tpms: null,
+    vehicle_uid: "",
   },
 }
 
@@ -140,22 +161,26 @@ const settingsSlice = createSlice({
       if (id > 0) {
         switch (position) {
           case "left":
-            state.newData.tpms?.wheel_axes?.find((i) => i.id == id)?.wheels[0].push(wheelCreator())
+            state.newData.tpms?.wheel_axes
+              ?.find((i) => i.id == id)
+              ?.wheels[0].push(wheelCreator("L"))
             break
           case "right":
-            state.newData.tpms?.wheel_axes?.find((i) => i.id == id)?.wheels[1].push(wheelCreator())
+            state.newData.tpms?.wheel_axes
+              ?.find((i) => i.id == id)
+              ?.wheels[1].push(wheelCreator("R"))
         }
       } else {
         switch (position) {
           case "left":
             state.newData.tpms?.wheel_axes
               ?.find((i) => i.innerAxleId == id)
-              ?.wheels[0].push(wheelCreator())
+              ?.wheels[0].push(wheelCreator("L"))
             break
           case "right":
             state.newData.tpms?.wheel_axes
               ?.find((i) => i.innerAxleId == id)
-              ?.wheels[1].push(wheelCreator())
+              ?.wheels[1].push(wheelCreator("R"))
             break
         }
       }
@@ -251,6 +276,7 @@ const settingsSlice = createSlice({
       const { field, value } = action.payload
       const valueType = typeof value
       const item = state.newData.speed_control
+      console.log(value)
       if (item) {
         if (typeof item[field] === "boolean" && valueType === "boolean") {
           item[field] = value
@@ -318,6 +344,21 @@ const settingsSlice = createSlice({
         state.newData.tpms.settings.sensors.valid_time_period = action.payload
       }
     },
+    setAccountsList: (
+      state: ISettingState,
+      action: PayloadAction<IAccounts[] | null | "error" | "loading">,
+    ) => {
+      state.accounts = action.payload
+    },
+    setPluginsList: (
+      state: ISettingState,
+      action: PayloadAction<IPlugins[] | null | "error" | "loading">,
+    ) => {
+      state.plugins = action.payload
+    },
+    setObjectSettingsVehicleUid: (state: ISettingState, action: PayloadAction<string>) => {
+      state.newData.vehicle_uid = action.payload
+    },
   },
 })
 
@@ -339,5 +380,8 @@ export const {
   updateObjectSettingsMain,
   updateObjectSettingsCorrectKoef,
   updateObjectSettingsWheelsPressValidTime,
+  setAccountsList,
+  setPluginsList,
+  setObjectSettingsVehicleUid,
 } = settingsSlice.actions
 export default settingsSlice.reducer
