@@ -44,7 +44,7 @@ export const LineEditor = () => {
           pathOptions={{
             color: colorFigure,
             weight: lineWidth,
-            opacity: opacityFigure,
+            opacity: opacityFigure / 100,
           }}
         >
           {points.map((point, index) => {

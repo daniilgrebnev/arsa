@@ -119,7 +119,9 @@ export const getGeozone = async (uids: string[]) => {
 
 export const geoZonesGetTree = async () => {
   try {
-    const { status, data } = await serverInstance.post("svr/v1/ctl/geozones/get_tree_geozones")
+    const { status, data } = await tpmsInstance.post(
+      "https://server.arsa.pro/api/svr/v1/ctl/geozones/get_tree_geozones",
+    )
     return { status, data: data.data }
   } catch (error) {
     console.error("Error during authentication:", error)
@@ -147,6 +149,18 @@ export const getTrackAPI = async (uid: string, start_time: any, end_time: any) =
     return response.data
   } catch (error) {
     console.log(error)
+    return { error: "Ошибка запроса данных" }
+  }
+}
+
+export const setGeozoneServer = async (geozone: any) => {
+  try {
+    const response = await serverInstance.post("svr/v1/ctl/geozones/post_geozone", {
+      ...geozone,
+    })
+    return response.data
+  } catch (error) {
+    console.error("Error during set geozone:", error)
     return { error: "Ошибка запроса данных" }
   }
 }

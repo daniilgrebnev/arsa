@@ -15,7 +15,7 @@ export const CircleEditor = () => {
   const dispatch = useDispatch()
   const [transparentCircle, setTransparentCircle] = useState<any>(null)
 
-  const { latitube, longitube } = useSelector((state: RootState) => state.map.creatorFigure)
+  const { latitude, longitude } = useSelector((state: RootState) => state.map.creatorFigure)
   const colorFigure = useSelector((state: RootState) => state.map.creatorFigure.color)
   const opacityFigure = useSelector((state: RootState) => state.map.creatorFigure.transparency)
   const lineWidth = useSelector((state: RootState) => state.map.creatorFigure.line_width)
@@ -25,19 +25,19 @@ export const CircleEditor = () => {
   const customIcon = useRef(
     L.divIcon({
       iconSize: [20, 20],
-    })
+    }),
   )
 
   useMapEvent("click", (e) => {
     if (radius) {
       return
     }
-    if (!latitube && !longitube) {
+    if (!latitude && !longitude) {
       dispatch(setLatLng(e.latlng))
       return
     }
-    if (latitube && longitube) {
-      dispatch(setRadius(L.latLng(latitube, longitube).distanceTo(e.latlng)))
+    if (latitude && longitude) {
+      dispatch(setRadius(L.latLng(latitude, longitude).distanceTo(e.latlng)))
     }
     dispatch(addGeozonePoint(e.latlng))
   })
@@ -47,37 +47,37 @@ export const CircleEditor = () => {
       setTransparentCircle(null)
       return
     }
-    if (latitube && longitube) {
-      setTransparentCircle(L.latLng(latitube, longitube).distanceTo(e.latlng))
+    if (latitude && longitude) {
+      setTransparentCircle(L.latLng(latitude, longitude).distanceTo(e.latlng))
     }
   })
 
   const handleCenter = (e: any) => {
     dispatch(setLatLng(e.target.getLatLng()))
-    if (latitube && longitube) {
+    if (latitude && longitude) {
       dispatch(
         setGeozonePoint(
           findNewPoints(points, e.target.getLatLng(), {
-            lat: latitube,
-            lng: longitube,
-          })
-        )
+            lat: latitude,
+            lng: longitude,
+          }),
+        ),
       )
     }
   }
 
   const handleRadius = (e: any) => {
     dispatch(setGeozonePoint([e.target.getLatLng()]))
-    if (latitube && longitube) {
-      dispatch(setRadius(e.target.getLatLng().distanceTo(L.latLng(latitube, longitube))))
+    if (latitude && longitude) {
+      dispatch(setRadius(e.target.getLatLng().distanceTo(L.latLng(latitude, longitude))))
     }
   }
 
   return (
     <>
-      {radius && latitube && longitube && (
+      {radius && latitude && longitude && (
         <Circle
-          center={L.latLng(latitube, longitube)}
+          center={L.latLng(latitude, longitude)}
           radius={radius}
           pathOptions={{
             color: colorFigure,
@@ -95,9 +95,9 @@ export const CircleEditor = () => {
           />
         </Circle>
       )}
-      {latitube && longitube && (
+      {latitude && longitude && (
         <Marker
-          position={L.latLng(latitube, longitube)}
+          position={L.latLng(latitude, longitude)}
           draggable={true}
           eventHandlers={{
             move: (e) => handleCenter(e),
@@ -105,14 +105,14 @@ export const CircleEditor = () => {
           icon={customIcon.current}
         />
       )}
-      {transparentCircle && latitube && longitube && (
+      {transparentCircle && latitude && longitude && (
         <Circle
-          center={L.latLng(latitube, longitube)}
+          center={L.latLng(latitude, longitude)}
           radius={transparentCircle}
           dashArray="5, 10"
           pathOptions={{
             color: colorFigure,
-            fillOpacity: opacityFigure,
+            fillOpacity: opacityFigure / 100,
             weight: lineWidth,
           }}
         />

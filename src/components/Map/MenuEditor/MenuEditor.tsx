@@ -14,9 +14,11 @@ import {
   setTypeFigure,
 } from "./../../../store/reducers/map/map"
 import { Range, getTrackBackground } from "react-range"
+import { getGeozones, setGeozone } from "./../../../store/reducers/map/mapThunk"
+import { setCheckedGeoZones } from "./../../../store/reducers/geozones/geozonesSlice"
 
 export const MenuEditor = () => {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch<any>()
   const typeFigure = useSelector((state: RootState) => state.map.creatorFigure.geometry_type_id)
   const colorFigure = useSelector((state: RootState) => state.map.creatorFigure.color)
   const opacityFigure = useSelector((state: RootState) => state.map.creatorFigure.transparency)
@@ -24,7 +26,7 @@ export const MenuEditor = () => {
   const commentGeozone = useSelector((state: RootState) => state.map.creatorFigure.comment)
   const nameGeozone = useSelector((state: RootState) => state.map.creatorFigure.geozone_name)
   const fig = useSelector((state: RootState) => state.map.creatorFigure)
-
+  const chekedGeozone = useSelector((state: RootState) => state.geoZones.checkedGeoZones)
   return (
     <div className="menu-editor">
       <div className="menu-editor__header">
@@ -67,9 +69,9 @@ export const MenuEditor = () => {
           Прозрачность:
           <Range
             values={[opacityFigure]}
-            step={0.01}
+            step={1}
             min={0}
-            max={1}
+            max={100}
             onChange={(values) => dispatch(setOpacityFigure(values[0]))}
             renderTrack={({ props, children }) => (
               <div
@@ -92,7 +94,7 @@ export const MenuEditor = () => {
                       values: [opacityFigure],
                       colors: ["var(--main-color)", "#ccc"],
                       min: 0,
-                      max: 1,
+                      max: 100,
                     }),
                     alignSelf: "center",
                   }}
@@ -118,7 +120,7 @@ export const MenuEditor = () => {
               ></div>
             )}
           />
-          {Math.round(opacityFigure * 100)}%
+          {Math.round(opacityFigure)}%
         </div>
         <div style={{ marginTop: "20px" }}>
           Толщина :
@@ -197,7 +199,7 @@ export const MenuEditor = () => {
         <button
           onClick={() => {
             // dispatch()
-            console.log(fig)
+            dispatch(setGeozone(fig, chekedGeozone))
             dispatch(clearFigure())
             dispatch(setEditMap(false))
           }}

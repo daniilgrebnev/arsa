@@ -1,5 +1,11 @@
+import { setCheckedGeoZones } from "src/store/reducers/geozones/geozonesSlice"
 import { AppDispatch } from "./../../store"
-import { getGeozone, getInfoPointEvent, getTrackAPI } from "./../../../api/apiGlobal"
+import {
+  getGeozone,
+  getInfoPointEvent,
+  getTrackAPI,
+  setGeozoneServer,
+} from "./../../../api/apiGlobal"
 import { addTrack, setAllGeozoneInfo, setTrackAll } from "./map"
 import { LatLng } from "leaflet"
 
@@ -38,5 +44,25 @@ export const getGeozones = (uids: string[]) => {
         }),
       ),
     )
+  }
+}
+
+export const setGeozone = (geozone: any, checkedgeoZones: any) => {
+  return async (dispatch: AppDispatch) => {
+    debugger
+    let newGeozone = {
+      ...geozone,
+      geozone_points: geozone.geozone_points.map((i) => {
+        let newPoint = { ...i, lon: i.lng }
+        delete newPoint.lng
+        return newPoint
+      }),
+    }
+    const res = await setGeozoneServer(newGeozone)
+    console.log(res)
+    if (res.data.geozone_uid) {
+      console.log("test")
+      dispatch(setCheckedGeoZones(checkedgeoZones))
+    }
   }
 }

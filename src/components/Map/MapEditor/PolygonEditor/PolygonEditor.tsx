@@ -26,7 +26,7 @@ export const PolygonEditor = () => {
   const lineWidth = useSelector((state: RootState) => state.map.creatorFigure.line_width)
   const points = useSelector((state: RootState) => state.map.creatorFigure.geozone_points)
 
-  const { latitube, longitube } = useSelector((state: RootState) => state.map.creatorFigure)
+  const { latitude, longitude } = useSelector((state: RootState) => state.map.creatorFigure)
 
   const customIcon = useRef(
     L.divIcon({
@@ -98,22 +98,22 @@ export const PolygonEditor = () => {
 
   const clickLastPoint = () => {
     setEdit(false)
-    dispatch(setRadius(maxDistance(points, { lat: latitube, lng: longitube })))
+    dispatch(setRadius(maxDistance(points, { lat: latitude, lng: longitude })))
   }
 
   const moveMarker = (e, index) => {
     const newPoints: any = [...points]
     newPoints[index] = e.latlng
     dispatch(setGeozonePoint(newPoints))
-    dispatch(setRadius(maxDistance(points, { lat: latitube, lng: longitube })))
+    dispatch(setRadius(maxDistance(points, { lat: latitude, lng: longitude })))
   }
 
   const handleCenter = (e) => {
     dispatch(
       setGeozonePoint(
         findNewPoints(points, e.target.getLatLng(), {
-          lat: latitube,
-          lng: longitube,
+          lat: latitude,
+          lng: longitude,
         }),
       ),
     )
@@ -126,7 +126,7 @@ export const PolygonEditor = () => {
           positions={points}
           pathOptions={{
             color: colorFigure,
-            fillOpacity: opacityFigure,
+            fillOpacity: opacityFigure / 100,
             weight: lineWidth,
           }}
         >
@@ -143,9 +143,9 @@ export const PolygonEditor = () => {
               />
             )
           })}
-          {latitube && longitube && (
+          {latitude && longitude && (
             <Marker
-              position={{ lat: latitube, lng: longitube }}
+              position={{ lat: latitude, lng: longitude }}
               draggable={true}
               eventHandlers={{
                 move: (e) => handleCenter(e),

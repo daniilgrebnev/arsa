@@ -43,8 +43,6 @@ export const MapPage = () => {
     dispatch(setIsOpenMenuMap(true))
   }
 
-  let chekedGeozoneA: string[] = ["001e3fd1-4d85-17a8-903a-6bac4f978829"]
-
   useEffect(() => {
     if (vehicleCheked.length > 5) {
       alert("Можно показать не более 5 треков")
@@ -59,10 +57,7 @@ export const MapPage = () => {
   }, [vehicleCheked, endDate, startDate])
 
   useEffect(() => {
-    if (chekedGeozone.length > 5) {
-      alert("Можно показать не более 5 треков")
-      return
-    }
+    debugger
     if (chekedGeozone.length === 0) {
       dispatch(setAllGeozoneInfo([]))
     }

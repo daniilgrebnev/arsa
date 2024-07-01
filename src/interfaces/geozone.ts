@@ -14,8 +14,8 @@ export interface IGeozone {
   color: string
   uid: string
   geozone_type_id: number
-  latitube: number | null
-  longitube: number | null
+  latitude: number | null
+  longitude: number | null
   radius: number | null
   line_width: number
   geometry_type_id: number

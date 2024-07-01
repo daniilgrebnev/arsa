@@ -37,8 +37,8 @@ const initialState: Imap = {
     color: "#ff6801",
     uid: "2435qwe3245",
     geozone_type_id: 0,
-    latitube: null,
-    longitube: null,
+    latitude: null,
+    longitude: null,
     radius: 0,
     line_width: 2,
     geometry_type_id: 2,
@@ -63,6 +63,7 @@ const mapSlice = createSlice({
       state.infoGeozones = action.payload
       if (action.payload.length > 0) {
         const points = L.polyline(action.payload[0].geozone_points.map((el) => [el.lat, el.lng]))
+        debugger
         const bounds = points.getBounds()
         state.map.fitBounds(bounds)
       }
@@ -73,7 +74,7 @@ const mapSlice = createSlice({
     setCreatorFigure(state: Imap, action: PayloadAction<any>) {
       let figure = { ...action.payload }
       if (figure.transparency === 0) {
-        figure.transparency = 0.1
+        figure.transparency = 1
       }
       if (figure.line_width === 0) {
         figure.line_width = 3
@@ -110,8 +111,8 @@ const mapSlice = createSlice({
         color: "#ff6801",
         uid: "2435qwe3245",
         geozone_type_id: 0,
-        latitube: 0,
-        longitube: 0,
+        latitude: 0,
+        longitude: 0,
         radius: 0,
         line_width: 1,
         geometry_type_id: 2,
@@ -137,21 +138,21 @@ const mapSlice = createSlice({
       state.creatorFigure.geometry_type_id = action.payload
       debugger
       if (action.payload === 0) {
-        if (!state.creatorFigure.latitube && !state.creatorFigure.longitube) {
+        if (!state.creatorFigure.latitude && !state.creatorFigure.longitude) {
           state.creatorFigure.geozone_points = []
         }
         state.creatorFigure.geozone_points = state.creatorFigure.geozone_points.filter((point) => {
           return (
             point.distanceTo({
-              lat: state.creatorFigure.latitube,
-              lng: state.creatorFigure.longitube,
+              lat: state.creatorFigure.latitude,
+              lng: state.creatorFigure.longitude,
             }) === state.creatorFigure.radius
           )
         })
       }
       if (action.payload === 3) {
-        state.creatorFigure.latitube = null
-        state.creatorFigure.longitube = null
+        state.creatorFigure.latitude = null
+        state.creatorFigure.longitude = null
         state.creatorFigure.radius = null
       }
     },
@@ -182,11 +183,11 @@ const mapSlice = createSlice({
       state.creatorFigure.geozone_points = newArrayPoints
     },
     setLatLng(state: Imap, action: PayloadAction<any>) {
-      state.creatorFigure.latitube = action.payload.lat
-      state.creatorFigure.longitube = action.payload.lng
+      state.creatorFigure.latitude = action.payload.lat
+      state.creatorFigure.longitude = action.payload.lng
     },
     setRadius(state: Imap, action: PayloadAction<number>) {
-      state.creatorFigure.radius = action.payload
+      state.creatorFigure.radius = Math.round(action.payload)
     },
     setFigure(state: Imap, action: PayloadAction<any>) {
       state.creatorFigure = action.payload
@@ -208,8 +209,8 @@ const mapSlice = createSlice({
       state.map = action.payload
     },
     setCenter(state: Imap, action: PayloadAction<{ lat: number; lng: number }>) {
-      state.creatorFigure.latitube = action.payload.lat
-      state.creatorFigure.longitube = action.payload.lng
+      state.creatorFigure.latitude = action.payload.lat
+      state.creatorFigure.longitude = action.payload.lng
     },
   },
 })

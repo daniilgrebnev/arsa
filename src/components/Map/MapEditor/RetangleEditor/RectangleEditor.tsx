@@ -1,100 +1,88 @@
-import { useEffect, useRef, useState } from "react";
-import L, { LeafletEvent, latLng, point } from "leaflet";
-import { Marker, Rectangle, useMapEvent } from "react-leaflet";
-import { useSelector } from "react-redux";
-import { RootState } from "@/store/store";
-import { useDispatch } from "react-redux";
-import { findNewPoints, maxDistance } from "./../../../../helpers/map";
+import { useEffect, useRef, useState } from "react"
+import L, { LeafletEvent, latLng, point } from "leaflet"
+import { Marker, Rectangle, useMapEvent } from "react-leaflet"
+import { useSelector } from "react-redux"
+import { RootState } from "@/store/store"
+import { useDispatch } from "react-redux"
+import { findNewPoints, maxDistance } from "./../../../../helpers/map"
 import {
   addGeozonePoint,
   setGeozonePoint,
   setLatLng,
   setRadius,
-} from "./../../../../store/reducers/map/map";
+} from "./../../../../store/reducers/map/map"
 
 export const RectangleEditor = () => {
-  const dispatch: any = useDispatch();
-  const [transparentRectangle, setTransparentRectangle] = useState<any>([]);
+  const dispatch: any = useDispatch()
+  const [transparentRectangle, setTransparentRectangle] = useState<any>([])
 
-  const colorFigure = useSelector(
-    (state: RootState) => state.map.creatorFigure.color
-  );
-  const opacityFigure = useSelector(
-    (state: RootState) => state.map.creatorFigure.transparency
-  );
-  const lineWidth = useSelector(
-    (state: RootState) => state.map.creatorFigure.line_width
-  );
+  const colorFigure = useSelector((state: RootState) => state.map.creatorFigure.color)
+  const opacityFigure = useSelector((state: RootState) => state.map.creatorFigure.transparency)
+  const lineWidth = useSelector((state: RootState) => state.map.creatorFigure.line_width)
 
-  const rectangle = useSelector(
-    (state: RootState) => state.map.creatorFigure.geozone_points
-  );
-  const { latitube, longitube } = useSelector(
-    (state: RootState) => state.map.creatorFigure
-  );
+  const rectangle = useSelector((state: RootState) => state.map.creatorFigure.geozone_points)
+  const { latitude, longitude } = useSelector((state: RootState) => state.map.creatorFigure)
 
   useMapEvent("click", (e) => {
     if (rectangle.length >= 2) {
-      return;
+      return
     }
     if (rectangle.length === 1) {
-      setTransparentRectangle([]);
+      setTransparentRectangle([])
     }
     if (rectangle.length === 0) {
-      setTransparentRectangle((prev) => [...prev, e.latlng]);
+      setTransparentRectangle((prev) => [...prev, e.latlng])
     }
-    dispatch(addGeozonePoint(e.latlng));
-  });
+    dispatch(addGeozonePoint(e.latlng))
+  })
 
   useMapEvent("mousemove", (e) => {
     if (transparentRectangle.length > 0) {
-      setTransparentRectangle((prev) => [...prev.slice(0, 1), e.latlng]);
+      setTransparentRectangle((prev) => [...prev.slice(0, 1), e.latlng])
     }
-  });
+  })
 
   useEffect(() => {
     if (rectangle.length === 2) {
-      dispatch(setLatLng(L.latLngBounds(rectangle).getCenter()));
-      if (latitube && longitube) {
-        dispatch(
-          setRadius(latLng(latitube, longitube).distanceTo(rectangle[0]))
-        );
+      dispatch(setLatLng(L.latLngBounds(rectangle).getCenter()))
+      if (latitude && longitude) {
+        dispatch(setRadius(latLng(latitude, longitude).distanceTo(rectangle[0])))
       }
     }
-  }, [rectangle]);
+  }, [rectangle])
 
   useEffect(() => {
-    if (latitube && longitube) {
-      dispatch(setRadius(latLng(latitube, longitube).distanceTo(rectangle[0])));
+    if (latitude && longitude) {
+      dispatch(setRadius(latLng(latitude, longitude).distanceTo(rectangle[0])))
     }
-  }, [longitube, latitube]);
+  }, [longitude, latitude])
 
   const customIcon = useRef(
     L.divIcon({
       iconSize: [20, 20],
-    })
-  );
+    }),
+  )
 
   const handleCenter = (e: LeafletEvent) => {
     dispatch(
       setGeozonePoint(
         findNewPoints(rectangle, e.target.getLatLng(), {
-          lat: latitube,
-          lng: longitube,
-        })
-      )
-    );
-    dispatch(setLatLng(e.target.getLatLng()));
-  };
+          lat: latitude,
+          lng: longitude,
+        }),
+      ),
+    )
+    dispatch(setLatLng(e.target.getLatLng()))
+  }
 
   const handleBounds = (e: LeafletEvent, index: number) => {
-    const newPoints: any = [...rectangle];
-    newPoints[index] = e.target.getLatLng();
-    dispatch(setGeozonePoint(newPoints));
-    if (latitube && longitube) {
-      dispatch(setRadius(latLng(latitube, longitube).distanceTo(newPoints[0])));
+    const newPoints: any = [...rectangle]
+    newPoints[index] = e.target.getLatLng()
+    dispatch(setGeozonePoint(newPoints))
+    if (latitude && longitude) {
+      dispatch(setRadius(latLng(latitude, longitude).distanceTo(newPoints[0])))
     }
-  };
+  }
 
   return (
     <>
@@ -103,15 +91,15 @@ export const RectangleEditor = () => {
           bounds={rectangle}
           pathOptions={{
             color: colorFigure,
-            fillOpacity: opacityFigure,
+            fillOpacity: opacityFigure / 100,
             weight: lineWidth,
           }}
         >
-          {latitube && longitube && (
+          {latitude && longitude && (
             <Marker
               position={{
-                lat: latitube,
-                lng: longitube,
+                lat: latitude,
+                lng: longitude,
               }}
               draggable={true}
               eventHandlers={{
@@ -145,5 +133,5 @@ export const RectangleEditor = () => {
         />
       )}
     </>
-  );
-};
+  )
+}

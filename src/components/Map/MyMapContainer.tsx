@@ -110,6 +110,7 @@ export const MyMapContainer: React.FC<propsType> = (props) => {
                     pathOptions={{
                       color: geozone.color,
                       weight: geozone.line_width,
+                      fillOpacity: geozone.transparency / 100,
                     }}
                     bounds={[
                       [geozone.geozone_points[0].lat, geozone.geozone_points[0].lng],
@@ -138,7 +139,7 @@ export const MyMapContainer: React.FC<propsType> = (props) => {
                 </ContextMenu>
               )
             }
-            if (geozone.geometry_type_id === 0 && geozone.latitube && geozone.longitube) {
+            if (geozone.geometry_type_id === 0 && geozone.latitude && geozone.longitude) {
               return (
                 <ContextMenu
                   btnMenu={[
@@ -161,11 +162,12 @@ export const MyMapContainer: React.FC<propsType> = (props) => {
                   setMenuVisible={(visible) => dispatch(setIsOpenMenuFigure(visible))}
                 >
                   <Circle
-                    center={[geozone.latitube, geozone.longitube]}
+                    center={[geozone.latitude, geozone.longitude]}
                     radius={geozone.radius ? geozone.radius : 500}
                     pathOptions={{
                       color: geozone.color,
                       weight: geozone.line_width,
+                      fillOpacity: geozone.transparency / 100,
                     }}
                     key={key}
                     eventHandlers={{
@@ -190,6 +192,7 @@ export const MyMapContainer: React.FC<propsType> = (props) => {
               )
             }
             if (geozone.geometry_type_id === 2) {
+              console.log(geozone.line_width)
               return (
                 <ContextMenu
                   btnMenu={[
@@ -212,6 +215,11 @@ export const MyMapContainer: React.FC<propsType> = (props) => {
                   setMenuVisible={(visible) => dispatch(setIsOpenMenuFigure(visible))}
                 >
                   <Polygon
+                    pathOptions={{
+                      color: geozone.color,
+                      weight: geozone.line_width,
+                      fillOpacity: geozone.transparency / 100,
+                    }}
                     positions={geozone.geozone_points
                       .map((item) => {
                         return [item.lat, item.lng]
@@ -264,7 +272,11 @@ export const MyMapContainer: React.FC<propsType> = (props) => {
                     positions={geozone.geozone_points.map((item) => {
                       return [item.lat, item.lng]
                     })}
-                    pathOptions={{ weight: 5 }}
+                    pathOptions={{
+                      color: geozone.color,
+                      weight: geozone.line_width,
+                      fillOpacity: geozone.transparency / 100,
+                    }}
                     eventHandlers={{
                       mousedown: (e) => {
                         e.originalEvent.preventDefault()
