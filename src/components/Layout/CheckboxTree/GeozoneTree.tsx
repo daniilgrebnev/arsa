@@ -1,6 +1,7 @@
 import { AppDispatch, RootState } from "@/store/store"
 import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
+import { setCheckedGeoZones } from "src/store/reducers/geozones/geozonesSlice"
 import CheckboxTree from "../../../components/testUi/CheckboxTree/CheckboxTree"
 import { geoZoneCheckboxTree } from "../../../components/testUi/CheckboxTree/geo-zones-process"
 import { thunkGetGeoZonesTree } from "../../../store/reducers/geozones/thunkGeozones"
@@ -15,6 +16,7 @@ export const GeozoneTree = () => {
   const [checked, setChecked] = useState<string[]>([])
   useEffect(() => {
     data == null && dispatch(thunkGetGeoZonesTree())
+    dispatch(setCheckedGeoZones(checked))
   }, [checked])
 
   const groups = data != null ? geoZoneCheckboxTree(fetchedData) : []

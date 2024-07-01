@@ -25,7 +25,7 @@ interface ISpeedViolationProps {
     | "reg_time_limit"
     | "reg_critical_limit"
     | "use_road_signs_instead_max_limit"
-  value: boolean | string
+  value: boolean | number
 }
 interface IDriverSettingsEvent {
   field:
@@ -254,7 +254,7 @@ const settingsSlice = createSlice({
       if (item) {
         if (typeof item[field] === "boolean" && valueType === "boolean") {
           item[field] = value
-        } else if (typeof item[field] == "string" && valueType == "string") {
+        } else if (typeof item[field] == "number" && valueType == "number") {
           item[field] = value
         }
       }

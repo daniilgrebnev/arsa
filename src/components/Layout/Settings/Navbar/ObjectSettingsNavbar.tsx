@@ -23,7 +23,7 @@ export const ObjectSettingsNavbar = () => {
               boxShadow: activeTab == i.tab ? "0px 0px 20px 0px #f2f0f0" : "",
             }}
             onClick={() => dispatch(setActiveMenuTab(i.tab))}
-            className={`w-[90%] ml-0 left-0 relative cursor-pointer text-nowrap py-3 px-10 rounded-sm transition-all hover:bg-white ${activeTab == i.tab && "bg-white py-5 font-base left-6 text-lg transition-all w-[100%] hover:bg-white"}`}
+            className={`w-[90%] ${i.tab == "vehicle_uid" && "hidden"} ml-0 left-0 relative cursor-pointer text-nowrap py-3 px-10 rounded-sm transition-all hover:bg-white ${activeTab == i.tab && "bg-white py-5 font-base left-6 text-lg transition-all w-[100%] hover:bg-white"}`}
           >
             {i.title}
           </div>
